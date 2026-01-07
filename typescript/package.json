@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@langchain/core": "^1.1.0",
-    "@modelcontextprotocol/sdk": "^1.23.0",
+    "@modelcontextprotocol/sdk": "^1.24.3",
     "@openai/agents": "^0.3.3",
     "@sumup/sdk": "^0.0.11",
     "ai": "^5.0.103",
