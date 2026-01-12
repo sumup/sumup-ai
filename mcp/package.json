@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.7",
-    "@rslib/core": "^0.18.0",
+    "@rslib/core": "^0.19.1",
     "@types/node": "^24.3.0",
     "rsbuild-plugin-publint": "^0.3.0",
     "ts-node": "^10.9.2",
