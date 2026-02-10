@@ -1,7 +1,7 @@
 import { tool } from "@openai/agents";
 import SumUp from "@sumup/sdk";
-import { registerTools } from "src/common";
 import type z from "zod";
+import { registerTools } from "../common";
 
 type AgentFunctionTool = ReturnType<typeof tool>;
 

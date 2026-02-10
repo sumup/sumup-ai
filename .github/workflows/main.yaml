@@ -68,6 +68,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Validate JSR publish (dry-run)
+        run: npx jsr publish --dry-run
+
       - name: Test
         run: npm run test
 
