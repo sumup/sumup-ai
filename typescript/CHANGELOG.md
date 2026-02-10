@@ -4,6 +4,18 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.9.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.8.0...typescript-v0.9.0) (2026-02-10)
+
+
+### Features
+
+* **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
+
+
+### Bug Fixes
+
+* **typescript:** @sumup/sdk package registry ([d4dfded](https://github.com/sumup/sumup-ai/commit/d4dfdede4fc8d7ef33a4b7b4a58294a9b0e8979b))
+
 ## [0.8.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.7.2...typescript-v0.8.0) (2025-12-20)
 
 
