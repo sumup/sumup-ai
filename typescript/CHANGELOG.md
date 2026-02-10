@@ -4,6 +4,13 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.9.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.9.0...typescript-v0.9.1) (2026-02-10)
+
+
+### Bug Fixes
+
+* **typescript:** local alias import for JSR ([5b170b1](https://github.com/sumup/sumup-ai/commit/5b170b1c1a81701e91b11cc12203b0318e541501))
+
 ## [0.9.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.8.0...typescript-v0.9.0) (2026-02-10)
 
 
