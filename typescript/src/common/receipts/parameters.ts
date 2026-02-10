@@ -54,20 +54,30 @@ export const getReceiptResult = z
         products: z
           .array(
             z.object({
-              name: z.string().describe(`Product name.`).optional(),
-              description: z
+              name: z.string().describe(`Product name`).optional(),
+              price: z.string().describe(`Product price`).optional(),
+              vat_rate: z.string().describe(`VAT rate`).optional(),
+              single_vat_amount: z
                 .string()
-                .describe(`Product description.`)
+                .describe(`VAT amount for a single product`)
                 .optional(),
-              price: z.number().describe(`Product price.`).optional(),
+              price_with_vat: z
+                .string()
+                .describe(`Product price including VAT`)
+                .optional(),
+              vat_amount: z.string().describe(`VAT amount`).optional(),
               quantity: z
                 .number()
                 .int()
-                .describe(`Product quantity.`)
+                .describe(`Product quantity`)
                 .optional(),
               total_price: z
-                .number()
-                .describe(`Quantity x product price.`)
+                .string()
+                .describe(`Quantity x product price`)
+                .optional(),
+              total_with_vat: z
+                .string()
+                .describe(`Total price including VAT`)
                 .optional(),
             }),
           )
@@ -111,7 +121,7 @@ export const getReceiptResult = z
                 ])
                 .describe(`Status of the transaction event.`)
                 .optional(),
-              amount: z.number().describe(`Amount of the event.`).optional(),
+              amount: z.string().describe(`Amount of the event.`).optional(),
               timestamp: z
                 .string()
                 .describe(`Date and time of the transaction event.`)

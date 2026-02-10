@@ -937,8 +937,9 @@ Whether an address is valid or not depends on whether the locally required field
         z.object({
           ref: z
             .string()
+            .max(32)
             .describe(`The unique reference for the personal identifier type.`),
-          value: z.string().describe(`The company identifier value.`),
+          value: z.string().max(128).describe(`The company identifier value.`),
         }),
       )
       .max(5)
@@ -1224,10 +1225,14 @@ Whether an address is valid or not depends on whether the locally required field
             z.object({
               ref: z
                 .string()
+                .max(32)
                 .describe(
                   `The unique reference for the personal identifier type.`,
                 ),
-              value: z.string().describe(`The company identifier value.`),
+              value: z
+                .string()
+                .max(128)
+                .describe(`The company identifier value.`),
             }),
           )
           .max(5)

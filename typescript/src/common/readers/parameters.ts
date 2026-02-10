@@ -71,6 +71,14 @@ Possible values:
         `Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.`,
       )
       .optional(),
+    service_account_id: z
+      .string()
+      .describe(
+        `Identifier of the system-managed service account associated with this reader.
+Present only for readers that are already paired.
+This field is currently in beta and may change.`,
+      )
+      .optional(),
     created_at: z
       .string()
       .describe(`The timestamp of when the reader was created.`),
@@ -288,6 +296,14 @@ Possible values:
         `Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.`,
       )
       .optional(),
+    service_account_id: z
+      .string()
+      .describe(
+        `Identifier of the system-managed service account associated with this reader.
+Present only for readers that are already paired.
+This field is currently in beta and may change.`,
+      )
+      .optional(),
     created_at: z
       .string()
       .describe(`The timestamp of when the reader was created.`),
@@ -308,10 +324,7 @@ export const getReaderStatusParameters = z.object({
 export const getReaderStatusResult = z
   .object({
     data: z.object({
-      battery_level: z
-        .record(z.unknown())
-        .describe(`Battery level percentage`)
-        .optional(),
+      battery_level: z.number().describe(`Battery level percentage`).optional(),
       battery_temperature: z
         .number()
         .int()
@@ -400,6 +413,14 @@ Possible values:
               `Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.`,
             )
             .optional(),
+          service_account_id: z
+            .string()
+            .describe(
+              `Identifier of the system-managed service account associated with this reader.
+Present only for readers that are already paired.
+This field is currently in beta and may change.`,
+            )
+            .optional(),
           created_at: z
             .string()
             .describe(`The timestamp of when the reader was created.`),
@@ -485,6 +506,14 @@ Possible values:
       .nullable()
       .describe(
         `Set of user-defined key-value pairs attached to the object. Partial updates are not supported. When updating, always submit whole metadata. Maximum of 64 parameters are allowed in the object.`,
+      )
+      .optional(),
+    service_account_id: z
+      .string()
+      .describe(
+        `Identifier of the system-managed service account associated with this reader.
+Present only for readers that are already paired.
+This field is currently in beta and may change.`,
       )
       .optional(),
     created_at: z
