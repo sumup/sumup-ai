@@ -55,7 +55,7 @@
     "@openai/agents": "^0.3.3",
     "@sumup/sdk": "^0.0.13",
     "ai": "^5.0.103",
-    "zod": "^3.25.76"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.14",
