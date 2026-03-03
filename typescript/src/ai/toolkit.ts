@@ -24,13 +24,12 @@ class SumUpAgentToolkit {
         z.infer<typeof t.parameters>,
         z.infer<typeof t.result>
       >({
-        name: t.name,
         description: t.description,
         inputSchema: zodSchema(t.parameters),
         outputSchema: zodSchema(t.result),
         execute: async (input: z.infer<typeof t.parameters>) => {
           const res = await t.callback(this._sumup, input);
-          return JSON.stringify(res);
+          return t.result.parse(res);
         },
       });
     });

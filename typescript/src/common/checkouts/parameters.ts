@@ -15,6 +15,7 @@ export const createCheckoutParameters = z
         "BRL",
         "CHF",
         "CLP",
+        "COP",
         "CZK",
         "DKK",
         "EUR",
@@ -93,6 +94,7 @@ export const createCheckoutParameters = z
               "BRL",
               "CHF",
               "CLP",
+              "COP",
               "CZK",
               "DKK",
               "EUR",
@@ -233,6 +235,7 @@ export const createCheckoutResult = z
         "BRL",
         "CHF",
         "CLP",
+        "COP",
         "CZK",
         "DKK",
         "EUR",
@@ -320,6 +323,7 @@ export const createCheckoutResult = z
               "BRL",
               "CHF",
               "CLP",
+              "COP",
               "CZK",
               "DKK",
               "EUR",
@@ -436,7 +440,7 @@ export const createCheckoutResult = z
       .describe(`List of transactions related to the payment.`)
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`Details of the payment checkout.`);
 
 export const deactivateCheckoutParameters = z.object({
@@ -459,6 +463,7 @@ export const deactivateCheckoutResult = z
         "BRL",
         "CHF",
         "CLP",
+        "COP",
         "CZK",
         "DKK",
         "EUR",
@@ -546,6 +551,7 @@ export const deactivateCheckoutResult = z
               "BRL",
               "CHF",
               "CLP",
+              "COP",
               "CZK",
               "DKK",
               "EUR",
@@ -662,7 +668,7 @@ export const deactivateCheckoutResult = z
       .describe(`List of transactions related to the payment.`)
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`Details of the payment checkout.`);
 
 export const getCheckoutParameters = z.object({
@@ -685,6 +691,7 @@ export const getCheckoutResult = z
         "BRL",
         "CHF",
         "CLP",
+        "COP",
         "CZK",
         "DKK",
         "EUR",
@@ -772,6 +779,7 @@ export const getCheckoutResult = z
               "BRL",
               "CHF",
               "CLP",
+              "COP",
               "CZK",
               "DKK",
               "EUR",
@@ -915,7 +923,7 @@ export const getCheckoutResult = z
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`OK`);
 
 export const getPaymentMethodsParameters = z.object({
@@ -942,7 +950,7 @@ export const getPaymentMethodsResult = z
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`Available payment methods`);
 
 export const listCheckoutsParameters = z.object({
@@ -971,6 +979,7 @@ export const listCheckoutsResult = z
           "BRL",
           "CHF",
           "CLP",
+          "COP",
           "CZK",
           "DKK",
           "EUR",
@@ -1058,6 +1067,7 @@ export const listCheckoutsResult = z
                 "BRL",
                 "CHF",
                 "CLP",
+                "COP",
                 "CZK",
                 "DKK",
                 "EUR",

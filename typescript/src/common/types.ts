@@ -2,10 +2,8 @@ import type SumUp from "@sumup/sdk";
 import type { z } from "zod";
 
 export type Tool<
-  // biome-ignore lint/suspicious/noExplicitAny: necessary evil
-  Args extends z.AnyZodObject = any,
-  // biome-ignore lint/suspicious/noExplicitAny: necessary evil
-  Result extends z.ZodTypeAny = any,
+  Args extends z.ZodObject<z.ZodRawShape> = z.ZodObject<z.ZodRawShape>,
+  Result extends z.ZodTypeAny = z.ZodTypeAny,
 > = {
   name: string;
   title: string;

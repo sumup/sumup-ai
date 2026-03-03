@@ -49,7 +49,7 @@ export const createMerchantRoleResult = z
       .string()
       .describe(`The timestamp of when the role was last updated.`),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A custom role that can be used to assign set of permissions to members.`,
   );
@@ -100,7 +100,7 @@ export const getMerchantRoleResult = z
       .string()
       .describe(`The timestamp of when the role was last updated.`),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A custom role that can be used to assign set of permissions to members.`,
   );
@@ -149,7 +149,7 @@ export const listMerchantRolesResult = z
         ),
     ),
   })
-  .passthrough()
+  .loose()
   .describe(`Returns a list of Role objects.`);
 
 export const updateMerchantRoleParameters = z.object({
@@ -199,7 +199,7 @@ export const updateMerchantRoleResult = z
       .string()
       .describe(`The timestamp of when the role was last updated.`),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A custom role that can be used to assign set of permissions to members.`,
   );

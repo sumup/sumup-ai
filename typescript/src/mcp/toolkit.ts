@@ -3,8 +3,9 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import SumUp from "@sumup/sdk";
-import type z from "zod";
+import { z } from "zod";
 import { registerTools, VERSION } from "../common";
+import { serializeToolResult } from "../common/serialize";
 
 // Type guard for checking if an error is an API error with status and response
 interface APIErrorLike {
@@ -112,7 +113,8 @@ class SumUpAgentToolkit extends McpServer {
           title: tool.title,
           description: tool.description,
           inputSchema: tool.parameters.shape,
-          outputSchema: tool.result.shape,
+          outputSchema:
+            tool.result instanceof z.ZodObject ? tool.result.shape : undefined,
           annotations: {
             title: tool.annotations?.title,
             readOnlyHint: tool.annotations?.readOnly,
@@ -124,14 +126,20 @@ class SumUpAgentToolkit extends McpServer {
           args: z.infer<typeof tool.parameters>,
         ): Promise<CallToolResult> => {
           try {
-            const result = await tool.callback(this._sumup, args);
+            const result = tool.result.parse(
+              await tool.callback(this._sumup, args),
+            );
+            const structuredContent =
+              typeof result === "object" && result !== null
+                ? (result as Record<string, unknown>)
+                : undefined;
 
             return {
-              structuredContent: result,
+              structuredContent,
               content: [
                 {
                   type: "text" as const,
-                  text: JSON.stringify(result),
+                  text: serializeToolResult(result),
                 },
               ],
             };
@@ -167,7 +175,11 @@ class SumUpAgentToolkit extends McpServer {
             }
 
             // For any other errors, re-throw to let MCP SDK handle them
-            throw error;
+            if (error instanceof Error) {
+              throw error;
+            }
+
+            throw new Error(String(error));
           }
         },
       );

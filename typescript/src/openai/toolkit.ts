@@ -1,6 +1,5 @@
 import { tool } from "@openai/agents";
 import SumUp from "@sumup/sdk";
-import type z from "zod";
 import { registerTools } from "../common";
 
 type AgentFunctionTool = ReturnType<typeof tool>;
@@ -25,15 +24,15 @@ class SumUpAgentToolkit {
     this.tools = [];
     registerTools((t) => {
       this.tools.push(
-        tool<z.infer<typeof t.parameters>>({
+        tool({
           name: t.name,
           description: t.description,
           strict: true,
           parameters: t.parameters,
           needsApproval: !!t.annotations?.destructive,
-          execute: async (input: z.infer<typeof t.parameters>) => {
+          execute: async (input) => {
             const res = await t.callback(this._sumup, input);
-            return JSON.stringify(res);
+            return t.result.parse(res);
           },
         }),
       );

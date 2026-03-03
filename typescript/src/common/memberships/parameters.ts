@@ -158,5 +158,5 @@ Possible values are:
     ),
     total_count: z.number().int(),
   })
-  .passthrough()
+  .loose()
   .describe(`Returns a list of Membership objects.`);
