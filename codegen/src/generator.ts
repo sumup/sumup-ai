@@ -1,4 +1,4 @@
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { camelCase, kebabCase, snakeCase } from "change-case";
 import { OpenAPIV3, type OpenAPIV3_1 } from "openapi-types";
@@ -57,6 +57,9 @@ export async function generate(
   const entries = Array.from(operationsByTag.entries()).sort(([a], [b]) =>
     a.localeCompare(b),
   );
+  const generatedTagDirs = new Set(entries.map(([tag]) => kebabCase(tag)));
+
+  cleanupStaleGeneratedTagDirs(options.outputDir, generatedTagDirs);
 
   for (const [tag, operations] of entries) {
     const tagDir = resolve(options.outputDir, kebabCase(tag));
@@ -64,6 +67,32 @@ export async function generate(
     await writeParametersFile(tagDir, operations);
     await writeToolsFile(tagDir, operations, tag);
     await writeIndexFile(tagDir, operations);
+  }
+}
+
+function cleanupStaleGeneratedTagDirs(
+  outputDir: string,
+  generatedTagDirs: Set<string>,
+) {
+  for (const entry of readdirSync(outputDir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) {
+      continue;
+    }
+
+    if (generatedTagDirs.has(entry.name)) {
+      continue;
+    }
+
+    const dirPath = resolve(outputDir, entry.name);
+    const filenames = new Set(readdirSync(dirPath));
+    const looksGenerated =
+      filenames.has("index.ts") &&
+      filenames.has("parameters.ts") &&
+      filenames.has("tools.ts");
+
+    if (looksGenerated) {
+      rmSync(dirPath, { recursive: true, force: true });
+    }
   }
 }
 
@@ -334,6 +363,7 @@ function buildResultSchema(operation: OperationDetails) {
   const schema = json.schema as OpenAPIV3_1.SchemaObject;
   const schemaResult = schemaToZod(schema, {
     allowNullableAdditionalProperties: true,
+    looseEmptyObject: true,
     passthroughObjects: true,
   });
 
