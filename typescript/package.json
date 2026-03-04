@@ -50,15 +50,15 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@langchain/core": "^1.1.24",
-    "@modelcontextprotocol/sdk": "^1.26.0",
-    "@openai/agents": "^0.3.3",
-    "@sumup/sdk": "^0.0.13",
-    "ai": "^5.0.103",
-    "zod": "^3.25.76"
+    "@langchain/core": "^1.1.29",
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "@openai/agents": "^0.5.3",
+    "@sumup/sdk": "^0.1.1",
+    "ai": "^6.0.111",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.14",
+    "@biomejs/biome": "^2.4.5",
     "@rslib/core": "^0.19.2",
     "@types/node": "^25.2.0",
     "rsbuild-plugin-publint": "^0.3.4",

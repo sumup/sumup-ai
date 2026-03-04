@@ -28,9 +28,10 @@ class SumUpAgentToolkit implements BaseToolkit {
     registerTools((t) => {
       this.tools.push(
         tool(
-          async (input: z.infer<typeof t.parameters>): Promise<string> => {
-            const res = await t.callback(this._sumup, input);
-            return JSON.stringify(res);
+          async (
+            input: z.infer<typeof t.parameters>,
+          ): Promise<z.infer<typeof t.result>> => {
+            return await t.callback(this._sumup, input);
           },
           {
             name: t.name,

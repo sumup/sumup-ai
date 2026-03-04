@@ -20,6 +20,7 @@ type BuildObjectResult = {
 type SchemaToZodOptions = {
   allowNullableAdditionalProperties?: boolean;
   passthroughObjects?: boolean;
+  looseEmptyObject?: boolean;
 };
 
 function shouldSkipNullableAdditionalProperties(
@@ -116,7 +117,7 @@ export function schemaToZod(
         expr += ".nullable()";
       }
       if (shouldPassthroughObjects) {
-        expr += ".passthrough()";
+        expr += ".loose()";
       }
       return finalize(expr, schema);
     }
@@ -160,7 +161,7 @@ export function schemaToZod(
       expr += ".nullable()";
     }
     if (shouldPassthroughObjects) {
-      expr += ".passthrough()";
+      expr += ".loose()";
     }
     return finalize(expr, schema);
   }
@@ -190,7 +191,7 @@ export function schemaToZod(
 
   // default to a record of unknown values when a schema does not define a specific type.
   // This mirrors the behaviour of the SDK generator where these schemas represent maps.
-  return finalize("z.record(z.unknown())", schema);
+  return finalize("z.record(z.string(), z.unknown())", schema);
 }
 
 export function collectObjectFields(
@@ -260,6 +261,17 @@ function buildObject(
   }
 
   let expression = `z.object({${lines.length > 0 ? `\n  ${lines.join(",\n  ")}\n` : ""}})`;
+
+  if (
+    lines.length === 0 &&
+    !schema.additionalProperties &&
+    options.looseEmptyObject
+  ) {
+    return {
+      code: `z.record(z.string(), z.unknown())`,
+      hasOnlyAdditionalProperties: false,
+    };
+  }
 
   if (schema.additionalProperties) {
     if (schema.additionalProperties === true) {

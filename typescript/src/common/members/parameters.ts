@@ -125,7 +125,7 @@ export const createMerchantMemberResult = z
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A member is user within specific resource identified by resource id, resource type, and associated roles.`,
   );
@@ -228,7 +228,7 @@ export const getMerchantMemberResult = z
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A member is user within specific resource identified by resource id, resource type, and associated roles.`,
   );
@@ -358,7 +358,7 @@ export const listMerchantMembersResult = z
     ),
     total_count: z.number().int().optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`Returns a list of Member objects.`);
 
 export const updateMerchantMemberParameters = z.object({
@@ -481,7 +481,7 @@ export const updateMerchantMemberResult = z
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A member is user within specific resource identified by resource id, resource type, and associated roles.`,
   );

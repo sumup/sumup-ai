@@ -86,7 +86,7 @@ This field is currently in beta and may change.`,
       .string()
       .describe(`The timestamp of when the reader was last updated.`),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A physical card reader device that can accept in-person payments.`,
   );
@@ -213,7 +213,7 @@ It can be used later to fetch the transaction details via the [Transactions API]
 `),
     }),
   })
-  .passthrough()
+  .loose()
   .describe(`The Checkout got successfully created for the given reader.`);
 
 export const createReaderTerminateParameters = z.object({
@@ -311,7 +311,7 @@ This field is currently in beta and may change.`,
       .string()
       .describe(`The timestamp of when the reader was last updated.`),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A physical card reader device that can accept in-person payments.`,
   );
@@ -356,7 +356,7 @@ export const getReaderStatusResult = z
       status: z.enum(["ONLINE", "OFFLINE"]).describe(`Status of a device`),
     }),
   })
-  .passthrough()
+  .loose()
   .describe(`Status of a device`);
 
 export const listReadersParameters = z.object({
@@ -433,7 +433,7 @@ This field is currently in beta and may change.`,
         ),
     ),
   })
-  .passthrough()
+  .loose()
   .describe(`Returns a list Reader objects.`);
 
 export const updateReaderParameters = z.object({
@@ -523,7 +523,7 @@ This field is currently in beta and may change.`,
       .string()
       .describe(`The timestamp of when the reader was last updated.`),
   })
-  .passthrough()
+  .loose()
   .describe(
     `A physical card reader device that can accept in-person payments.`,
   );

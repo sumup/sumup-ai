@@ -159,7 +159,7 @@ export const getReceiptResult = z
       })
       .describe(`Receipt merchant data`)
       .optional(),
-    emv_data: z.object({}).optional(),
+    emv_data: z.record(z.string(), z.unknown()).optional(),
     acquirer_data: z
       .object({
         tid: z.string().optional(),
@@ -169,5 +169,5 @@ export const getReceiptResult = z
       })
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`OK`);

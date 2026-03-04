@@ -46,6 +46,7 @@ export const getTransactionV2_1Result = z
         "BRL",
         "CHF",
         "CLP",
+        "COP",
         "CZK",
         "DKK",
         "EUR",
@@ -177,11 +178,23 @@ export const getTransactionV2_1Result = z
         `Payout plan of the registered user at the time when the transaction was made.`,
       )
       .optional(),
+    foreign_transaction_id: z
+      .string()
+      .describe(`External/foreign transaction id (passed by clients).`)
+      .optional(),
+    client_transaction_id: z
+      .string()
+      .describe(`Client transaction id.`)
+      .optional(),
     username: z
       .string()
       .describe(
         `Email address of the registered user (merchant) to whom the payment is made.`,
       )
+      .optional(),
+    fee_amount: z
+      .number()
+      .describe(`Transaction SumUp total fee amount.`)
       .optional(),
     lat: z
       .number()
@@ -201,27 +214,47 @@ export const getTransactionV2_1Result = z
         `Indication of the precision of the geographical position received from the payment terminal.`,
       )
       .optional(),
+    merchant_id: z
+      .number()
+      .int()
+      .describe(`SumUp merchant internal Id.`)
+      .optional(),
+    device_info: z
+      .object({
+        name: z.string().describe(`Device name.`).optional(),
+        system_name: z.string().describe(`Device OS.`).optional(),
+        model: z.string().describe(`Device model.`).optional(),
+        system_version: z.string().describe(`Device OS version.`).optional(),
+        uuid: z.string().describe(`Device UUID.`).optional(),
+      })
+      .optional(),
     simple_payment_type: z
       .enum([
-        "MOTO",
         "CASH",
         "CC_SIGNATURE",
         "ELV",
+        "ELV_WITHOUT_SIGNATURE",
         "CC_CUSTOMER_ENTERED",
         "MANUAL_ENTRY",
         "EMV",
+        "RECURRING",
+        "BALANCE",
+        "MOTO",
+        "BOLETO",
+        "APM",
+        "BITCOIN",
+        "CARD",
       ])
       .describe(`Simple name of the payment type.`)
       .optional(),
     verification_method: z
       .enum([
         "none",
-        "na",
         "signature",
         "offline PIN",
         "online PIN",
         "offline PIN + signature",
-        "confirmation code verified",
+        "na",
       ])
       .describe(`Verification method used for the transaction.`)
       .optional(),
@@ -267,71 +300,85 @@ export const getTransactionV2_1Result = z
       })
       .describe(`Details of the payment card.`)
       .optional(),
+    elv_account: z
+      .object({
+        sort_code: z.string().describe(`ELV card sort code.`).optional(),
+        last_4_digits: z
+          .string()
+          .describe(`ELV card account number last 4 digits.`)
+          .optional(),
+        sequence_no: z
+          .number()
+          .int()
+          .describe(`ELV card sequence number.`)
+          .optional(),
+        iban: z.string().describe(`ELV IBAN.`).optional(),
+      })
+      .optional(),
     local_time: z
       .string()
       .describe(`Local date and time of the creation of the transaction.`)
       .optional(),
+    payout_date: z.string().describe(`The date of the payout.`).optional(),
     payout_type: z
-      .enum(["BANK_ACCOUNT", "BALANCE", "PREPAID_CARD"])
+      .enum(["BANK_ACCOUNT", "PREPAID_CARD"])
       .describe(`Payout type for the transaction.`)
+      .optional(),
+    process_as: z
+      .enum(["CREDIT", "DEBIT"])
+      .describe(`Debit/Credit.`)
       .optional(),
     products: z
       .array(
         z
           .object({
-            name: z
-              .string()
-              .describe(`Name of the product from the merchant's catalog.`)
-              .optional(),
-            price: z
-              .number()
-              .describe(`Price of the product without VAT.`)
-              .optional(),
-            vat_rate: z
-              .number()
-              .describe(`VAT rate applicable to the product.`)
-              .optional(),
+            name: z.string().describe(`Product name.`).optional(),
+            price_label: z.string().describe(`Product description.`).optional(),
+            price: z.number().describe(`Product price.`).optional(),
+            vat_rate: z.number().describe(`VAT percentage.`).optional(),
             single_vat_amount: z
               .number()
-              .describe(
-                `Amount of the VAT for a single product item (calculated as the product of \`price\` and \`vat_rate\`, i.e. \`single_vat_amount = price * vat_rate\`).`,
-              )
+              .describe(`VAT amount for a single product.`)
               .optional(),
             price_with_vat: z
               .number()
-              .describe(`Price of a single product item with VAT.`)
+              .describe(`Product price incl. VAT.`)
               .optional(),
-            vat_amount: z
-              .number()
-              .describe(
-                `Total VAT amount for the purchase (calculated as the product of \`single_vat_amount\` and \`quantity\`, i.e. \`vat_amount = single_vat_amount * quantity\`).`,
-              )
-              .optional(),
-            quantity: z
-              .number()
-              .describe(`Number of product items for the purchase.`)
-              .optional(),
+            vat_amount: z.number().describe(`VAT amount.`).optional(),
+            quantity: z.number().int().describe(`Product quantity.`).optional(),
             total_price: z
               .number()
-              .describe(
-                `Total price of the product items without VAT (calculated as the product of \`price\` and \`quantity\`, i.e. \`total_price = price * quantity\`).`,
-              )
+              .describe(`Quantity x product price.`)
               .optional(),
             total_with_vat: z
               .number()
-              .describe(
-                `Total price of the product items including VAT (calculated as the product of \`price_with_vat\` and \`quantity\`, i.e. \`total_with_vat = price_with_vat * quantity\`).`,
-              )
+              .describe(`Total price incl. VAT.`)
               .optional(),
           })
-          .describe(`Details of the product for which the payment is made.`),
+          .describe(`Purchase product.`),
       )
       .describe(
         `List of products from the merchant's catalogue for which the transaction serves as a payment.`,
       )
       .optional(),
     vat_rates: z
-      .array(z.record(z.unknown()))
+      .array(
+        z.object({
+          rate: z.number().describe(`VAT rate.`).optional(),
+          net: z
+            .number()
+            .describe(`NET amount of products having this VAT rate applied.`)
+            .optional(),
+          vat: z
+            .number()
+            .describe(`VAT amount of this rate applied.`)
+            .optional(),
+          gross: z
+            .number()
+            .describe(`Gross amount of products having this VAT rate applied.`)
+            .optional(),
+        }),
+      )
       .describe(`List of VAT rates applicable to the transaction.`)
       .optional(),
     transaction_events: z
@@ -394,6 +441,7 @@ export const getTransactionV2_1Result = z
         "REFUND_FAILED",
         "REFUNDED",
         "NON_COLLECTION",
+        "PENDING",
       ])
       .describe(
         `Status generated from the processing status and the latest transaction state.`,
@@ -401,24 +449,8 @@ export const getTransactionV2_1Result = z
       .optional(),
     links: z
       .array(
-        z.union([
-          z
-            .object({
-              rel: z
-                .string()
-                .describe(`Specifies the relation to the current resource.`)
-                .optional(),
-              href: z
-                .string()
-                .describe(`URL for accessing the related resource.`)
-                .optional(),
-              type: z
-                .string()
-                .describe(`Specifies the media type of the related resource.`)
-                .optional(),
-            })
-            .describe(`Details of a link to a related resource.`),
-          z.object({
+        z
+          .object({
             rel: z
               .string()
               .describe(`Specifies the relation to the current resource.`)
@@ -431,16 +463,8 @@ export const getTransactionV2_1Result = z
               .string()
               .describe(`Specifies the media type of the related resource.`)
               .optional(),
-            min_amount: z
-              .number()
-              .describe(`Minimum allowed amount for the refund.`)
-              .optional(),
-            max_amount: z
-              .number()
-              .describe(`Maximum allowed amount for the refund.`)
-              .optional(),
-          }),
-        ]),
+          })
+          .describe(`Details of a link to a related resource.`),
       )
       .describe(`List of hyperlinks for accessing related resources.`)
       .optional(),
@@ -529,7 +553,7 @@ export const getTransactionV2_1Result = z
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`OK`);
 
 export const listTransactionsV2_1Parameters = z.object({
@@ -684,6 +708,7 @@ export const listTransactionsV2_1Result = z
               "BRL",
               "CHF",
               "CLP",
+              "COP",
               "CZK",
               "DKK",
               "EUR",
@@ -814,31 +839,31 @@ export const listTransactionsV2_1Result = z
               `Issuing card network of the payment card used for the transaction.`,
             )
             .optional(),
+          payout_date: z
+            .string()
+            .describe(`Payout date (if paid out at once).`)
+            .optional(),
+          payout_type: z
+            .enum(["BANK_ACCOUNT", "PREPAID_CARD"])
+            .describe(`Payout type.`)
+            .optional(),
+          refunded_amount: z
+            .number()
+            .describe(`Total refunded amount.`)
+            .optional(),
         }),
       )
       .optional(),
     links: z
       .array(
-        z
-          .object({
-            rel: z
-              .string()
-              .describe(`Specifies the relation to the current resource.`)
-              .optional(),
-            href: z
-              .string()
-              .describe(`URL for accessing the related resource.`)
-              .optional(),
-            type: z
-              .string()
-              .describe(`Specifies the media type of the related resource.`)
-              .optional(),
-          })
-          .describe(`Details of a link to a related resource.`),
+        z.object({
+          rel: z.string().describe(`Relation.`),
+          href: z.string().describe(`Location.`),
+        }),
       )
       .optional(),
   })
-  .passthrough()
+  .loose()
   .describe(`OK`);
 
 export const refundTransactionParameters = z
