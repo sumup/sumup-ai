@@ -5,7 +5,6 @@ import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import SumUp from "@sumup/sdk";
 import { z } from "zod";
 import { registerTools, VERSION } from "../common";
-import { serializeToolResult } from "../common/serialize";
 
 // Type guard for checking if an error is an API error with status and response
 interface APIErrorLike {
@@ -139,7 +138,7 @@ class SumUpAgentToolkit extends McpServer {
               content: [
                 {
                   type: "text" as const,
-                  text: serializeToolResult(result),
+                  text: JSON.stringify(structuredContent, null, 2),
                 },
               ],
             };

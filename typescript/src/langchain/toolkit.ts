@@ -6,7 +6,6 @@ import {
 import SumUp from "@sumup/sdk";
 import type z from "zod";
 import { registerTools } from "../common";
-import { serializeToolResult } from "../common/serialize";
 
 class SumUpAgentToolkit implements BaseToolkit {
   private _sumup: SumUp;
@@ -29,9 +28,10 @@ class SumUpAgentToolkit implements BaseToolkit {
     registerTools((t) => {
       this.tools.push(
         tool(
-          async (input: z.infer<typeof t.parameters>): Promise<string> => {
-            const res = await t.callback(this._sumup, input);
-            return serializeToolResult(t.result.parse(res));
+          async (
+            input: z.infer<typeof t.parameters>,
+          ): Promise<z.infer<typeof t.result>> => {
+            return await t.callback(this._sumup, input);
           },
           {
             name: t.name,
