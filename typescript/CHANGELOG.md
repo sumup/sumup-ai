@@ -4,6 +4,22 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.10.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.9.1...typescript-v0.10.0) (2026-03-04)
+
+
+### Features
+
+* **sdk:** update to latest ([#384](https://github.com/sumup/sumup-ai/issues/384)) ([b492aa4](https://github.com/sumup/sumup-ai/commit/b492aa4e0a247844c0f45269636bbf5a7f678242))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @biomejs/biome in /typescript ([#365](https://github.com/sumup/sumup-ai/issues/365)) ([d612645](https://github.com/sumup/sumup-ai/commit/d612645663b9c04394da4df9308c34102e43f986))
+* **deps-dev:** bump minimatch ([#379](https://github.com/sumup/sumup-ai/issues/379)) ([784fc91](https://github.com/sumup/sumup-ai/commit/784fc91a437e7f8ed5eaae283347e547babd9a40))
+* **deps-dev:** bump rsbuild-plugin-publint in /typescript ([#363](https://github.com/sumup/sumup-ai/issues/363)) ([59eb5cd](https://github.com/sumup/sumup-ai/commit/59eb5cd3373a536bb2f8f6e03265073e4ceaf8b9))
+* **deps-dev:** bump typedoc from 0.28.16 to 0.28.17 in /typescript ([#373](https://github.com/sumup/sumup-ai/issues/373)) ([00e2d46](https://github.com/sumup/sumup-ai/commit/00e2d4679cde26bc766deb1b911dda28f996fe9e))
+* **deps:** bump @langchain/core from 1.1.8 to 1.1.24 in /typescript ([#371](https://github.com/sumup/sumup-ai/issues/371)) ([12d695b](https://github.com/sumup/sumup-ai/commit/12d695bf45e3f6a487faf64f05a5ba33c6d1a018))
+
 ## [0.9.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.9.0...typescript-v0.9.1) (2026-02-10)
 
 
