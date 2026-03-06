@@ -15,7 +15,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "baseUrl": ".",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },

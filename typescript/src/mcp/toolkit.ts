@@ -5,6 +5,11 @@ import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import SumUp from "@sumup/sdk";
 import { z } from "zod";
 import { registerTools, VERSION } from "../common";
+import {
+  addResourceMetadata,
+  constructResourceMetadata,
+  parseWWWAuthenticate,
+} from "./auth";
 
 // Type guard for checking if an error is an API error with status and response
 interface APIErrorLike {
@@ -29,16 +34,18 @@ function isAPIError(error: unknown): error is APIErrorLike {
 
 class SumUpAgentToolkit extends McpServer {
   private _sumup: SumUp;
-  private _resource?: string;
+  private _resourceMetadata?: string;
 
   constructor({
     apiKey,
     host,
     resource,
+    resourceMetadata,
   }: {
     apiKey: string;
     host?: string;
     resource?: string;
+    resourceMetadata?: string;
     configuration: ServerOptions;
   }) {
     super(
@@ -54,7 +61,8 @@ class SumUpAgentToolkit extends McpServer {
       },
     );
 
-    this._resource = resource;
+    this._resourceMetadata =
+      resourceMetadata ?? constructResourceMetadata(resource);
 
     this._sumup = new SumUp({
       apiKey,
@@ -148,16 +156,15 @@ class SumUpAgentToolkit extends McpServer {
               const wwwAuthenticate =
                 error.response.headers.get("www-authenticate");
 
-              if (wwwAuthenticate && this._resource) {
+              if (wwwAuthenticate && this._resourceMetadata) {
                 // Parse www-authenticate header to check if it's an OAuth error
-                const isOAuthError =
-                  this._parseWWWAuthenticate(wwwAuthenticate);
+                const isOAuthError = parseWWWAuthenticate(wwwAuthenticate);
 
                 if (isOAuthError) {
                   // Add resource_metadata to the www-authenticate header
-                  const enhancedHeader = this._addResourceMetadata(
+                  const enhancedHeader = addResourceMetadata(
                     wwwAuthenticate,
-                    this._resource,
+                    this._resourceMetadata,
                   );
 
                   // Throw McpError with www-authenticate header in data
@@ -183,51 +190,6 @@ class SumUpAgentToolkit extends McpServer {
         },
       );
     });
-  }
-
-  /**
-   * Parse WWW-Authenticate header to check if it contains OAuth challenge parameters.
-   * Returns true if the header appears to be an OAuth Bearer challenge.
-   */
-  private _parseWWWAuthenticate(header: string): boolean {
-    // Check if it's a Bearer challenge
-    if (!header.toLowerCase().startsWith("bearer")) {
-      return false;
-    }
-
-    // OAuth Bearer challenges typically contain error, error_description, or scope
-    return /\b(error|scope|realm)\s*=/i.test(header);
-  }
-
-  /**
-   * Add or override resource_metadata in WWW-Authenticate header.
-   */
-  private _addResourceMetadata(header: string, resource: string): string {
-    const trimmed = header.trim();
-
-    // If resource_metadata already exists, replace it
-    if (/resource_metadata\s*=/i.test(trimmed)) {
-      return trimmed.replace(
-        /resource_metadata\s*=\s*"[^"]*"/gi,
-        `resource_metadata="${resource}"`,
-      );
-    }
-
-    // Add resource_metadata to the header
-    // Format: Bearer error="...", resource_metadata="..."
-    // If header ends with quotes, add comma and parameter
-    // Otherwise just append it
-    if (trimmed.endsWith('"') || trimmed.endsWith("'")) {
-      return `${trimmed}, resource_metadata="${resource}"`;
-    }
-
-    // If there are existing parameters, add comma
-    if (trimmed.includes("=")) {
-      return `${trimmed}, resource_metadata="${resource}"`;
-    }
-
-    // Otherwise, add it after "Bearer"
-    return `${trimmed} resource_metadata="${resource}"`;
   }
 }
 
