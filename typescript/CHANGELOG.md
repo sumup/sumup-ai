@@ -4,6 +4,13 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.10.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.10.0...typescript-v0.10.1) (2026-03-06)
+
+
+### Bug Fixes
+
+* **sdk:** www-authenticate header handling for mcp ([2e232ca](https://github.com/sumup/sumup-ai/commit/2e232cac09f74201f8a4de38bc0628a769759517))
+
 ## [0.10.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.9.1...typescript-v0.10.0) (2026-03-04)
 
 
