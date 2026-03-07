@@ -2,35 +2,15 @@ import type { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-import SumUp from "@sumup/sdk";
+import SumUp, { APIError } from "@sumup/sdk";
 import { z } from "zod";
-import { registerTools, VERSION } from "../common";
 import {
-  addResourceMetadata,
   constructResourceMetadata,
-  parseWWWAuthenticate,
-} from "./auth";
-
-// Type guard for checking if an error is an API error with status and response
-interface APIErrorLike {
-  status: number;
-  response: Response;
-  message: string;
-}
-
-function isAPIError(error: unknown): error is APIErrorLike {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "status" in error &&
-    // biome-ignore lint/suspicious/noExplicitAny: Type guard needs runtime checking
-    typeof (error as any).status === "number" &&
-    "response" in error &&
-    // biome-ignore lint/suspicious/noExplicitAny: Type guard needs runtime checking
-    (error as any).response instanceof Response &&
-    "message" in error
-  );
-}
+  parseWWWAuthenticateChallenges,
+  registerTools,
+  stringifyWWWAuthenticateChallenges,
+  VERSION,
+} from "../common";
 
 class SumUpAgentToolkit extends McpServer {
   private _sumup: SumUp;
@@ -57,6 +37,7 @@ class SumUpAgentToolkit extends McpServer {
         capabilities: {
           resources: {},
           tools: {},
+          logging: {},
         },
       },
     );
@@ -76,8 +57,7 @@ class SumUpAgentToolkit extends McpServer {
         mimeType: "text/plain",
       },
       async (uri) => {
-        // TODO: use URI once new developer portal is rolled out.
-        const content = await fetch("https://developer.sumup.com/llms.txt");
+        const content = await fetch(uri.toString());
         return {
           contents: [
             {
@@ -97,10 +77,7 @@ class SumUpAgentToolkit extends McpServer {
         mimeType: "text/plain",
       },
       async (uri) => {
-        // TODO: use URI once we serve the raw OpenAPI specs in the developer portal.
-        const content = await fetch(
-          "https://raw.githubusercontent.com/sumup/openapi/refs/heads/main/openapi.json",
-        );
+        const content = await fetch(uri.toString());
         return {
           contents: [
             {
@@ -152,19 +129,30 @@ class SumUpAgentToolkit extends McpServer {
             };
           } catch (error) {
             // Handle OAuth authorization errors
-            if (isAPIError(error) && error.status === 401) {
+            if (error instanceof APIError && error.status === 401) {
               const wwwAuthenticate =
                 error.response.headers.get("www-authenticate");
 
               if (wwwAuthenticate && this._resourceMetadata) {
-                // Parse www-authenticate header to check if it's an OAuth error
-                const isOAuthError = parseWWWAuthenticate(wwwAuthenticate);
+                const challenges =
+                  parseWWWAuthenticateChallenges(wwwAuthenticate);
+                if (
+                  challenges?.some((challenge) => challenge.scheme === "bearer")
+                ) {
+                  const enhancedHeader = stringifyWWWAuthenticateChallenges(
+                    challenges.map((challenge) => {
+                      if (challenge.scheme !== "bearer" || challenge.token68) {
+                        return challenge;
+                      }
 
-                if (isOAuthError) {
-                  // Add resource_metadata to the www-authenticate header
-                  const enhancedHeader = addResourceMetadata(
-                    wwwAuthenticate,
-                    this._resourceMetadata,
+                      return {
+                        ...challenge,
+                        parameters: {
+                          ...challenge.parameters,
+                          resource_metadata: this._resourceMetadata,
+                        },
+                      };
+                    }),
                   );
 
                   // Throw McpError with www-authenticate header in data

@@ -1,3 +1,9 @@
+export {
+  constructResourceMetadata,
+  parseWWWAuthenticate,
+  parseWWWAuthenticateChallenges,
+  stringifyWWWAuthenticateChallenges,
+} from "./auth";
 export { VERSION } from "./const";
 
 import {
