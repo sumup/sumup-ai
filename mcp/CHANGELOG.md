@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.10.2](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.1...mcp-v0.10.2) (2026-03-13)
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @types/node from 25.3.0 to 25.3.3 in /mcp ([#394](https://github.com/sumup/sumup-ai/issues/394)) ([163162b](https://github.com/sumup/sumup-ai/commit/163162b21d1182188d5f712a24727f0f853a88ec))
+* **deps:** bump @modelcontextprotocol/sdk from 1.27.0 to 1.27.1 in /mcp ([#392](https://github.com/sumup/sumup-ai/issues/392)) ([7ba7126](https://github.com/sumup/sumup-ai/commit/7ba7126431707b47d5dee6b74a117743cc8658d9))
+* **deps:** bump express-rate-limit from 8.2.1 to 8.3.0 in /mcp in the npm_and_yarn group across 1 directory ([#389](https://github.com/sumup/sumup-ai/issues/389)) ([9354cbb](https://github.com/sumup/sumup-ai/commit/9354cbbdd2a211f03904acc5964dd2a2bb7c378f))
+* **deps:** bump the npm_and_yarn group across 1 directory with 2 updates ([#387](https://github.com/sumup/sumup-ai/issues/387)) ([699f22a](https://github.com/sumup/sumup-ai/commit/699f22a088da58320c67bd21a62fff9cdfd09b06))
+
 ## [0.10.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.0...mcp-v0.10.1) (2026-03-04)
 
 

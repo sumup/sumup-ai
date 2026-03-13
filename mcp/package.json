@@ -1,6 +1,6 @@
 {
   "name": "@sumup/mcp",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "MCP server for interacting with SumUp",
   "homepage": "https://github.com/sumup/sumup-ai",
   "license": "Apache-2.0",
