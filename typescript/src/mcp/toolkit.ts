@@ -12,22 +12,32 @@ import {
   VERSION,
 } from "../common";
 
+export type SumUpAgentToolkitOptions = {
+  apiKey?: string;
+  host?: string;
+  resource?: string;
+  resourceMetadata?: string;
+  configuration: ServerOptions;
+};
+
 class SumUpAgentToolkit extends McpServer {
-  private _sumup: SumUp;
+  private _apiKey?: string;
+  private _host?: string;
   private _resourceMetadata?: string;
 
+  /**
+   * Builds a SumUp MCP server.
+   *
+   * Direct toolkit users can provide a default `apiKey`. Remote MCP servers can
+   * leave it unset and rely on the validated bearer token propagated through
+   * the MCP request's auth context.
+   */
   constructor({
     apiKey,
     host,
     resource,
     resourceMetadata,
-  }: {
-    apiKey: string;
-    host?: string;
-    resource?: string;
-    resourceMetadata?: string;
-    configuration: ServerOptions;
-  }) {
+  }: SumUpAgentToolkitOptions) {
     super(
       {
         name: "SumUp",
@@ -44,11 +54,8 @@ class SumUpAgentToolkit extends McpServer {
 
     this._resourceMetadata =
       resourceMetadata ?? constructResourceMetadata(resource);
-
-    this._sumup = new SumUp({
-      apiKey,
-      host,
-    });
+    this._apiKey = apiKey;
+    this._host = host;
 
     this.registerResource(
       "SumUp developer documentation",
@@ -108,11 +115,11 @@ class SumUpAgentToolkit extends McpServer {
         },
         async (
           args: z.infer<typeof tool.parameters>,
+          extra,
         ): Promise<CallToolResult> => {
           try {
-            const result = tool.result.parse(
-              await tool.callback(this._sumup, args),
-            );
+            const sumup = this.createClient(extra?.authInfo?.token);
+            const result = tool.result.parse(await tool.callback(sumup, args));
             const structuredContent =
               typeof result === "object" && result !== null
                 ? (result as Record<string, unknown>)
@@ -177,6 +184,20 @@ class SumUpAgentToolkit extends McpServer {
           }
         },
       );
+    });
+  }
+
+  private createClient(accessToken?: string): SumUp {
+    return new SumUp({
+      apiKey: this._apiKey,
+      host: this._host,
+      ...(accessToken
+        ? {
+            baseParams: {
+              authorization: `Bearer ${accessToken}`,
+            },
+          }
+        : {}),
     });
   }
 }
