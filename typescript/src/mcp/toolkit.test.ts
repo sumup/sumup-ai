@@ -1,8 +1,9 @@
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
+import type SumUp from "@sumup/sdk";
 import { APIError } from "@sumup/sdk";
 
 const mockToolkitState = {
-  callback: async () => ({ ok: true }),
+  callback: async (_sumup: SumUp) => ({ ok: true }),
 };
 
 jest.mock("../common", () => {
@@ -29,7 +30,7 @@ jest.mock("../common", () => {
         result: z.object({
           ok: z.boolean(),
         }),
-        callback: async () => mockToolkitState.callback(),
+        callback: async (sumup: SumUp) => mockToolkitState.callback(sumup),
       });
     },
   };
@@ -38,6 +39,30 @@ jest.mock("../common", () => {
 import SumUpAgentToolkit from "./toolkit";
 
 describe("mcp toolkit auth error handling", () => {
+  test("uses authInfo token as a per-request authorization override", async () => {
+    mockToolkitState.callback = async (sumup: SumUp) => {
+      const headers = new Headers(sumup.baseParams.headers);
+      return {
+        ok: headers.get("authorization") === "Bearer request-token",
+      };
+    };
+
+    const toolkit = new SumUpAgentToolkit({
+      apiKey: "default-key",
+      configuration: {},
+    });
+
+    const tool =
+      // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
+      (toolkit as any)._registeredTools.mock_tool;
+
+    await expect(
+      tool.handler({}, { authInfo: { token: "request-token" } }),
+    ).resolves.toMatchObject({
+      structuredContent: { ok: true },
+    });
+  });
+
   test("maps @sumup/sdk APIError(401) with WWW-Authenticate to McpError", async () => {
     mockToolkitState.callback = async () => {
       const response = new Response(
@@ -54,7 +79,6 @@ describe("mcp toolkit auth error handling", () => {
     };
 
     const toolkit = new SumUpAgentToolkit({
-      apiKey: "test-key",
       resourceMetadata:
         "https://api.sumup.example/.well-known/oauth-protected-resource",
       configuration: {},
