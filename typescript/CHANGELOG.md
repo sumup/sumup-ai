@@ -4,6 +4,25 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.11.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.10.1...typescript-v0.11.0) (2026-03-13)
+
+
+### Features
+
+* **typescript:** auth styles in MCP ([#396](https://github.com/sumup/sumup-ai/issues/396)) ([fc35e69](https://github.com/sumup/sumup-ai/commit/fc35e69ead9a127c330d8c99b1e2b8863a70b5e5))
+
+
+### Chores
+
+* **sdk:** refactor www-authenticate header handling ([5954433](https://github.com/sumup/sumup-ai/commit/5954433a2b19b8b343f23ea3bf8f093cdb392086))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @rslib/core from 0.19.2 to 0.19.6 in /typescript ([#393](https://github.com/sumup/sumup-ai/issues/393)) ([feafc77](https://github.com/sumup/sumup-ai/commit/feafc7701e192ec8799dc0e2bfce4b0592731f6b))
+* **deps-dev:** bump @types/node from 25.2.0 to 25.3.3 in /typescript ([#395](https://github.com/sumup/sumup-ai/issues/395)) ([cfe26e3](https://github.com/sumup/sumup-ai/commit/cfe26e30a091009b00d5fd635c1f9ad51609750e))
+* **deps:** bump express-rate-limit from 8.2.1 to 8.3.0 in /typescript in the npm_and_yarn group across 1 directory ([#390](https://github.com/sumup/sumup-ai/issues/390)) ([05e44f6](https://github.com/sumup/sumup-ai/commit/05e44f6edcd83971e43982bcb3921ad77094e672))
+
 ## [0.10.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.10.0...typescript-v0.10.1) (2026-03-06)
 
 
