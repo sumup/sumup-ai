@@ -50,23 +50,23 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@langchain/core": "^1.1.33",
-    "@modelcontextprotocol/sdk": "^1.27.1",
-    "@openai/agents": "^0.5.4",
+    "@langchain/core": "^1.1.36",
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "@openai/agents": "^0.8.1",
     "@sumup/sdk": "^0.1.3",
-    "ai": "^6.0.128",
+    "ai": "^6.0.141",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.5",
-    "@rslib/core": "^0.19.6",
+    "@biomejs/biome": "^2.4.9",
+    "@rslib/core": "^0.20.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.3.5",
-    "jest": "^30.2.0",
+    "@types/node": "^25.5.0",
+    "jest": "^30.3.0",
     "rsbuild-plugin-publint": "^0.3.4",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.28.17",
+    "typedoc": "^0.28.18",
     "typescript": "^5.9.3"
   },
   "files": [
