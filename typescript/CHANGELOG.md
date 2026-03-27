@@ -4,6 +4,21 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.12.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.11.0...typescript-v0.12.0) (2026-03-27)
+
+
+### Features
+
+* **sdk:** expose tool metadata ([#413](https://github.com/sumup/sumup-ai/issues/413)) ([6ac02f5](https://github.com/sumup/sumup-ai/commit/6ac02f5c02f604de1f9bbbe0c40de377ec993120))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @types/node from 25.3.3 to 25.3.5 in /typescript ([#403](https://github.com/sumup/sumup-ai/issues/403)) ([c7a13a5](https://github.com/sumup/sumup-ai/commit/c7a13a5cb20d15e2b36356e3d8da634d1ba8248d))
+* **deps:** bump @langchain/core from 1.1.29 to 1.1.31 in /typescript ([#398](https://github.com/sumup/sumup-ai/issues/398)) ([bf8c376](https://github.com/sumup/sumup-ai/commit/bf8c376d8277159a85d4f70ff54162ea370167be))
+* **deps:** bump @openai/agents from 0.5.3 to 0.5.4 in /typescript ([#400](https://github.com/sumup/sumup-ai/issues/400)) ([442a666](https://github.com/sumup/sumup-ai/commit/442a666db5bbac3ffa917221c2681fa46370c7e5))
+* **deps:** bump ai from 6.0.111 to 6.0.116 in /typescript ([#407](https://github.com/sumup/sumup-ai/issues/407)) ([b2168a0](https://github.com/sumup/sumup-ai/commit/b2168a0eac5c240a87afa09081039b7aa7032713))
+
 ## [0.11.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.10.1...typescript-v0.11.0) (2026-03-13)
 
 

@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.11.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.2...mcp-v0.11.0) (2026-03-27)
+
+
+### Features
+
+* **sdk:** expose tool metadata ([#413](https://github.com/sumup/sumup-ai/issues/413)) ([6ac02f5](https://github.com/sumup/sumup-ai/commit/6ac02f5c02f604de1f9bbbe0c40de377ec993120))
+
+
+### Chores
+
+* release main ([#388](https://github.com/sumup/sumup-ai/issues/388)) ([fb02c23](https://github.com/sumup/sumup-ai/commit/fb02c23f59911e9ef55e53cf6de093c6c591539f))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @biomejs/biome from 2.4.4 to 2.4.7 in /mcp ([#410](https://github.com/sumup/sumup-ai/issues/410)) ([3f267e9](https://github.com/sumup/sumup-ai/commit/3f267e91cbdcd482e8f9304131f81749673048c0))
+* **deps-dev:** bump @rslib/core from 0.19.6 to 0.20.0 in /mcp ([#412](https://github.com/sumup/sumup-ai/issues/412)) ([4773437](https://github.com/sumup/sumup-ai/commit/47734378e3bc73610eec97ba8bd8f16d9f53f2ba))
+* **deps-dev:** bump @types/node from 25.3.0 to 25.3.3 in /mcp ([#394](https://github.com/sumup/sumup-ai/issues/394)) ([163162b](https://github.com/sumup/sumup-ai/commit/163162b21d1182188d5f712a24727f0f853a88ec))
+* **deps-dev:** bump @types/node from 25.3.3 to 25.5.0 in /mcp ([#409](https://github.com/sumup/sumup-ai/issues/409)) ([3b9cc42](https://github.com/sumup/sumup-ai/commit/3b9cc42892055476a8fa509f7d36d5e103e477fd))
+* **deps:** bump @modelcontextprotocol/sdk from 1.27.0 to 1.27.1 in /mcp ([#392](https://github.com/sumup/sumup-ai/issues/392)) ([7ba7126](https://github.com/sumup/sumup-ai/commit/7ba7126431707b47d5dee6b74a117743cc8658d9))
+* **deps:** bump @modelcontextprotocol/sdk in /mcp ([#405](https://github.com/sumup/sumup-ai/issues/405)) ([0196154](https://github.com/sumup/sumup-ai/commit/0196154b8501ee3a2041707401422758bd929d79))
+* **deps:** bump @sumup/agent-toolkit from 0.9.1 to 0.11.0 in /mcp ([#411](https://github.com/sumup/sumup-ai/issues/411)) ([4354951](https://github.com/sumup/sumup-ai/commit/4354951de56a2165596cfe6f896e972c7dc9eb29))
+* **deps:** bump express-rate-limit from 8.2.1 to 8.3.0 in /mcp in the npm_and_yarn group across 1 directory ([#389](https://github.com/sumup/sumup-ai/issues/389)) ([9354cbb](https://github.com/sumup/sumup-ai/commit/9354cbbdd2a211f03904acc5964dd2a2bb7c378f))
+* **deps:** bump node from `fd16460` to `636c5bc` in /mcp ([#391](https://github.com/sumup/sumup-ai/issues/391)) ([6a4a8a4](https://github.com/sumup/sumup-ai/commit/6a4a8a4862ac8ade10bc35c897cea38948ca19db))
+
 ## [0.10.2](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.1...mcp-v0.10.2) (2026-03-13)
 
 
