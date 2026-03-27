@@ -1,6 +1,6 @@
 import {
   type BaseToolkit,
-  type StructuredTool,
+  type StructuredToolInterface,
   tool,
 } from "@langchain/core/tools";
 import SumUp from "@sumup/sdk";
@@ -10,7 +10,7 @@ import { registerTools } from "../common";
 class SumUpAgentToolkit implements BaseToolkit {
   private _sumup: SumUp;
 
-  tools: StructuredTool[];
+  tools: StructuredToolInterface[];
 
   constructor({
     apiKey,
@@ -49,7 +49,7 @@ class SumUpAgentToolkit implements BaseToolkit {
     });
   }
 
-  getTools(): StructuredTool[] {
+  getTools(): StructuredToolInterface[] {
     return this.tools;
   }
 }
