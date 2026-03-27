@@ -33,6 +33,7 @@ export const getTransactionV2_1: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["transactions.history"],
   },
 };
 
@@ -53,6 +54,7 @@ export const listTransactionsV2_1: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["transactions.history"],
   },
 };
 
@@ -73,5 +75,6 @@ export const refundTransaction: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payments"],
   },
 };

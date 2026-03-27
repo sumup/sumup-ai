@@ -20,5 +20,6 @@ export const listMemberships: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };

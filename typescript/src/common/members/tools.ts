@@ -31,6 +31,7 @@ export const createMerchantMember: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -51,6 +52,7 @@ export const deleteMerchantMember: Tool<
     readOnly: false,
     destructive: true,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -71,6 +73,7 @@ export const getMerchantMember: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -91,6 +94,7 @@ export const listMerchantMembers: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -111,5 +115,6 @@ export const updateMerchantMember: Tool<
     readOnly: false,
     destructive: false,
     idempotent: true,
+    oauthScopes: [],
   },
 };

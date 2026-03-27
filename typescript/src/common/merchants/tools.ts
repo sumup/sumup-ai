@@ -27,6 +27,7 @@ export const getMerchant: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["user.profile", "user.profile_readonly"],
   },
 };
 
@@ -47,6 +48,7 @@ export const getPerson: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["user.profile", "user.profile_readonly"],
   },
 };
 
@@ -67,5 +69,6 @@ export const listPersons: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["user.profile", "user.profile_readonly"],
   },
 };

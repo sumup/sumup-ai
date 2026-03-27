@@ -20,5 +20,6 @@ export const getReceipt: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };

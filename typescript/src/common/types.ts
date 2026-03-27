@@ -43,4 +43,8 @@ type Annotations = {
    * Default: false
    */
   idempotent?: boolean;
+  /**
+   * OAuth scopes that can be used to authorize access to the endpoint.
+   */
+  oauthScopes?: string[];
 };

@@ -9,6 +9,7 @@ import {
   parseWWWAuthenticateChallenges,
   registerTools,
   stringifyWWWAuthenticateChallenges,
+  TOOL_OAUTH_SCOPES_META_KEY,
   VERSION,
 } from "../common";
 
@@ -112,6 +113,11 @@ class SumUpAgentToolkit extends McpServer {
             destructiveHint: tool.annotations?.destructive,
             idempotentHint: tool.annotations?.idempotent,
           },
+          _meta: tool.annotations?.oauthScopes?.length
+            ? {
+                [TOOL_OAUTH_SCOPES_META_KEY]: tool.annotations.oauthScopes,
+              }
+            : undefined,
         },
         async (
           args: z.infer<typeof tool.parameters>,

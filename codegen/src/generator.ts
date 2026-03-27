@@ -29,6 +29,7 @@ type OperationDetails = {
   bodyFields: NormalizedField[];
   bodyDescription?: string;
   responses?: OpenAPIV3_1.ResponsesObject;
+  oauthScopes: string[];
 };
 
 export type CodegenOptions = {
@@ -184,6 +185,7 @@ function collectOperations(
         bodyFields,
         bodyDescription,
         responses: operation.responses,
+        oauthScopes: collectOAuthScopes(spec, operation),
       };
 
       const existing = map.get(tag);
@@ -200,6 +202,40 @@ function collectOperations(
   }
 
   return map;
+}
+
+function collectOAuthScopes(
+  spec: OpenAPIV3_1.Document,
+  operation: OpenAPIV3_1.OperationObject,
+) {
+  const securityRequirements = operation.security ?? spec.security ?? [];
+  const scopes = new Set<string>();
+
+  for (const requirement of securityRequirements) {
+    for (const [schemeName, schemeScopes] of Object.entries(requirement)) {
+      if (!Array.isArray(schemeScopes)) {
+        continue;
+      }
+
+      const scheme = spec.components?.securitySchemes?.[schemeName];
+      if (
+        scheme &&
+        !("$ref" in scheme) &&
+        scheme.type !== "oauth2" &&
+        scheme.type !== "openIdConnect"
+      ) {
+        continue;
+      }
+
+      for (const scope of schemeScopes) {
+        if (typeof scope === "string" && scope.length > 0) {
+          scopes.add(scope);
+        }
+      }
+    }
+  }
+
+  return Array.from(scopes).sort((a, b) => a.localeCompare(b));
 }
 
 function normalizeParameters(params: OpenAPIV3_1.ParameterObject[]) {
@@ -426,6 +462,7 @@ async function writeToolsFile(
       `    readOnly: ${operation.method === OpenAPIV3.HttpMethods.GET},`,
       `    destructive: ${operation.method === OpenAPIV3.HttpMethods.DELETE},`,
       `    idempotent: ${operation.method === OpenAPIV3.HttpMethods.PUT},`,
+      `    oauthScopes: [${operation.oauthScopes.map((scope) => JSON.stringify(scope)).join(", ")}],`,
       `  },`,
       `};`,
       "",

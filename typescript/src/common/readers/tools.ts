@@ -37,6 +37,7 @@ export const createReader: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.write"],
   },
 };
 
@@ -48,7 +49,7 @@ export const createReaderCheckout: Tool<
   title: `Create a Reader Checkout`,
   description: `Creates a Checkout for a Reader.
 
-This process is asynchronous and the actual transaction may take some time to be stared on the device.
+This process is asynchronous and the actual transaction may take some time to be started on the device.
 
 
 There are some caveats when using this endpoint:
@@ -67,6 +68,7 @@ There are some caveats when using this endpoint:
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.write"],
   },
 };
 
@@ -100,6 +102,7 @@ If a transaction is successfully terminated and \`return_url\` was provided on C
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.write"],
   },
 };
 
@@ -120,6 +123,7 @@ export const deleteReader: Tool<
     readOnly: false,
     destructive: true,
     idempotent: false,
+    oauthScopes: ["readers.write"],
   },
 };
 
@@ -140,6 +144,7 @@ export const getReader: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.read"],
   },
 };
 
@@ -178,6 +183,7 @@ Device Status
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.read"],
   },
 };
 
@@ -198,6 +204,7 @@ export const listReaders: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.read"],
   },
 };
 
@@ -218,5 +225,6 @@ export const updateReader: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["readers.write"],
   },
 };

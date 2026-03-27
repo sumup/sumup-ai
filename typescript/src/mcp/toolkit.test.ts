@@ -19,6 +19,9 @@ jest.mock("../common", () => {
         description: string;
         parameters: ReturnType<typeof z.object>;
         result: ReturnType<typeof z.object>;
+        annotations?: {
+          oauthScopes?: string[];
+        };
         callback: typeof mockToolkitState.callback;
       }) => void,
     ) => {
@@ -30,6 +33,9 @@ jest.mock("../common", () => {
         result: z.object({
           ok: z.boolean(),
         }),
+        annotations: {
+          oauthScopes: ["mock.read", "mock.write"],
+        },
         callback: async (sumup: SumUp) => mockToolkitState.callback(sumup),
       });
     },
@@ -60,6 +66,20 @@ describe("mcp toolkit auth error handling", () => {
       tool.handler({}, { authInfo: { token: "request-token" } }),
     ).resolves.toMatchObject({
       structuredContent: { ok: true },
+    });
+  });
+
+  test("exposes OAuth scopes in MCP tool metadata", () => {
+    const toolkit = new SumUpAgentToolkit({
+      configuration: {},
+    });
+
+    const tool =
+      // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
+      (toolkit as any)._registeredTools.mock_tool;
+
+    expect(tool._meta).toEqual({
+      "com.sumup/oauth-scopes": ["mock.read", "mock.write"],
     });
   });
 
