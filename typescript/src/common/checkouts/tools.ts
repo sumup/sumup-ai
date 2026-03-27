@@ -35,6 +35,7 @@ Follow by processing a checkout to charge the provided payment instrument.`,
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payments"],
   },
 };
 
@@ -55,6 +56,7 @@ export const deactivateCheckout: Tool<
     readOnly: false,
     destructive: true,
     idempotent: false,
+    oauthScopes: ["payments"],
   },
 };
 
@@ -75,6 +77,7 @@ export const getCheckout: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payments"],
   },
 };
 
@@ -98,6 +101,7 @@ export const getPaymentMethods: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -118,5 +122,6 @@ export const listCheckouts: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payments"],
   },
 };

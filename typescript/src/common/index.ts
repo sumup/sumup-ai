@@ -4,7 +4,7 @@ export {
   parseWWWAuthenticateChallenges,
   stringifyWWWAuthenticateChallenges,
 } from "./auth";
-export { VERSION } from "./const";
+export { TOOL_OAUTH_SCOPES_META_KEY, VERSION } from "./const";
 
 import {
   createCheckout,

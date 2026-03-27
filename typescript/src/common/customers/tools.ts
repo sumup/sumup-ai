@@ -31,6 +31,7 @@ export const createCustomer: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payment_instruments"],
   },
 };
 
@@ -55,6 +56,7 @@ export const deactivatePaymentInstrument: Tool<
     readOnly: false,
     destructive: true,
     idempotent: false,
+    oauthScopes: ["payment_instruments"],
   },
 };
 
@@ -75,6 +77,7 @@ export const getCustomer: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payment_instruments"],
   },
 };
 
@@ -95,6 +98,7 @@ export const listPaymentInstruments: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["payment_instruments"],
   },
 };
 
@@ -117,5 +121,6 @@ The request only overwrites the parameters included in the request, all other pa
     readOnly: false,
     destructive: false,
     idempotent: true,
+    oauthScopes: ["payment_instruments"],
   },
 };

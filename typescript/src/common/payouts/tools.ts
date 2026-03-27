@@ -20,5 +20,6 @@ export const listPayoutsV1: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: ["user.profile", "user.profile_readonly"],
   },
 };

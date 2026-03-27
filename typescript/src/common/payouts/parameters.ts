@@ -39,4 +39,4 @@ export const listPayoutsV1Result = z
         .optional(),
     }),
   )
-  .describe(`OK`);
+  .describe(`List of payout summaries.`);

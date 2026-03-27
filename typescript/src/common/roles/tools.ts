@@ -31,6 +31,7 @@ export const createMerchantRole: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -51,6 +52,7 @@ export const deleteMerchantRole: Tool<
     readOnly: false,
     destructive: true,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -71,6 +73,7 @@ export const getMerchantRole: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -91,6 +94,7 @@ export const listMerchantRoles: Tool<
     readOnly: true,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };
 
@@ -111,5 +115,6 @@ export const updateMerchantRole: Tool<
     readOnly: false,
     destructive: false,
     idempotent: false,
+    oauthScopes: [],
   },
 };

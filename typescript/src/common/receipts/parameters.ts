@@ -45,6 +45,7 @@ export const getReceiptResult = z
               .optional(),
             type: z.string().describe(`Card Scheme.`).optional(),
           })
+          .describe(`Payment card details displayed on the receipt.`)
           .optional(),
         installments_count: z
           .number()
@@ -96,38 +97,45 @@ export const getReceiptResult = z
           .optional(),
         events: z
           .array(
-            z.object({
-              id: z
-                .number()
-                .int()
-                .describe(`Unique ID of the transaction event.`)
-                .optional(),
-              transaction_id: z
-                .string()
-                .describe(`Unique ID of the transaction.`)
-                .optional(),
-              type: z
-                .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
-                .describe(`Type of the transaction event.`)
-                .optional(),
-              status: z
-                .enum([
-                  "PENDING",
-                  "SCHEDULED",
-                  "FAILED",
-                  "REFUNDED",
-                  "SUCCESSFUL",
-                  "PAID_OUT",
-                ])
-                .describe(`Status of the transaction event.`)
-                .optional(),
-              amount: z.string().describe(`Amount of the event.`).optional(),
-              timestamp: z
-                .string()
-                .describe(`Date and time of the transaction event.`)
-                .optional(),
-              receipt_no: z.string().optional(),
-            }),
+            z
+              .object({
+                id: z
+                  .number()
+                  .int()
+                  .describe(`Unique ID of the transaction event.`)
+                  .optional(),
+                transaction_id: z
+                  .string()
+                  .describe(`Unique ID of the transaction.`)
+                  .optional(),
+                type: z
+                  .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
+                  .describe(`Type of the transaction event.`)
+                  .optional(),
+                status: z
+                  .enum([
+                    "PENDING",
+                    "SCHEDULED",
+                    "FAILED",
+                    "REFUNDED",
+                    "SUCCESSFUL",
+                    "PAID_OUT",
+                  ])
+                  .describe(`Status of the transaction event.`)
+                  .optional(),
+                amount: z.string().describe(`Amount of the event.`).optional(),
+                timestamp: z
+                  .string()
+                  .describe(`Date and time of the transaction event.`)
+                  .optional(),
+                receipt_no: z
+                  .string()
+                  .describe(`Receipt number associated with the event.`)
+                  .optional(),
+              })
+              .describe(
+                `Transaction event details as rendered on the receipt.`,
+              ),
           )
           .describe(`Events`)
           .optional(),
@@ -154,12 +162,19 @@ export const getReceiptResult = z
               })
               .optional(),
           })
+          .describe(`Merchant profile details displayed on the receipt.`)
           .optional(),
-        locale: z.string().optional(),
+        locale: z
+          .string()
+          .describe(`Locale used for rendering localized receipt fields.`)
+          .optional(),
       })
       .describe(`Receipt merchant data`)
       .optional(),
-    emv_data: z.record(z.string(), z.unknown()).optional(),
+    emv_data: z
+      .record(z.string(), z.unknown())
+      .describe(`EMV-specific metadata returned for card-present payments.`)
+      .optional(),
     acquirer_data: z
       .object({
         tid: z.string().optional(),
@@ -167,7 +182,8 @@ export const getReceiptResult = z
         return_code: z.string().optional(),
         local_time: z.string().optional(),
       })
+      .describe(`Acquirer-specific metadata related to the card authorization.`)
       .optional(),
   })
   .loose()
-  .describe(`OK`);
+  .describe(`Receipt details for a transaction.`);

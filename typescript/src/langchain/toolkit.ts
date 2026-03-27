@@ -37,6 +37,11 @@ class SumUpAgentToolkit implements BaseToolkit {
             name: t.name,
             description: t.description,
             schema: t.parameters,
+            metadata: t.annotations?.oauthScopes?.length
+              ? {
+                  oauthScopes: t.annotations.oauthScopes,
+                }
+              : undefined,
             responseFormat: "content",
           },
         ),
