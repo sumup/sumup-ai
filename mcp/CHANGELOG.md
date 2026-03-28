@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.0...mcp-v0.11.1) (2026-03-28)
+
+
+### Build System & Dependencies
+
+* **deps:** bump path-to-regexp ([#417](https://github.com/sumup/sumup-ai/issues/417)) ([7be768a](https://github.com/sumup/sumup-ai/commit/7be768af5bfbcb1076104d4cb656d8c31fc832e2))
+
 ## [0.11.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.2...mcp-v0.11.0) (2026-03-27)
 
 
