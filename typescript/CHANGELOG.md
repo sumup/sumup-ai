@@ -4,6 +4,18 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.13.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.12.0...typescript-v0.13.0) (2026-03-28)
+
+
+### Features
+
+* **sdk:** update deps to latest ([#415](https://github.com/sumup/sumup-ai/issues/415)) ([bdd9534](https://github.com/sumup/sumup-ai/commit/bdd9534adcd40a79ed6aa4768acd277a53201926))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump handlebars ([#416](https://github.com/sumup/sumup-ai/issues/416)) ([6dca471](https://github.com/sumup/sumup-ai/commit/6dca47161951bc66fecf8cd06c36b4426a16bc90))
+
 ## [0.12.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.11.0...typescript-v0.12.0) (2026-03-27)
 
 
