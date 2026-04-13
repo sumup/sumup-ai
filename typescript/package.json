@@ -58,7 +58,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.9",
+    "@biomejs/biome": "^2.4.10",
     "@rslib/core": "^0.20.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.0",
