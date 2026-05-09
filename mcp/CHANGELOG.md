@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.11.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.0...mcp-v0.11.1) (2026-05-09)
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @biomejs/biome from 2.4.7 to 2.4.9 in /mcp ([#425](https://github.com/sumup/sumup-ai/issues/425)) ([83ea1b5](https://github.com/sumup/sumup-ai/commit/83ea1b524c3c00399e0e854003158a08e4411555))
+* **deps-dev:** bump @rslib/core from 0.20.0 to 0.20.1 in /mcp ([#423](https://github.com/sumup/sumup-ai/issues/423)) ([2ff5e02](https://github.com/sumup/sumup-ai/commit/2ff5e02e15fdd50eb9a29838bf8cff05f5b4ff6e))
+* **deps:** bump @sumup/agent-toolkit from 0.11.0 to 0.12.0 in /mcp ([#426](https://github.com/sumup/sumup-ai/issues/426)) ([50c2ee6](https://github.com/sumup/sumup-ai/commit/50c2ee6ebd940c3300b660eb8391b4bd17902df0))
+* **deps:** bump fast-uri from 3.1.0 to 3.1.2 in /mcp in the npm_and_yarn group across 1 directory ([#443](https://github.com/sumup/sumup-ai/issues/443)) ([e30f7f6](https://github.com/sumup/sumup-ai/commit/e30f7f627f34b1f00c13b21a84cb0bd877602fa7))
+* **deps:** bump path-to-regexp ([#417](https://github.com/sumup/sumup-ai/issues/417)) ([7be768a](https://github.com/sumup/sumup-ai/commit/7be768af5bfbcb1076104d4cb656d8c31fc832e2))
+
 ## [0.11.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.2...mcp-v0.11.0) (2026-03-27)
 
 

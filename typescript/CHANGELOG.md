@@ -4,6 +4,21 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.13.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.12.0...typescript-v0.13.0) (2026-05-09)
+
+
+### Features
+
+* **sdk:** update deps to latest ([#415](https://github.com/sumup/sumup-ai/issues/415)) ([bdd9534](https://github.com/sumup/sumup-ai/commit/bdd9534adcd40a79ed6aa4768acd277a53201926))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump handlebars ([#416](https://github.com/sumup/sumup-ai/issues/416)) ([6dca471](https://github.com/sumup/sumup-ai/commit/6dca47161951bc66fecf8cd06c36b4426a16bc90))
+* **deps:** bump ai from 6.0.141 to 6.0.146 in /typescript ([#434](https://github.com/sumup/sumup-ai/issues/434)) ([f55b488](https://github.com/sumup/sumup-ai/commit/f55b488439d02a0bd45f64cbd9eea6d97be2c59d))
+* **deps:** bump the npm_and_yarn group across 1 directory with 2 updates ([#444](https://github.com/sumup/sumup-ai/issues/444)) ([dd50940](https://github.com/sumup/sumup-ai/commit/dd50940201bf7de576a7c538657105cad7a87b95))
+* **deps:** bump the npm_and_yarn group across 2 directories with 2 updates ([#445](https://github.com/sumup/sumup-ai/issues/445)) ([5004f19](https://github.com/sumup/sumup-ai/commit/5004f1985a75c450e39209787ced5197d6afea6c))
+
 ## [0.12.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.11.0...typescript-v0.12.0) (2026-03-27)
 
 
