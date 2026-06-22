@@ -54,6 +54,6 @@
     "@types/node": "^25.3.0",
     "rsbuild-plugin-publint": "^0.3.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^6.0.2"
   }
 }
