@@ -7,6 +7,24 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+    groups:
+      tooling:
+        dependency-type: development
+        patterns:
+          - "@biomejs/biome"
+          - "@types/node"
+          - "ts-node"
+          - "typescript"
+      rslib:
+        dependency-type: development
+        patterns:
+          - "@rslib/core"
+          - "rsbuild-plugin-publint"
+      mcp-runtime:
+        dependency-type: production
+        patterns:
+          - "@modelcontextprotocol/sdk"
+          - "@sumup/agent-toolkit"
   - package-ecosystem: "npm"
     directory: "/typescript"
     open-pull-requests-limit: 5
@@ -14,6 +32,30 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+    groups:
+      tooling:
+        dependency-type: development
+        patterns:
+          - "@biomejs/biome"
+          - "@types/node"
+          - "@types/jest"
+          - "jest"
+          - "ts-jest"
+          - "ts-node"
+          - "typedoc"
+          - "typescript"
+      rslib:
+        dependency-type: development
+        patterns:
+          - "@rslib/core"
+          - "rsbuild-plugin-publint"
+      ai-runtime:
+        dependency-type: production
+        patterns:
+          - "@langchain/core"
+          - "@modelcontextprotocol/sdk"
+          - "@openai/agents"
+          - "ai"
   - package-ecosystem: "github-actions"
     directory: "/"
     open-pull-requests-limit: 5
@@ -21,6 +63,18 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+    groups:
+      core-actions:
+        patterns:
+          - "actions/*"
+      quality-actions:
+        patterns:
+          - "amannn/action-semantic-pull-request"
+          - "biomejs/setup-biome"
+          - "reviewdog/action-actionlint"
+      release-actions:
+        patterns:
+          - "google-github-actions/release-please-action"
   - package-ecosystem: "docker"
     directory: "/mcp"
     open-pull-requests-limit: 5
@@ -28,3 +82,26 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+  - package-ecosystem: "npm"
+    directory: "/codegen"
+    open-pull-requests-limit: 5
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    groups:
+      tooling:
+        dependency-type: development
+        patterns:
+          - "@biomejs/biome"
+          - "@types/node"
+          - "ts-node"
+          - "typescript"
+      generator-runtime:
+        dependency-type: production
+        patterns:
+          - "@apidevtools/swagger-parser"
+          - "change-case"
+          - "commander"
+          - "openapi-types"
+          - "prettier"
