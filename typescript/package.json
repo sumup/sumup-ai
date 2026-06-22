@@ -59,11 +59,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.14",
-    "@rslib/core": "^0.20.1",
+    "@rslib/core": "^0.22.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^25.5.0",
     "jest": "^30.3.0",
-    "rsbuild-plugin-publint": "^0.3.4",
+    "rsbuild-plugin-publint": "^1.0.0",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.18",
