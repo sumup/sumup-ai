@@ -1,18 +1,16 @@
 import { z } from "zod";
 
 export const getTransactionV2_1Parameters = z.object({
-  merchantCode: z.string(),
+  merchantCode: z
+    .string()
+    .describe(
+      `Merchant code of the account whose transaction should be retrieved.`,
+    ),
   id: z
     .string()
     .optional()
     .describe(
       `Retrieves the transaction resource with the specified transaction ID (the \`id\` parameter in the transaction resource).`,
-    ),
-  internal_id: z
-    .string()
-    .optional()
-    .describe(
-      `Retrieves the transaction resource with the specified internal transaction ID (the \`internal_id\` parameter in the transaction resource).`,
     ),
   transaction_code: z
     .string()
@@ -70,8 +68,16 @@ export const getTransactionV2_1Result = z
       )
       .optional(),
     status: z
-      .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING"])
-      .describe(`Current status of the transaction.`)
+      .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
+      .describe(
+        `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+      )
       .optional(),
     payment_type: z
       .enum([
@@ -112,33 +118,33 @@ export const getTransactionV2_1Result = z
       .optional(),
     entry_mode: z
       .enum([
-        "none",
-        "magstripe",
-        "chip",
-        "manual entry",
-        "customer entry",
-        "magstripe fallback",
-        "contactless",
-        "moto",
-        "contactless magstripe",
-        "boleto",
-        "direct debit",
-        "sofort",
-        "ideal",
-        "bancontact",
-        "eps",
-        "mybank",
-        "satispay",
-        "blik",
-        "p24",
-        "giropay",
-        "pix",
-        "qr code pix",
-        "apple pay",
-        "google pay",
-        "paypal",
-        "twint",
-        "na",
+        "BOLETO",
+        "SOFORT",
+        "IDEAL",
+        "BANCONTACT",
+        "EPS",
+        "MYBANK",
+        "SATISPAY",
+        "BLIK",
+        "P24",
+        "GIROPAY",
+        "PIX",
+        "QR_CODE_PIX",
+        "APPLE_PAY",
+        "GOOGLE_PAY",
+        "PAYPAL",
+        "TWINT",
+        "NONE",
+        "CHIP",
+        "MANUAL_ENTRY",
+        "CUSTOMER_ENTRY",
+        "MAGSTRIPE_FALLBACK",
+        "MAGSTRIPE",
+        "DIRECT_DEBIT",
+        "CONTACTLESS",
+        "MOTO",
+        "CONTACTLESS_MAGSTRIPE",
+        "N/A",
       ])
       .describe(`Entry mode of the payment details.`)
       .optional(),
@@ -147,11 +153,6 @@ export const getTransactionV2_1Result = z
       .describe(
         `Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.`,
       )
-      .optional(),
-    internal_id: z
-      .number()
-      .int()
-      .describe(`Internal unique ID of the transaction on the SumUp platform.`)
       .optional(),
     product_summary: z
       .string()
@@ -401,14 +402,27 @@ export const getTransactionV2_1Result = z
               .optional(),
             status: z
               .enum([
-                "PENDING",
-                "SCHEDULED",
                 "FAILED",
-                "REFUNDED",
-                "SUCCESSFUL",
                 "PAID_OUT",
+                "PENDING",
+                "RECONCILED",
+                "REFUNDED",
+                "SCHEDULED",
+                "SUCCESSFUL",
               ])
-              .describe(`Status of the transaction event.`)
+              .describe(
+                `Status of the transaction event.
+
+Not every value is used for every event type.
+
+- \`PENDING\`: The event has been created but is not final yet. Used for events that are still being processed and whose final outcome is not known yet.
+- \`SCHEDULED\`: The event is planned for a future payout cycle but has not been executed yet. This applies to payout events before money is actually sent out.
+- \`RECONCILED\`: The underlying payment has been matched with settlement data and is ready to continue through payout processing, but the funds have not been paid out yet. This applies to payout events.
+- \`PAID_OUT\`: The payout event has been completed and the funds were included in a merchant payout.
+- \`REFUNDED\`: A refund event has been accepted and recorded in the refund flow. This is the status returned for refund events once the transaction amount is being or has been returned to the payer.
+- \`SUCCESSFUL\`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as \`PAID_OUT\` or \`REFUNDED\`.
+- \`FAILED\`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.`,
+              )
               .optional(),
             amount: z.number().describe(`Amount of the event.`).optional(),
             due_date: z
@@ -431,9 +445,9 @@ export const getTransactionV2_1Result = z
               .describe(`Date and time of the transaction event.`)
               .optional(),
           })
-          .describe(`Details of a transaction event.`),
+          .describe(`Detailed information about a transaction event.`),
       )
-      .describe(`List of transaction events related to the transaction.`)
+      .describe(`Detailed list of events related to the transaction.`)
       .optional(),
     simple_status: z
       .enum([
@@ -449,7 +463,18 @@ export const getTransactionV2_1Result = z
         "PENDING",
       ])
       .describe(
-        `Status generated from the processing status and the latest transaction state.`,
+        `High-level status of the transaction from the merchant's perspective.
+
+- \`PENDING\`: The payment has been initiated and is still being processed. A final outcome is not available yet.
+- \`SUCCESSFUL\`: The payment was completed successfully.
+- \`PAID_OUT\`: The payment was completed successfully and the funds have already been included in a payout to the merchant.
+- \`FAILED\`: The payment did not complete successfully.
+- \`CANCELLED\`: The payment was cancelled or reversed and is no longer payable or payable to the merchant.
+- \`CANCEL_FAILED\`: An attempt to cancel or reverse the payment was not completed successfully.
+- \`REFUNDED\`: The payment was refunded in full or in part.
+- \`REFUND_FAILED\`: An attempt to refund the payment was not completed successfully.
+- \`CHARGEBACK\`: The payment was subject to a chargeback.
+- \`NON_COLLECTION\`: The amount could not be collected from the merchant after a chargeback or related adjustment.`,
       )
       .optional(),
     links: z
@@ -500,14 +525,27 @@ export const getTransactionV2_1Result = z
               .optional(),
             status: z
               .enum([
-                "PENDING",
-                "SCHEDULED",
                 "FAILED",
-                "REFUNDED",
-                "SUCCESSFUL",
                 "PAID_OUT",
+                "PENDING",
+                "RECONCILED",
+                "REFUNDED",
+                "SCHEDULED",
+                "SUCCESSFUL",
               ])
-              .describe(`Status of the transaction event.`)
+              .describe(
+                `Status of the transaction event.
+
+Not every value is used for every event type.
+
+- \`PENDING\`: The event has been created but is not final yet. Used for events that are still being processed and whose final outcome is not known yet.
+- \`SCHEDULED\`: The event is planned for a future payout cycle but has not been executed yet. This applies to payout events before money is actually sent out.
+- \`RECONCILED\`: The underlying payment has been matched with settlement data and is ready to continue through payout processing, but the funds have not been paid out yet. This applies to payout events.
+- \`PAID_OUT\`: The payout event has been completed and the funds were included in a merchant payout.
+- \`REFUNDED\`: A refund event has been accepted and recorded in the refund flow. This is the status returned for refund events once the transaction amount is being or has been returned to the payer.
+- \`SUCCESSFUL\`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as \`PAID_OUT\` or \`REFUNDED\`.
+- \`FAILED\`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.`,
+              )
               .optional(),
             amount: z.number().describe(`Amount of the event.`).optional(),
             timestamp: z
@@ -532,9 +570,9 @@ export const getTransactionV2_1Result = z
               .describe(`Amount of the fee deducted for the event.`)
               .optional(),
           })
-          .describe(`Transaction event details.`),
+          .describe(`High-level transaction event details.`),
       )
-      .describe(`List of events related to the transaction.`)
+      .describe(`Compact list of events related to the transaction.`)
       .optional(),
     location: z
       .object({
@@ -574,7 +612,11 @@ export const getTransactionV2_1Result = z
   );
 
 export const listTransactionsV2_1Parameters = z.object({
-  merchantCode: z.string(),
+  merchantCode: z
+    .string()
+    .describe(
+      `Merchant code of the account whose transaction history should be listed.`,
+    ),
   transaction_code: z
     .string()
     .optional()
@@ -594,7 +636,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .describe(
       `Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.`,
     ),
-  users: z
+  "users[]": z
     .array(z.string())
     .optional()
     .describe(`Filters the returned results by user email.`),
@@ -606,7 +648,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .describe(
       `Filters the returned results by the specified list of final statuses of the transactions.`,
     ),
-  payment_types: z
+  "payment_types[]": z
     .array(
       z
         .enum([
@@ -660,13 +702,13 @@ export const listTransactionsV2_1Parameters = z.object({
           "CONTACTLESS_MAGSTRIPE",
           "N/A",
         ])
-        .describe(`Entry mode value accepted by the \`entry_modes[]\` filter.`),
+        .describe(`Entry mode of the payment details.`),
     )
     .optional()
     .describe(
       `Filters the returned results by the specified list of entry modes.`,
     ),
-  types: z
+  "types[]": z
     .array(z.enum(["PAYMENT", "REFUND", "CHARGE_BACK"]))
     .optional()
     .describe(
@@ -751,8 +793,22 @@ export const listTransactionsV2_1Result = z
               )
               .optional(),
             status: z
-              .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING"])
-              .describe(`Current status of the transaction.`)
+              .enum([
+                "SUCCESSFUL",
+                "CANCELLED",
+                "FAILED",
+                "PENDING",
+                "REFUNDED",
+              ])
+              .describe(
+                `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+              )
               .optional(),
             payment_type: z
               .enum([
@@ -890,7 +946,12 @@ export const listTransactionsV2_1Result = z
 
 export const refundTransactionParameters = z
   .object({
-    txnId: z.string().describe(`Unique ID of the transaction.`),
+    merchantCode: z
+      .string()
+      .describe(
+        `Merchant code of the account that owns the payment to refund.`,
+      ),
+    transactionId: z.string().describe(`Unique ID of the transaction.`),
     amount: z
       .number()
       .describe(

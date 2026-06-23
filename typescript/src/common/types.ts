@@ -10,7 +10,7 @@ export type Tool<
   description: string;
   parameters: Args;
   result: Result;
-  callback: (sumup: SumUp, args: z.infer<Args>) => Promise<z.infer<Result>>;
+  callback: (sumup: SumUp, args: z.infer<Args>) => Promise<unknown>;
   annotations?: Annotations;
 };
 

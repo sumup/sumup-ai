@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const getReceiptParameters = z.object({
-  id: z
+  transactionId: z
     .string()
     .describe(
       `SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.`,
@@ -19,6 +19,11 @@ export const getReceiptResult = z
     transaction_data: z
       .object({
         transaction_code: z.string().describe(`Transaction code.`).optional(),
+        transaction_id: z
+          .string()
+          .describe(`Unique ID of the transaction.`)
+          .optional(),
+        merchant_code: z.string().describe(`Merchant code.`).optional(),
         amount: z.string().describe(`Transaction amount.`).optional(),
         vat_amount: z.string().describe(`Transaction VAT amount.`).optional(),
         tip_amount: z
@@ -37,6 +42,13 @@ export const getReceiptResult = z
           .string()
           .describe(`Cardholder verification method.`)
           .optional(),
+        card_reader: z
+          .object({
+            code: z.string().describe(`Reader serial number.`).optional(),
+            type: z.string().describe(`Reader type.`).optional(),
+          })
+          .describe(`Card reader details displayed on the receipt.`)
+          .optional(),
         card: z
           .object({
             last_4_digits: z
@@ -52,10 +64,18 @@ export const getReceiptResult = z
           .int()
           .describe(`Number of installments.`)
           .optional(),
+        process_as: z
+          .enum(["CREDIT", "DEBIT"])
+          .describe(`Debit/Credit.`)
+          .optional(),
         products: z
           .array(
             z.object({
               name: z.string().describe(`Product name`).optional(),
+              description: z
+                .string()
+                .describe(`Product description`)
+                .optional(),
               price: z.string().describe(`Product price`).optional(),
               vat_rate: z.string().describe(`VAT rate`).optional(),
               single_vat_amount: z
@@ -114,14 +134,27 @@ export const getReceiptResult = z
                   .optional(),
                 status: z
                   .enum([
-                    "PENDING",
-                    "SCHEDULED",
                     "FAILED",
-                    "REFUNDED",
-                    "SUCCESSFUL",
                     "PAID_OUT",
+                    "PENDING",
+                    "RECONCILED",
+                    "REFUNDED",
+                    "SCHEDULED",
+                    "SUCCESSFUL",
                   ])
-                  .describe(`Status of the transaction event.`)
+                  .describe(
+                    `Status of the transaction event.
+
+Not every value is used for every event type.
+
+- \`PENDING\`: The event has been created but is not final yet. Used for events that are still being processed and whose final outcome is not known yet.
+- \`SCHEDULED\`: The event is planned for a future payout cycle but has not been executed yet. This applies to payout events before money is actually sent out.
+- \`RECONCILED\`: The underlying payment has been matched with settlement data and is ready to continue through payout processing, but the funds have not been paid out yet. This applies to payout events.
+- \`PAID_OUT\`: The payout event has been completed and the funds were included in a merchant payout.
+- \`REFUNDED\`: A refund event has been accepted and recorded in the refund flow. This is the status returned for refund events once the transaction amount is being or has been returned to the payer.
+- \`SUCCESSFUL\`: The event completed successfully. Use this as the generic terminal success status for event types that do not expose a more specific business outcome such as \`PAID_OUT\` or \`REFUNDED\`.
+- \`FAILED\`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.`,
+                  )
                   .optional(),
                 amount: z.string().describe(`Amount of the event.`).optional(),
                 timestamp: z
@@ -149,14 +182,20 @@ export const getReceiptResult = z
           .object({
             merchant_code: z.string().optional(),
             business_name: z.string().optional(),
+            company_registration_number: z.string().optional(),
+            vat_id: z.string().optional(),
+            website: z.string().optional(),
             email: z.string().optional(),
+            language: z.string().optional(),
             address: z
               .object({
                 address_line1: z.string().optional(),
+                address_line2: z.string().optional(),
                 city: z.string().optional(),
                 country: z.string().optional(),
                 country_en_name: z.string().optional(),
                 country_native_name: z.string().optional(),
+                region_name: z.string().optional(),
                 post_code: z.string().optional(),
                 landline: z.string().optional(),
               })
@@ -172,7 +211,8 @@ export const getReceiptResult = z
       .describe(`Receipt merchant data`)
       .optional(),
     emv_data: z
-      .record(z.string(), z.unknown())
+      .object({})
+      .catchall(z.unknown())
       .describe(`EMV-specific metadata returned for card-present payments.`)
       .optional(),
     acquirer_data: z

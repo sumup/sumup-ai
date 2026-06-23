@@ -2,6 +2,8 @@ import type SumUp from "@sumup/sdk";
 import type { Tool } from "../types";
 
 import {
+  createApplePaySessionParameters,
+  createApplePaySessionResult,
   createCheckoutParameters,
   createCheckoutResult,
   deactivateCheckoutParameters,
@@ -14,6 +16,32 @@ import {
   listCheckoutsResult,
 } from "./parameters";
 
+export const createApplePaySession: Tool<
+  typeof createApplePaySessionParameters,
+  typeof createApplePaySessionResult
+> = {
+  name: "create_apple_pay_session",
+  title: `Create an Apple Pay session`,
+  description: `Creates an Apple Pay merchant session for the specified checkout.
+
+Use this endpoint after the customer selects Apple Pay and before calling
+\`ApplePaySession.completeMerchantValidation(...)\` in the browser.
+SumUp validates the merchant session request and returns the Apple Pay
+session object that your frontend should pass to Apple's JavaScript API.`,
+  parameters: createApplePaySessionParameters,
+  result: createApplePaySessionResult,
+  callback: async (sumup: SumUp, { checkoutId, ...args }) => {
+    return await sumup.checkouts.createApplePaySession(checkoutId, args);
+  },
+  annotations: {
+    title: `Create an Apple Pay session`,
+    readOnly: false,
+    destructive: false,
+    idempotent: true,
+    oauthScopes: [],
+  },
+};
+
 export const createCheckout: Tool<
   typeof createCheckoutParameters,
   typeof createCheckoutResult
@@ -23,6 +51,7 @@ export const createCheckout: Tool<
   description: `Creates a new payment checkout resource. The unique \`checkout_reference\` created by this request, is used for further manipulation of the checkout.
 
 For 3DS checkouts, add the \`redirect_url\` parameter to your request body schema.
+To use the [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) page, set the \`hosted_checkout.enabled\` to \`true\`.
 
 Follow by processing a checkout to charge the provided payment instrument.`,
   parameters: createCheckoutParameters,
@@ -48,8 +77,8 @@ export const deactivateCheckout: Tool<
   description: `Deactivates an identified checkout resource. If the checkout has already been processed it can not be deactivated.`,
   parameters: deactivateCheckoutParameters,
   result: deactivateCheckoutResult,
-  callback: async (sumup: SumUp, { id, ...args }) => {
-    return await sumup.checkouts.deactivate(id, args);
+  callback: async (sumup: SumUp, { checkoutId, ...args }) => {
+    return await sumup.checkouts.deactivate(checkoutId, args);
   },
   annotations: {
     title: `Deactivate a checkout`,
@@ -69,8 +98,8 @@ export const getCheckout: Tool<
   description: `Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.`,
   parameters: getCheckoutParameters,
   result: getCheckoutResult,
-  callback: async (sumup: SumUp, { id, ...args }) => {
-    return await sumup.checkouts.get(id, args);
+  callback: async (sumup: SumUp, { checkoutId, ...args }) => {
+    return await sumup.checkouts.get(checkoutId, args);
   },
   annotations: {
     title: `Retrieve a checkout`,

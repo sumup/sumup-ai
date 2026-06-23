@@ -1,4 +1,5 @@
 export {
+  createApplePaySessionParameters,
   createCheckoutParameters,
   deactivateCheckoutParameters,
   getCheckoutParameters,
@@ -6,6 +7,7 @@ export {
   listCheckoutsParameters,
 } from "./parameters";
 export {
+  createApplePaySession,
   createCheckout,
   deactivateCheckout,
   getCheckout,

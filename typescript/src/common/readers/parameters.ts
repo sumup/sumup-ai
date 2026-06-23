@@ -95,6 +95,24 @@ export const createReaderCheckoutParameters = z
   .object({
     merchantCode: z.string().describe(`Merchant Code`),
     readerId: z.string().describe(`The unique identifier of the Reader`),
+    aade: z
+      .object({
+        provider_id: z
+          .string()
+          .describe(`The identifier of the AADE signature provider.`),
+        signature: z
+          .string()
+          .describe(`The base64 encoded signature of the transaction data.`),
+        signature_data: z
+          .string()
+          .describe(`The string containing the signed transaction data.`),
+      })
+      .describe(
+        `Optional object containing data for transactions from ERP integrators in Greece that comply with the AADE 1155 protocol.
+When such regulatory/business requirements apply, this object must be provided and contains the data needed to validate the transaction with the AADE signature provider.
+`,
+      )
+      .optional(),
     affiliate: z
       .object({
         app_id: z.string().describe(`Application ID of the affiliate.
@@ -227,7 +245,7 @@ export const deleteReaderParameters = z.object({
   merchantCode: z
     .string()
     .describe(`Short unique identifier for the merchant.`),
-  id: z
+  readerId: z
     .string()
     .min(30)
     .max(30)
@@ -242,7 +260,7 @@ export const getReaderParameters = z.object({
   merchantCode: z
     .string()
     .describe(`Short unique identifier for the merchant.`),
-  id: z
+  readerId: z
     .string()
     .min(30)
     .max(30)
@@ -440,7 +458,7 @@ export const updateReaderParameters = z.object({
   merchantCode: z
     .string()
     .describe(`Short unique identifier for the merchant.`),
-  id: z
+  readerId: z
     .string()
     .min(30)
     .max(30)

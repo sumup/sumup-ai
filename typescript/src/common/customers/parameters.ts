@@ -262,14 +262,24 @@ export const listPaymentInstrumentsResult = z
           .optional(),
         mandate: z
           .object({
-            type: z.string().describe(`Indicates the mandate type`).optional(),
-            status: z.string().describe(`Mandate status`).optional(),
+            type: z
+              .string()
+              .describe(
+                `Type of mandate stored for the checkout or payment instrument.`,
+              )
+              .optional(),
+            status: z
+              .enum(["active", "inactive"])
+              .describe(`Current lifecycle status of the mandate.`)
+              .optional(),
             merchant_code: z
               .string()
-              .describe(`Merchant code which has the mandate`)
+              .describe(`Merchant account for which the mandate is valid.`)
               .optional(),
           })
-          .describe(`Created mandate`)
+          .describe(
+            `Details of the mandate linked to the saved payment instrument.`,
+          )
           .optional(),
         created_at: z
           .string()

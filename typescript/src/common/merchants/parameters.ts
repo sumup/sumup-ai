@@ -36,7 +36,8 @@ export const getMerchantResult = z
       .object({
         name: z
           .string()
-          .max(512)
+          .min(1)
+          .max(150)
           .describe(`The company's legal name.`)
           .optional(),
         merchant_category_code: z
@@ -65,7 +66,7 @@ export const getMerchantResult = z
               .optional(),
             post_code: z
               .string()
-              .max(32)
+              .max(10)
               .describe(
                 `The postal code (aka. zip code) of the address.
 `,
@@ -80,7 +81,7 @@ country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
             city: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The city of the address.
 `,
@@ -88,7 +89,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             province: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The province where the address is located. This may not be relevant in some countries.
 `,
@@ -96,7 +97,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             region: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The region where the address is located. This may not be relevant in some countries.
 `,
@@ -104,7 +105,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             county: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
 `,
@@ -112,7 +113,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             autonomous_community: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In Spain, an autonomous community is the first sub-national level of political and administrative division.
 `,
@@ -120,7 +121,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             post_town: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
 `,
@@ -128,7 +129,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             state: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
 `,
@@ -136,7 +137,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             neighborhood: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Locality level of the address. Used in countries such as Brazil or Chile.
 `,
@@ -144,7 +145,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             commune: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
 `,
@@ -152,7 +153,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             department: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
 `,
@@ -160,7 +161,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             municipality: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
 `,
@@ -168,7 +169,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             district: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
 `,
@@ -176,7 +177,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             zip_code: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A US system of postal codes used by the United States Postal Service (USPS).
 `,
@@ -184,7 +185,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             eircode: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A postal address in Ireland.
 `,
@@ -206,7 +207,7 @@ Whether an address is valid or not depends on whether the locally required field
               .optional(),
             post_code: z
               .string()
-              .max(32)
+              .max(10)
               .describe(
                 `The postal code (aka. zip code) of the address.
 `,
@@ -221,7 +222,7 @@ country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
             city: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The city of the address.
 `,
@@ -229,7 +230,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             province: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The province where the address is located. This may not be relevant in some countries.
 `,
@@ -237,7 +238,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             region: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The region where the address is located. This may not be relevant in some countries.
 `,
@@ -245,7 +246,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             county: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
 `,
@@ -253,7 +254,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             autonomous_community: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In Spain, an autonomous community is the first sub-national level of political and administrative division.
 `,
@@ -261,7 +262,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             post_town: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
 `,
@@ -269,7 +270,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             state: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
 `,
@@ -277,7 +278,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             neighborhood: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Locality level of the address. Used in countries such as Brazil or Chile.
 `,
@@ -285,7 +286,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             commune: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
 `,
@@ -293,7 +294,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             department: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
 `,
@@ -301,7 +302,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             municipality: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
 `,
@@ -309,7 +310,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             district: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
 `,
@@ -317,7 +318,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             zip_code: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A US system of postal codes used by the United States Postal Service (USPS).
 `,
@@ -325,7 +326,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             eircode: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A postal address in Ireland.
 `,
@@ -358,7 +359,7 @@ Whether an address is valid or not depends on whether the locally required field
           .optional(),
         phone_number: z
           .string()
-          .max(64)
+          .max(16)
           .describe(
             `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
 `,
@@ -367,7 +368,6 @@ Whether an address is valid or not depends on whether the locally required field
         website: z
           .string()
           .max(255)
-          .nullable()
           .describe(
             `HTTP(S) URL of the company's website.
 `,
@@ -378,7 +378,8 @@ Whether an address is valid or not depends on whether the locally required field
           .catchall(z.unknown())
           .nullable()
           .describe(
-            `Object attributes that are modifiable only by SumUp applications.`,
+            `Object attributes that are modifiable only by SumUp applications.
+`,
           )
           .optional(),
       })
@@ -398,11 +399,13 @@ type to allow for support of future countries in client code.`),
       .object({
         name: z
           .string()
-          .max(512)
+          .min(1)
+          .max(150)
           .describe(`The customer-facing business name.`)
           .optional(),
         dynamic_descriptor: z
           .string()
+          .min(1)
           .max(30)
           .describe(
             `The descriptor is the text that your customer sees on their bank account statement.
@@ -412,17 +415,17 @@ The more recognisable your descriptor is, the less risk you have of receiving di
           .optional(),
         website: z
           .string()
-          .max(512)
+          .max(255)
           .describe(`The business's publicly available website.`)
           .optional(),
         email: z
           .string()
-          .max(256)
+          .max(255)
           .describe(`A publicly available email address.`)
           .optional(),
         phone_number: z
           .string()
-          .max(64)
+          .max(16)
           .describe(
             `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
 `,
@@ -438,7 +441,7 @@ The more recognisable your descriptor is, the less risk you have of receiving di
               .optional(),
             post_code: z
               .string()
-              .max(32)
+              .max(10)
               .describe(
                 `The postal code (aka. zip code) of the address.
 `,
@@ -453,7 +456,7 @@ country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
             city: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The city of the address.
 `,
@@ -461,7 +464,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             province: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The province where the address is located. This may not be relevant in some countries.
 `,
@@ -469,7 +472,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             region: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The region where the address is located. This may not be relevant in some countries.
 `,
@@ -477,7 +480,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             county: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
 `,
@@ -485,7 +488,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             autonomous_community: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In Spain, an autonomous community is the first sub-national level of political and administrative division.
 `,
@@ -493,7 +496,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             post_town: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
 `,
@@ -501,7 +504,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             state: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
 `,
@@ -509,7 +512,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             neighborhood: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Locality level of the address. Used in countries such as Brazil or Chile.
 `,
@@ -517,7 +520,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             commune: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
 `,
@@ -525,7 +528,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             department: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
 `,
@@ -533,7 +536,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             municipality: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
 `,
@@ -541,7 +544,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             district: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
 `,
@@ -549,7 +552,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             zip_code: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A US system of postal codes used by the United States Postal Service (USPS).
 `,
@@ -557,7 +560,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             eircode: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A postal address in Ireland.
 `,
@@ -762,7 +765,7 @@ export const getPersonResult = z
       .optional(),
     phone_number: z
       .string()
-      .max(64)
+      .max(16)
       .describe(
         `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
 `,
@@ -801,7 +804,7 @@ export const getPersonResult = z
           .optional(),
         post_code: z
           .string()
-          .max(32)
+          .max(10)
           .describe(
             `The postal code (aka. zip code) of the address.
 `,
@@ -816,7 +819,7 @@ country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
         city: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `The city of the address.
 `,
@@ -824,7 +827,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         province: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `The province where the address is located. This may not be relevant in some countries.
 `,
@@ -832,7 +835,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         region: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `The region where the address is located. This may not be relevant in some countries.
 `,
@@ -840,7 +843,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         county: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
 `,
@@ -848,7 +851,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         autonomous_community: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `In Spain, an autonomous community is the first sub-national level of political and administrative division.
 `,
@@ -856,7 +859,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         post_town: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
 `,
@@ -864,7 +867,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         state: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
 `,
@@ -872,7 +875,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         neighborhood: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `Locality level of the address. Used in countries such as Brazil or Chile.
 `,
@@ -880,7 +883,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         commune: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
 `,
@@ -888,7 +891,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         department: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
 `,
@@ -896,7 +899,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         municipality: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
 `,
@@ -904,7 +907,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         district: z
           .string()
-          .max(512)
+          .max(60)
           .describe(
             `A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
 `,
@@ -912,7 +915,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         zip_code: z
           .string()
-          .max(512)
+          .max(10)
           .describe(
             `A US system of postal codes used by the United States Postal Service (USPS).
 `,
@@ -920,7 +923,7 @@ type to allow for support of future countries in client code.`),
           .optional(),
         eircode: z
           .string()
-          .max(512)
+          .max(10)
           .describe(
             `A postal address in Ireland.
 `,
@@ -942,11 +945,8 @@ Whether an address is valid or not depends on whether the locally required field
           value: z.string().max(128).describe(`The company identifier value.`),
         }),
       )
-      .max(5)
-      .describe(
-        `A list of country-specific personal identifiers.
-`,
-      )
+      .max(32)
+      .describe(`A list of country-specific personal identifiers.`)
       .optional(),
     citizenship: z
       .string()
@@ -1048,7 +1048,7 @@ export const listPersonsResult = z
           .optional(),
         phone_number: z
           .string()
-          .max(64)
+          .max(16)
           .describe(
             `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
 `,
@@ -1089,7 +1089,7 @@ export const listPersonsResult = z
               .optional(),
             post_code: z
               .string()
-              .max(32)
+              .max(10)
               .describe(
                 `The postal code (aka. zip code) of the address.
 `,
@@ -1104,7 +1104,7 @@ country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
             city: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The city of the address.
 `,
@@ -1112,7 +1112,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             province: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The province where the address is located. This may not be relevant in some countries.
 `,
@@ -1120,7 +1120,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             region: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `The region where the address is located. This may not be relevant in some countries.
 `,
@@ -1128,7 +1128,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             county: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A county is a geographic region of a country used for administrative or other purposes in some nations. Used in countries such as Ireland, Romania, etc.
 `,
@@ -1136,7 +1136,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             autonomous_community: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In Spain, an autonomous community is the first sub-national level of political and administrative division.
 `,
@@ -1144,7 +1144,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             post_town: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A post town is a required part of all postal addresses in the United Kingdom and Ireland, and a basic unit of the postal delivery system.
 `,
@@ -1152,7 +1152,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             state: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Most often, a country has a single state, with various administrative divisions. The term "state" is sometimes used to refer to the federated polities that make up the federation. Used in countries such as the United States and Brazil.
 `,
@@ -1160,7 +1160,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             neighborhood: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `Locality level of the address. Used in countries such as Brazil or Chile.
 `,
@@ -1168,7 +1168,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             commune: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `In many countries, terms cognate with "commune" are used, referring to the community living in the area and the common interest. Used in countries such as Chile.
 `,
@@ -1176,7 +1176,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             department: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A department (French: département, Spanish: departamento) is an administrative or political division in several countries. Used in countries such as Colombia.
 `,
@@ -1184,7 +1184,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             municipality: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A municipality is usually a single administrative division having corporate status and powers of self-government or jurisdiction as granted by national and regional laws to which it is subordinate. Used in countries such as Colombia.
 `,
@@ -1192,7 +1192,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             district: z
               .string()
-              .max(512)
+              .max(60)
               .describe(
                 `A district is a type of administrative division that in some countries is managed by the local government. Used in countries such as Portugal.
 `,
@@ -1200,7 +1200,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             zip_code: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A US system of postal codes used by the United States Postal Service (USPS).
 `,
@@ -1208,7 +1208,7 @@ type to allow for support of future countries in client code.`),
               .optional(),
             eircode: z
               .string()
-              .max(512)
+              .max(10)
               .describe(
                 `A postal address in Ireland.
 `,
@@ -1235,11 +1235,8 @@ Whether an address is valid or not depends on whether the locally required field
                 .describe(`The company identifier value.`),
             }),
           )
-          .max(5)
-          .describe(
-            `A list of country-specific personal identifiers.
-`,
-          )
+          .max(32)
+          .describe(`A list of country-specific personal identifiers.`)
           .optional(),
         citizenship: z
           .string()
