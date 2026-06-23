@@ -268,7 +268,7 @@ function buildObject(
     options.looseEmptyObject
   ) {
     return {
-      code: `z.record(z.string(), z.unknown())`,
+      code: `z.object({}).catchall(z.unknown())`,
       hasOnlyAdditionalProperties: false,
     };
   }

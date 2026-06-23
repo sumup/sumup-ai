@@ -113,7 +113,8 @@ Possible values are:
             .catchall(z.unknown())
             .nullable()
             .describe(
-              `Object attributes that are modifiable only by SumUp applications.`,
+              `Object attributes that are modifiable only by SumUp applications.
+`,
             )
             .optional(),
           resource: z
@@ -146,7 +147,8 @@ Possible values are:
                 .catchall(z.unknown())
                 .nullable()
                 .describe(
-                  `Object attributes that are modifiable only by SumUp applications.`,
+                  `Object attributes that are modifiable only by SumUp applications.
+`,
                 )
                 .optional(),
             })

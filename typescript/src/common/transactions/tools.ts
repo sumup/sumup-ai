@@ -17,12 +17,10 @@ export const getTransactionV2_1: Tool<
   name: "get_transaction_v2_1",
   title: `Retrieve a transaction`,
   description: `Retrieves the full details of an identified transaction. The transaction resource is identified by a query parameter and *one* of following parameters is required:
-
- *  \`id\`
- *  \`internal_id\`
- *  \`transaction_code\`
- *  \`foreign_transaction_id\`
- *  \`client_transaction_id\``,
+- \`id\`
+- \`transaction_code\`
+- \`foreign_transaction_id\`
+- \`client_transaction_id\``,
   parameters: getTransactionV2_1Parameters,
   result: getTransactionV2_1Result,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {
@@ -67,8 +65,8 @@ export const refundTransaction: Tool<
   description: `Refunds an identified transaction either in full or partially.`,
   parameters: refundTransactionParameters,
   result: refundTransactionResult,
-  callback: async (sumup: SumUp, { txnId, ...args }) => {
-    return await sumup.transactions.refund(txnId, args);
+  callback: async (sumup: SumUp, { merchantCode, transactionId, ...args }) => {
+    return await sumup.transactions.refund(merchantCode, transactionId, args);
   },
   annotations: {
     title: `Refund a transaction`,

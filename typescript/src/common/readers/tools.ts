@@ -115,8 +115,8 @@ export const deleteReader: Tool<
   description: `Delete a reader.`,
   parameters: deleteReaderParameters,
   result: deleteReaderResult,
-  callback: async (sumup: SumUp, { merchantCode, id, ...args }) => {
-    return await sumup.readers.delete(merchantCode, id, args);
+  callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
+    return await sumup.readers.delete(merchantCode, readerId, args);
   },
   annotations: {
     title: `Delete a reader`,
@@ -136,8 +136,8 @@ export const getReader: Tool<
   description: `Retrieve a Reader.`,
   parameters: getReaderParameters,
   result: getReaderResult,
-  callback: async (sumup: SumUp, { merchantCode, id, ...args }) => {
-    return await sumup.readers.get(merchantCode, id, args);
+  callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
+    return await sumup.readers.get(merchantCode, readerId, args);
   },
   annotations: {
     title: `Retrieve a Reader`,
@@ -217,8 +217,8 @@ export const updateReader: Tool<
   description: `Update a Reader.`,
   parameters: updateReaderParameters,
   result: updateReaderResult,
-  callback: async (sumup: SumUp, { merchantCode, id, ...args }) => {
-    return await sumup.readers.update(merchantCode, id, args);
+  callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
+    return await sumup.readers.update(merchantCode, readerId, args);
   },
   annotations: {
     title: `Update a Reader`,

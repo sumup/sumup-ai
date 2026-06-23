@@ -1,14 +1,32 @@
 import { z } from "zod";
 
+export const createApplePaySessionParameters = z.object({
+  checkoutId: z.string().describe(`Unique ID of the checkout resource.`),
+  context: z.string().describe(`the context to create this apple pay session.`),
+  target: z
+    .string()
+    .describe(`The target url to create this apple pay session.`),
+});
+
+export const createApplePaySessionResult = z
+  .object({})
+  .catchall(z.unknown())
+  .loose()
+  .describe(`Successful request. Returns the Apple Pay merchant session object
+that should be forwarded to the Apple Pay JS SDK to complete merchant
+validation and continue the payment flow.`);
+
 export const createCheckoutParameters = z
   .object({
     checkout_reference: z
       .string()
       .max(90)
       .describe(
-        `Unique ID of the payment checkout specified by the client application when creating the checkout resource.`,
+        `Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.`,
       ),
-    amount: z.number().describe(`Amount of the payment.`),
+    amount: z
+      .number()
+      .describe(`Amount to be charged to the payer, expressed in major units.`),
     currency: z
       .enum([
         "BGN",
@@ -33,44 +51,60 @@ export const createCheckoutParameters = z
       ),
     merchant_code: z
       .string()
-      .describe(`Unique identifying code of the merchant profile.`),
+      .describe(`Merchant account that should receive the payment.`),
     description: z
       .string()
       .describe(
-        `Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.`,
+        `Short merchant-defined description shown in SumUp tools and reporting for easier identification of the checkout.`,
       )
       .optional(),
     return_url: z
       .string()
       .describe(
-        `URL to which the SumUp platform sends the processing status of the payment checkout.`,
+        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
       )
       .optional(),
     customer_id: z
       .string()
       .describe(
-        `Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.`,
+        `Merchant-scoped customer identifier. Required when setting up recurring payments and useful when the checkout should be linked to a returning payer.`,
       )
       .optional(),
     purpose: z
       .enum(["CHECKOUT", "SETUP_RECURRING_PAYMENT"])
-      .describe(`Purpose of the checkout.`)
+      .describe(
+        `Business purpose of the checkout. Use \`CHECKOUT\` for a standard payment and \`SETUP_RECURRING_PAYMENT\` when collecting consent and payment details for future recurring charges.`,
+      )
       .optional(),
     valid_until: z
       .string()
       .nullable()
       .describe(
-        `Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.`,
+        `Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.`,
       )
       .optional(),
     redirect_url: z
       .string()
       .describe(
-        `__Required__ for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and __recommended__ for card payments. Refers to a url where the end user is redirected once the payment processing completes. If not specified, the [Payment Widget](https://developer.sumup.com/online-payments/tools/card-widget) renders [3DS challenge](https://developer.sumup.com/online-payments/features/3ds) within an iframe instead of performing a full-page redirect.`,
+        `URL where the payer should be sent after a redirect-based payment or SCA flow completes. This is required for [APMs](https://developer.sumup.com/online-payments/apm/introduction) and recommended for card checkouts that may require [3DS](https://developer.sumup.com/online-payments/features/3ds). If it is omitted, the [Payment Widget](https://developer.sumup.com/online-payments/checkouts) can render the challenge in an iframe instead of using a full-page redirect.`,
+      )
+      .optional(),
+    hosted_checkout: z
+      .object({
+        enabled: z
+          .boolean()
+          .describe(
+            `Whether the checkout should include a SumUp-hosted payment page.`,
+          ),
+      })
+      .describe(
+        `Hosted Checkout configuration. Enable it to receive a SumUp-hosted payment page URL in the checkout response.`,
       )
       .optional(),
   })
-  .describe(`Details of the payment checkout.`);
+  .describe(
+    `Request body for creating a checkout before processing payment. Define the payment amount, currency, merchant, and optional customer or redirect behavior here.`,
+  );
 
 export const createCheckoutResult = z
   .object({
@@ -78,10 +112,13 @@ export const createCheckoutResult = z
       .string()
       .max(90)
       .describe(
-        `Unique ID of the payment checkout specified by the client application when creating the checkout resource.`,
+        `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
       .optional(),
-    amount: z.number().describe(`Amount of the payment.`).optional(),
+    amount: z
+      .number()
+      .describe(`Amount to be charged to the payer, expressed in major units.`)
+      .optional(),
     currency: z
       .enum([
         "BGN",
@@ -107,24 +144,29 @@ export const createCheckoutResult = z
       .optional(),
     merchant_code: z
       .string()
-      .describe(`Unique identifying code of the merchant profile.`)
+      .describe(`Merchant account that receives the payment.`)
       .optional(),
     description: z
       .string()
       .describe(
-        `Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.`,
+        `Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.`,
       )
       .optional(),
     return_url: z
       .string()
       .describe(
-        `URL to which the SumUp platform sends the processing status of the payment checkout.`,
+        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
       )
       .optional(),
-    id: z.string().describe(`Unique ID of the checkout resource.`).optional(),
+    id: z
+      .string()
+      .describe(`Unique SumUp identifier of the checkout resource.`)
+      .optional(),
     status: z
       .enum(["PENDING", "FAILED", "PAID", "EXPIRED"])
-      .describe(`Current status of the checkout.`)
+      .describe(
+        `Current high-level state of the checkout. \`PENDING\` means the checkout exists but is not yet completed, \`PAID\` means a payment succeeded, \`FAILED\` means the latest processing attempt failed, and \`EXPIRED\` means the checkout can no longer be processed.`,
+      )
       .optional(),
     date: z
       .string()
@@ -136,25 +178,41 @@ export const createCheckoutResult = z
       .string()
       .nullable()
       .describe(
-        `Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.`,
+        `Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.`,
       )
       .optional(),
     customer_id: z
       .string()
       .describe(
-        `Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.`,
+        `Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.`,
       )
       .optional(),
     mandate: z
       .object({
-        type: z.string().describe(`Indicates the mandate type`).optional(),
-        status: z.string().describe(`Mandate status`).optional(),
+        type: z
+          .string()
+          .describe(
+            `Type of mandate stored for the checkout or payment instrument.`,
+          )
+          .optional(),
+        status: z
+          .enum(["active", "inactive"])
+          .describe(`Current lifecycle status of the mandate.`)
+          .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant code which has the mandate`)
+          .describe(`Merchant account for which the mandate is valid.`)
           .optional(),
       })
-      .describe(`Created mandate`)
+      .describe(
+        `Details of the mandate linked to the saved payment instrument.`,
+      )
+      .optional(),
+    hosted_checkout_url: z
+      .string()
+      .describe(
+        `URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.`,
+      )
       .optional(),
     transactions: z
       .array(
@@ -200,8 +258,16 @@ export const createCheckoutResult = z
             )
             .optional(),
           status: z
-            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING"])
-            .describe(`Current status of the transaction.`)
+            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
+            .describe(
+              `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+            )
             .optional(),
           payment_type: z
             .enum([
@@ -246,33 +312,33 @@ export const createCheckoutResult = z
             .optional(),
           entry_mode: z
             .enum([
-              "none",
-              "magstripe",
-              "chip",
-              "manual entry",
-              "customer entry",
-              "magstripe fallback",
-              "contactless",
-              "moto",
-              "contactless magstripe",
-              "boleto",
-              "direct debit",
-              "sofort",
-              "ideal",
-              "bancontact",
-              "eps",
-              "mybank",
-              "satispay",
-              "blik",
-              "p24",
-              "giropay",
-              "pix",
-              "qr code pix",
-              "apple pay",
-              "google pay",
-              "paypal",
-              "twint",
-              "na",
+              "BOLETO",
+              "SOFORT",
+              "IDEAL",
+              "BANCONTACT",
+              "EPS",
+              "MYBANK",
+              "SATISPAY",
+              "BLIK",
+              "P24",
+              "GIROPAY",
+              "PIX",
+              "QR_CODE_PIX",
+              "APPLE_PAY",
+              "GOOGLE_PAY",
+              "PAYPAL",
+              "TWINT",
+              "NONE",
+              "CHIP",
+              "MANUAL_ENTRY",
+              "CUSTOMER_ENTRY",
+              "MAGSTRIPE_FALLBACK",
+              "MAGSTRIPE",
+              "DIRECT_DEBIT",
+              "CONTACTLESS",
+              "MOTO",
+              "CONTACTLESS_MAGSTRIPE",
+              "N/A",
             ])
             .describe(`Entry mode of the payment details.`)
             .optional(),
@@ -282,23 +348,20 @@ export const createCheckoutResult = z
               `Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.`,
             )
             .optional(),
-          internal_id: z
-            .number()
-            .int()
-            .describe(
-              `Internal unique ID of the transaction on the SumUp platform.`,
-            )
-            .optional(),
         }),
       )
-      .describe(`List of transactions related to the payment.`)
+      .describe(
+        `Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.`,
+      )
       .optional(),
   })
   .loose()
-  .describe(`Details of the payment checkout.`);
+  .describe(
+    `Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.`,
+  );
 
 export const deactivateCheckoutParameters = z.object({
-  id: z.string().describe(`Unique ID of the checkout resource.`),
+  checkoutId: z.string().describe(`Unique ID of the checkout resource.`),
 });
 
 export const deactivateCheckoutResult = z
@@ -307,10 +370,13 @@ export const deactivateCheckoutResult = z
       .string()
       .max(90)
       .describe(
-        `Unique ID of the payment checkout specified by the client application when creating the checkout resource.`,
+        `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
       .optional(),
-    amount: z.number().describe(`Amount of the payment.`).optional(),
+    amount: z
+      .number()
+      .describe(`Amount to be charged to the payer, expressed in major units.`)
+      .optional(),
     currency: z
       .enum([
         "BGN",
@@ -336,24 +402,29 @@ export const deactivateCheckoutResult = z
       .optional(),
     merchant_code: z
       .string()
-      .describe(`Unique identifying code of the merchant profile.`)
+      .describe(`Merchant account that receives the payment.`)
       .optional(),
     description: z
       .string()
       .describe(
-        `Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.`,
+        `Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.`,
       )
       .optional(),
     return_url: z
       .string()
       .describe(
-        `URL to which the SumUp platform sends the processing status of the payment checkout.`,
+        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
       )
       .optional(),
-    id: z.string().describe(`Unique ID of the checkout resource.`).optional(),
+    id: z
+      .string()
+      .describe(`Unique SumUp identifier of the checkout resource.`)
+      .optional(),
     status: z
       .enum(["PENDING", "FAILED", "PAID", "EXPIRED"])
-      .describe(`Current status of the checkout.`)
+      .describe(
+        `Current high-level state of the checkout. \`PENDING\` means the checkout exists but is not yet completed, \`PAID\` means a payment succeeded, \`FAILED\` means the latest processing attempt failed, and \`EXPIRED\` means the checkout can no longer be processed.`,
+      )
       .optional(),
     date: z
       .string()
@@ -365,25 +436,41 @@ export const deactivateCheckoutResult = z
       .string()
       .nullable()
       .describe(
-        `Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.`,
+        `Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.`,
       )
       .optional(),
     customer_id: z
       .string()
       .describe(
-        `Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.`,
+        `Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.`,
       )
       .optional(),
     mandate: z
       .object({
-        type: z.string().describe(`Indicates the mandate type`).optional(),
-        status: z.string().describe(`Mandate status`).optional(),
+        type: z
+          .string()
+          .describe(
+            `Type of mandate stored for the checkout or payment instrument.`,
+          )
+          .optional(),
+        status: z
+          .enum(["active", "inactive"])
+          .describe(`Current lifecycle status of the mandate.`)
+          .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant code which has the mandate`)
+          .describe(`Merchant account for which the mandate is valid.`)
           .optional(),
       })
-      .describe(`Created mandate`)
+      .describe(
+        `Details of the mandate linked to the saved payment instrument.`,
+      )
+      .optional(),
+    hosted_checkout_url: z
+      .string()
+      .describe(
+        `URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.`,
+      )
       .optional(),
     transactions: z
       .array(
@@ -429,8 +516,16 @@ export const deactivateCheckoutResult = z
             )
             .optional(),
           status: z
-            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING"])
-            .describe(`Current status of the transaction.`)
+            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
+            .describe(
+              `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+            )
             .optional(),
           payment_type: z
             .enum([
@@ -475,33 +570,33 @@ export const deactivateCheckoutResult = z
             .optional(),
           entry_mode: z
             .enum([
-              "none",
-              "magstripe",
-              "chip",
-              "manual entry",
-              "customer entry",
-              "magstripe fallback",
-              "contactless",
-              "moto",
-              "contactless magstripe",
-              "boleto",
-              "direct debit",
-              "sofort",
-              "ideal",
-              "bancontact",
-              "eps",
-              "mybank",
-              "satispay",
-              "blik",
-              "p24",
-              "giropay",
-              "pix",
-              "qr code pix",
-              "apple pay",
-              "google pay",
-              "paypal",
-              "twint",
-              "na",
+              "BOLETO",
+              "SOFORT",
+              "IDEAL",
+              "BANCONTACT",
+              "EPS",
+              "MYBANK",
+              "SATISPAY",
+              "BLIK",
+              "P24",
+              "GIROPAY",
+              "PIX",
+              "QR_CODE_PIX",
+              "APPLE_PAY",
+              "GOOGLE_PAY",
+              "PAYPAL",
+              "TWINT",
+              "NONE",
+              "CHIP",
+              "MANUAL_ENTRY",
+              "CUSTOMER_ENTRY",
+              "MAGSTRIPE_FALLBACK",
+              "MAGSTRIPE",
+              "DIRECT_DEBIT",
+              "CONTACTLESS",
+              "MOTO",
+              "CONTACTLESS_MAGSTRIPE",
+              "N/A",
             ])
             .describe(`Entry mode of the payment details.`)
             .optional(),
@@ -511,23 +606,20 @@ export const deactivateCheckoutResult = z
               `Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.`,
             )
             .optional(),
-          internal_id: z
-            .number()
-            .int()
-            .describe(
-              `Internal unique ID of the transaction on the SumUp platform.`,
-            )
-            .optional(),
         }),
       )
-      .describe(`List of transactions related to the payment.`)
+      .describe(
+        `Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.`,
+      )
       .optional(),
   })
   .loose()
-  .describe(`Details of the payment checkout.`);
+  .describe(
+    `Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.`,
+  );
 
 export const getCheckoutParameters = z.object({
-  id: z.string().describe(`Unique ID of the checkout resource.`),
+  checkoutId: z.string().describe(`Unique ID of the checkout resource.`),
 });
 
 export const getCheckoutResult = z
@@ -536,10 +628,13 @@ export const getCheckoutResult = z
       .string()
       .max(90)
       .describe(
-        `Unique ID of the payment checkout specified by the client application when creating the checkout resource.`,
+        `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
       .optional(),
-    amount: z.number().describe(`Amount of the payment.`).optional(),
+    amount: z
+      .number()
+      .describe(`Amount to be charged to the payer, expressed in major units.`)
+      .optional(),
     currency: z
       .enum([
         "BGN",
@@ -565,24 +660,29 @@ export const getCheckoutResult = z
       .optional(),
     merchant_code: z
       .string()
-      .describe(`Unique identifying code of the merchant profile.`)
+      .describe(`Merchant account that receives the payment.`)
       .optional(),
     description: z
       .string()
       .describe(
-        `Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.`,
+        `Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.`,
       )
       .optional(),
     return_url: z
       .string()
       .describe(
-        `URL to which the SumUp platform sends the processing status of the payment checkout.`,
+        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
       )
       .optional(),
-    id: z.string().describe(`Unique ID of the checkout resource.`).optional(),
+    id: z
+      .string()
+      .describe(`Unique SumUp identifier of the checkout resource.`)
+      .optional(),
     status: z
       .enum(["PENDING", "FAILED", "PAID", "EXPIRED"])
-      .describe(`Current status of the checkout.`)
+      .describe(
+        `Current high-level state of the checkout. \`PENDING\` means the checkout exists but is not yet completed, \`PAID\` means a payment succeeded, \`FAILED\` means the latest processing attempt failed, and \`EXPIRED\` means the checkout can no longer be processed.`,
+      )
       .optional(),
     date: z
       .string()
@@ -594,25 +694,41 @@ export const getCheckoutResult = z
       .string()
       .nullable()
       .describe(
-        `Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.`,
+        `Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.`,
       )
       .optional(),
     customer_id: z
       .string()
       .describe(
-        `Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.`,
+        `Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.`,
       )
       .optional(),
     mandate: z
       .object({
-        type: z.string().describe(`Indicates the mandate type`).optional(),
-        status: z.string().describe(`Mandate status`).optional(),
+        type: z
+          .string()
+          .describe(
+            `Type of mandate stored for the checkout or payment instrument.`,
+          )
+          .optional(),
+        status: z
+          .enum(["active", "inactive"])
+          .describe(`Current lifecycle status of the mandate.`)
+          .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant code which has the mandate`)
+          .describe(`Merchant account for which the mandate is valid.`)
           .optional(),
       })
-      .describe(`Created mandate`)
+      .describe(
+        `Details of the mandate linked to the saved payment instrument.`,
+      )
+      .optional(),
+    hosted_checkout_url: z
+      .string()
+      .describe(
+        `URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.`,
+      )
       .optional(),
     transactions: z
       .array(
@@ -658,8 +774,16 @@ export const getCheckoutResult = z
             )
             .optional(),
           status: z
-            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING"])
-            .describe(`Current status of the transaction.`)
+            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
+            .describe(
+              `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+            )
             .optional(),
           payment_type: z
             .enum([
@@ -704,33 +828,33 @@ export const getCheckoutResult = z
             .optional(),
           entry_mode: z
             .enum([
-              "none",
-              "magstripe",
-              "chip",
-              "manual entry",
-              "customer entry",
-              "magstripe fallback",
-              "contactless",
-              "moto",
-              "contactless magstripe",
-              "boleto",
-              "direct debit",
-              "sofort",
-              "ideal",
-              "bancontact",
-              "eps",
-              "mybank",
-              "satispay",
-              "blik",
-              "p24",
-              "giropay",
-              "pix",
-              "qr code pix",
-              "apple pay",
-              "google pay",
-              "paypal",
-              "twint",
-              "na",
+              "BOLETO",
+              "SOFORT",
+              "IDEAL",
+              "BANCONTACT",
+              "EPS",
+              "MYBANK",
+              "SATISPAY",
+              "BLIK",
+              "P24",
+              "GIROPAY",
+              "PIX",
+              "QR_CODE_PIX",
+              "APPLE_PAY",
+              "GOOGLE_PAY",
+              "PAYPAL",
+              "TWINT",
+              "NONE",
+              "CHIP",
+              "MANUAL_ENTRY",
+              "CUSTOMER_ENTRY",
+              "MAGSTRIPE_FALLBACK",
+              "MAGSTRIPE",
+              "DIRECT_DEBIT",
+              "CONTACTLESS",
+              "MOTO",
+              "CONTACTLESS_MAGSTRIPE",
+              "N/A",
             ])
             .describe(`Entry mode of the payment details.`)
             .optional(),
@@ -740,16 +864,11 @@ export const getCheckoutResult = z
               `Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.`,
             )
             .optional(),
-          internal_id: z
-            .number()
-            .int()
-            .describe(
-              `Internal unique ID of the transaction on the SumUp platform.`,
-            )
-            .optional(),
         }),
       )
-      .describe(`List of transactions related to the payment.`)
+      .describe(
+        `Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.`,
+      )
       .optional(),
     transaction_code: z
       .string()
@@ -767,7 +886,7 @@ export const getCheckoutResult = z
     redirect_url: z
       .string()
       .describe(
-        `Refers to a url where the end user is redirected once the payment processing completes.`,
+        `URL where the payer is redirected after a redirect-based payment or SCA flow completes.`,
       )
       .optional(),
     payment_instrument: z
@@ -775,13 +894,13 @@ export const getCheckoutResult = z
         token: z.string().describe(`Token value`).optional(),
       })
       .describe(
-        `Object containing token information for the specified payment instrument`,
+        `Details of the saved payment instrument created or reused during checkout processing.`,
       )
       .optional(),
   })
   .loose()
   .describe(
-    `Checkout response returned after a successful processing attempt.`,
+    `Checkout resource returned after a synchronous processing attempt. In addition to the base checkout fields, it can include the resulting transaction identifiers and any newly created payment instrument token.`,
   );
 
 export const getPaymentMethodsParameters = z.object({
@@ -828,10 +947,15 @@ export const listCheckoutsResult = z
           .string()
           .max(90)
           .describe(
-            `Unique ID of the payment checkout specified by the client application when creating the checkout resource.`,
+            `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
           )
           .optional(),
-        amount: z.number().describe(`Amount of the payment.`).optional(),
+        amount: z
+          .number()
+          .describe(
+            `Amount to be charged to the payer, expressed in major units.`,
+          )
+          .optional(),
         currency: z
           .enum([
             "BGN",
@@ -857,27 +981,29 @@ export const listCheckoutsResult = z
           .optional(),
         merchant_code: z
           .string()
-          .describe(`Unique identifying code of the merchant profile.`)
+          .describe(`Merchant account that receives the payment.`)
           .optional(),
         description: z
           .string()
           .describe(
-            `Short description of the checkout visible in the SumUp dashboard. The description can contribute to reporting, allowing easier identification of a checkout.`,
+            `Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.`,
           )
           .optional(),
         return_url: z
           .string()
           .describe(
-            `URL to which the SumUp platform sends the processing status of the payment checkout.`,
+            `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
           )
           .optional(),
         id: z
           .string()
-          .describe(`Unique ID of the checkout resource.`)
+          .describe(`Unique SumUp identifier of the checkout resource.`)
           .optional(),
         status: z
           .enum(["PENDING", "FAILED", "PAID", "EXPIRED"])
-          .describe(`Current status of the checkout.`)
+          .describe(
+            `Current high-level state of the checkout. \`PENDING\` means the checkout exists but is not yet completed, \`PAID\` means a payment succeeded, \`FAILED\` means the latest processing attempt failed, and \`EXPIRED\` means the checkout can no longer be processed.`,
+          )
           .optional(),
         date: z
           .string()
@@ -889,25 +1015,41 @@ export const listCheckoutsResult = z
           .string()
           .nullable()
           .describe(
-            `Date and time of the checkout expiration before which the client application needs to send a processing request. If no value is present, the checkout does not have an expiration time.`,
+            `Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.`,
           )
           .optional(),
         customer_id: z
           .string()
           .describe(
-            `Unique identification of a customer. If specified, the checkout session and payment instrument are associated with the referenced customer.`,
+            `Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.`,
           )
           .optional(),
         mandate: z
           .object({
-            type: z.string().describe(`Indicates the mandate type`).optional(),
-            status: z.string().describe(`Mandate status`).optional(),
+            type: z
+              .string()
+              .describe(
+                `Type of mandate stored for the checkout or payment instrument.`,
+              )
+              .optional(),
+            status: z
+              .enum(["active", "inactive"])
+              .describe(`Current lifecycle status of the mandate.`)
+              .optional(),
             merchant_code: z
               .string()
-              .describe(`Merchant code which has the mandate`)
+              .describe(`Merchant account for which the mandate is valid.`)
               .optional(),
           })
-          .describe(`Created mandate`)
+          .describe(
+            `Details of the mandate linked to the saved payment instrument.`,
+          )
+          .optional(),
+        hosted_checkout_url: z
+          .string()
+          .describe(
+            `URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.`,
+          )
           .optional(),
         transactions: z
           .array(
@@ -956,8 +1098,22 @@ export const listCheckoutsResult = z
                 )
                 .optional(),
               status: z
-                .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING"])
-                .describe(`Current status of the transaction.`)
+                .enum([
+                  "SUCCESSFUL",
+                  "CANCELLED",
+                  "FAILED",
+                  "PENDING",
+                  "REFUNDED",
+                ])
+                .describe(
+                  `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+                )
                 .optional(),
               payment_type: z
                 .enum([
@@ -1002,33 +1158,33 @@ export const listCheckoutsResult = z
                 .optional(),
               entry_mode: z
                 .enum([
-                  "none",
-                  "magstripe",
-                  "chip",
-                  "manual entry",
-                  "customer entry",
-                  "magstripe fallback",
-                  "contactless",
-                  "moto",
-                  "contactless magstripe",
-                  "boleto",
-                  "direct debit",
-                  "sofort",
-                  "ideal",
-                  "bancontact",
-                  "eps",
-                  "mybank",
-                  "satispay",
-                  "blik",
-                  "p24",
-                  "giropay",
-                  "pix",
-                  "qr code pix",
-                  "apple pay",
-                  "google pay",
-                  "paypal",
-                  "twint",
-                  "na",
+                  "BOLETO",
+                  "SOFORT",
+                  "IDEAL",
+                  "BANCONTACT",
+                  "EPS",
+                  "MYBANK",
+                  "SATISPAY",
+                  "BLIK",
+                  "P24",
+                  "GIROPAY",
+                  "PIX",
+                  "QR_CODE_PIX",
+                  "APPLE_PAY",
+                  "GOOGLE_PAY",
+                  "PAYPAL",
+                  "TWINT",
+                  "NONE",
+                  "CHIP",
+                  "MANUAL_ENTRY",
+                  "CUSTOMER_ENTRY",
+                  "MAGSTRIPE_FALLBACK",
+                  "MAGSTRIPE",
+                  "DIRECT_DEBIT",
+                  "CONTACTLESS",
+                  "MOTO",
+                  "CONTACTLESS_MAGSTRIPE",
+                  "N/A",
                 ])
                 .describe(`Entry mode of the payment details.`)
                 .optional(),
@@ -1038,16 +1194,11 @@ export const listCheckoutsResult = z
                   `Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.`,
                 )
                 .optional(),
-              internal_id: z
-                .number()
-                .int()
-                .describe(
-                  `Internal unique ID of the transaction on the SumUp platform.`,
-                )
-                .optional(),
             }),
           )
-          .describe(`List of transactions related to the payment.`)
+          .describe(
+            `Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.`,
+          )
           .optional(),
         transaction_code: z
           .string()
@@ -1065,7 +1216,7 @@ export const listCheckoutsResult = z
         redirect_url: z
           .string()
           .describe(
-            `Refers to a url where the end user is redirected once the payment processing completes.`,
+            `URL where the payer is redirected after a redirect-based payment or SCA flow completes.`,
           )
           .optional(),
         payment_instrument: z
@@ -1073,12 +1224,12 @@ export const listCheckoutsResult = z
             token: z.string().describe(`Token value`).optional(),
           })
           .describe(
-            `Object containing token information for the specified payment instrument`,
+            `Details of the saved payment instrument created or reused during checkout processing.`,
           )
           .optional(),
       })
       .describe(
-        `Checkout response returned after a successful processing attempt.`,
+        `Checkout resource returned after a synchronous processing attempt. In addition to the base checkout fields, it can include the resulting transaction identifiers and any newly created payment instrument token.`,
       ),
   )
   .describe(`Returns a list of checkout resources.`);

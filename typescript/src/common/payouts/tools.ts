@@ -9,7 +9,13 @@ export const listPayoutsV1: Tool<
 > = {
   name: "list_payouts_v1",
   title: `List payouts`,
-  description: `Lists ordered payouts for the merchant profile.`,
+  description: `Lists payout and payout-deduction records for the specified merchant account within the requested date range.
+
+The response can include:
+- regular payouts (\`type = PAYOUT\`)
+- deduction records for refunds, chargebacks, direct debit returns, or balance adjustments
+
+Results are sorted by payout date in the requested \`order\`.`,
   parameters: listPayoutsV1Parameters,
   result: listPayoutsV1Result,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {

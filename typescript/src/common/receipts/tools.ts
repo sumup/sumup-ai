@@ -12,8 +12,8 @@ export const getReceipt: Tool<
   description: `Retrieves receipt specific data for a transaction.`,
   parameters: getReceiptParameters,
   result: getReceiptResult,
-  callback: async (sumup: SumUp, { id, ...args }) => {
-    return await sumup.receipts.get(id, args);
+  callback: async (sumup: SumUp, { transactionId, ...args }) => {
+    return await sumup.receipts.get(transactionId, args);
   },
   annotations: {
     title: `Retrieve receipt details`,

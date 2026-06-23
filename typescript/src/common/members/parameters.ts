@@ -38,7 +38,8 @@ export const createMerchantMemberParameters = z.object({
     .object({})
     .catchall(z.unknown())
     .describe(
-      `Object attributes that are modifiable only by SumUp applications.`,
+      `Object attributes that are modifiable only by SumUp applications.
+`,
     )
     .optional(),
 });
@@ -59,6 +60,9 @@ export const createMerchantMemberResult = z
         id: z
           .string()
           .describe(`Identifier for the End-User (also called Subject).`),
+        type: z
+          .enum(["user", "managed_user", "service_account", "system_account"])
+          .describe(`Type of the user account.`),
         email: z
           .string()
           .describe(
@@ -81,7 +85,7 @@ export const createMerchantMemberResult = z
           .optional(),
         nickname: z
           .string()
-          .describe(`User's preferred name. Used for display purposes only.`)
+          .describe(`User's nickname. Used for display purposes only.`)
           .optional(),
         picture: z
           .string()
@@ -121,7 +125,8 @@ export const createMerchantMemberResult = z
       .catchall(z.unknown())
       .nullable()
       .describe(
-        `Object attributes that are modifiable only by SumUp applications.`,
+        `Object attributes that are modifiable only by SumUp applications.
+`,
       )
       .optional(),
   })
@@ -162,6 +167,9 @@ export const getMerchantMemberResult = z
         id: z
           .string()
           .describe(`Identifier for the End-User (also called Subject).`),
+        type: z
+          .enum(["user", "managed_user", "service_account", "system_account"])
+          .describe(`Type of the user account.`),
         email: z
           .string()
           .describe(
@@ -184,7 +192,7 @@ export const getMerchantMemberResult = z
           .optional(),
         nickname: z
           .string()
-          .describe(`User's preferred name. Used for display purposes only.`)
+          .describe(`User's nickname. Used for display purposes only.`)
           .optional(),
         picture: z
           .string()
@@ -224,7 +232,8 @@ export const getMerchantMemberResult = z
       .catchall(z.unknown())
       .nullable()
       .describe(
-        `Object attributes that are modifiable only by SumUp applications.`,
+        `Object attributes that are modifiable only by SumUp applications.
+`,
       )
       .optional(),
   })
@@ -282,6 +291,14 @@ export const listMerchantMembersResult = z
               id: z
                 .string()
                 .describe(`Identifier for the End-User (also called Subject).`),
+              type: z
+                .enum([
+                  "user",
+                  "managed_user",
+                  "service_account",
+                  "system_account",
+                ])
+                .describe(`Type of the user account.`),
               email: z
                 .string()
                 .describe(
@@ -304,9 +321,7 @@ export const listMerchantMembersResult = z
                 .optional(),
               nickname: z
                 .string()
-                .describe(
-                  `User's preferred name. Used for display purposes only.`,
-                )
+                .describe(`User's nickname. Used for display purposes only.`)
                 .optional(),
               picture: z
                 .string()
@@ -348,7 +363,8 @@ export const listMerchantMembersResult = z
             .catchall(z.unknown())
             .nullable()
             .describe(
-              `Object attributes that are modifiable only by SumUp applications.`,
+              `Object attributes that are modifiable only by SumUp applications.
+`,
             )
             .optional(),
         })
@@ -378,14 +394,15 @@ export const updateMerchantMemberParameters = z.object({
     .object({})
     .catchall(z.unknown())
     .describe(
-      `Object attributes that are modifiable only by SumUp applications.`,
+      `Object attributes that are modifiable only by SumUp applications.
+`,
     )
     .optional(),
   user: z
     .object({
       nickname: z
         .string()
-        .describe(`User's preferred name. Used for display purposes only.`)
+        .describe(`User's nickname. Used for display purposes only.`)
         .optional(),
       password: z
         .string()
@@ -415,6 +432,9 @@ export const updateMerchantMemberResult = z
         id: z
           .string()
           .describe(`Identifier for the End-User (also called Subject).`),
+        type: z
+          .enum(["user", "managed_user", "service_account", "system_account"])
+          .describe(`Type of the user account.`),
         email: z
           .string()
           .describe(
@@ -437,7 +457,7 @@ export const updateMerchantMemberResult = z
           .optional(),
         nickname: z
           .string()
-          .describe(`User's preferred name. Used for display purposes only.`)
+          .describe(`User's nickname. Used for display purposes only.`)
           .optional(),
         picture: z
           .string()
@@ -477,7 +497,8 @@ export const updateMerchantMemberResult = z
       .catchall(z.unknown())
       .nullable()
       .describe(
-        `Object attributes that are modifiable only by SumUp applications.`,
+        `Object attributes that are modifiable only by SumUp applications.
+`,
       )
       .optional(),
   })
