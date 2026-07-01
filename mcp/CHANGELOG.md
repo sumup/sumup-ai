@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.11.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.0...mcp-v0.11.1) (2026-07-01)
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @biomejs/biome from 2.4.7 to 2.4.9 in /mcp ([#425](https://github.com/sumup/sumup-ai/issues/425)) ([83ea1b5](https://github.com/sumup/sumup-ai/commit/83ea1b524c3c00399e0e854003158a08e4411555))
+* **deps-dev:** bump @biomejs/biome from 2.4.9 to 2.4.14 in /mcp ([#427](https://github.com/sumup/sumup-ai/issues/427)) ([e3d3e48](https://github.com/sumup/sumup-ai/commit/e3d3e4813cc8bd98fb0b7407d9974b1d3065c3f5))
+* **deps-dev:** bump @rslib/core from 0.20.0 to 0.20.1 in /mcp ([#423](https://github.com/sumup/sumup-ai/issues/423)) ([2ff5e02](https://github.com/sumup/sumup-ai/commit/2ff5e02e15fdd50eb9a29838bf8cff05f5b4ff6e))
+* **deps-dev:** bump @rslib/core from 0.20.1 to 0.21.3 in /mcp ([#432](https://github.com/sumup/sumup-ai/issues/432)) ([54120e1](https://github.com/sumup/sumup-ai/commit/54120e1e82850055fbc94e99239454d1a0017309))
+* **deps-dev:** bump @rslib/core in /mcp in the rslib group ([#462](https://github.com/sumup/sumup-ai/issues/462)) ([8395151](https://github.com/sumup/sumup-ai/commit/8395151cbdb96c54b9e356191f7efaff13a2a972))
+* **deps-dev:** bump the rslib group in /mcp with 2 updates ([#455](https://github.com/sumup/sumup-ai/issues/455)) ([df4477d](https://github.com/sumup/sumup-ai/commit/df4477d3007a7272259e72aa9528f4bc9a37ea3a))
+* **deps-dev:** bump the tooling group across 1 directory with 3 updates ([#453](https://github.com/sumup/sumup-ai/issues/453)) ([8b077a5](https://github.com/sumup/sumup-ai/commit/8b077a5656469b515fb47dcb5d48107cdacd323d))
+* **deps-dev:** bump the tooling group in /mcp with 2 updates ([#467](https://github.com/sumup/sumup-ai/issues/467)) ([3f8296b](https://github.com/sumup/sumup-ai/commit/3f8296b7fc62a59734a9036425652e2421d5ab18))
+* **deps-dev:** bump typescript from 5.9.3 to 6.0.2 in /mcp ([#422](https://github.com/sumup/sumup-ai/issues/422)) ([65703f8](https://github.com/sumup/sumup-ai/commit/65703f85b81f4052a3b51b17a515f50f17c0866e))
+* **deps:** bump @modelcontextprotocol/sdk in /mcp ([#429](https://github.com/sumup/sumup-ai/issues/429)) ([f9d5535](https://github.com/sumup/sumup-ai/commit/f9d5535859685eb2bda623998f2011975b667652))
+* **deps:** bump @sumup/agent-toolkit from 0.11.0 to 0.12.0 in /mcp ([#426](https://github.com/sumup/sumup-ai/issues/426)) ([50c2ee6](https://github.com/sumup/sumup-ai/commit/50c2ee6ebd940c3300b660eb8391b4bd17902df0))
+* **deps:** bump fast-uri from 3.1.0 to 3.1.2 in /mcp in the npm_and_yarn group across 1 directory ([#443](https://github.com/sumup/sumup-ai/issues/443)) ([e30f7f6](https://github.com/sumup/sumup-ai/commit/e30f7f627f34b1f00c13b21a84cb0bd877602fa7))
+* **deps:** bump langsmith ([#447](https://github.com/sumup/sumup-ai/issues/447)) ([9d811f4](https://github.com/sumup/sumup-ai/commit/9d811f40764ca4ad5ce484251c28ff62aaa0aca6))
+* **deps:** bump node from `7c6af15` to `a2dc166` in /mcp ([#460](https://github.com/sumup/sumup-ai/issues/460)) ([89a44f3](https://github.com/sumup/sumup-ai/commit/89a44f39bb9ae40c50e80d71f5b41a38593b7b91))
+* **deps:** bump node from 25-alpine to 26-alpine in /mcp ([#448](https://github.com/sumup/sumup-ai/issues/448)) ([5a56a46](https://github.com/sumup/sumup-ai/commit/5a56a469e08f51f041a9d857d1d073893dd9ac13))
+* **deps:** bump path-to-regexp ([#417](https://github.com/sumup/sumup-ai/issues/417)) ([7be768a](https://github.com/sumup/sumup-ai/commit/7be768af5bfbcb1076104d4cb656d8c31fc832e2))
+
 ## [0.11.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.10.2...mcp-v0.11.0) (2026-03-27)
 
 
