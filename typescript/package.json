@@ -58,10 +58,10 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
+    "@biomejs/biome": "^2.5.1",
     "@rslib/core": "^0.23.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.3",
+    "@types/node": "^26.0.0",
     "jest": "^30.4.2",
     "rsbuild-plugin-publint": "^1.0.0",
     "ts-jest": "^29.4.11",
