@@ -20,8 +20,8 @@
     "prettier": "^3.8.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
-    "@types/node": "^25.9.3",
+    "@biomejs/biome": "^2.5.1",
+    "@types/node": "^26.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^6.0.3"
   }
