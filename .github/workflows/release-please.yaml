@@ -13,12 +13,11 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: >-
-      !startsWith(github.event.head_commit.message, 'release: ')
     steps:
       - name: Release Please
         uses: google-github-actions/release-please-action@v4
         with:
+          skip-github-pull-request: "${{ startsWith(github.event.head_commit.message, 'release: ') }}"
           token: ${{ secrets.GITHUB_TOKEN }}
           manifest-file: .release-please-manifest.json
           config-file: release-please-config.json
