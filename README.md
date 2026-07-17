@@ -15,7 +15,7 @@ SumUp AI toolkit contains collections of SDKs for building AI-enhanced applicati
 
 SumUp hosts a [Model Context Protocol (MCP)](https://modelcontextprotocol.com/) at `https://mcp.sumup.com`, for more details see [sumup/sumup-mcp](https://github.com/sumup/sumup-mcp).
 
-Your can also run SumUp MCP server locally:
+You can also run SumUp MCP server locally:
 
 ```sh
 SUMUP_API_KEY=YOUR_SUMUP_API_KEY npx -y @sumup/mcp
