@@ -1,3 +1,8 @@
+jest.mock("ai", () => ({
+  tool: (options: unknown) => options,
+  zodSchema: (schema: unknown) => schema,
+}));
+
 import SumUpAgentToolkit from "./toolkit";
 
 describe("SumUpAgentToolkit approval policy", () => {
@@ -27,7 +32,7 @@ describe("SumUpAgentToolkit approval policy", () => {
             {
               toolCallId: "tool-call-id",
               messages: [],
-              experimental_context: undefined,
+              context: undefined,
             },
           ),
         ),
