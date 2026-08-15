@@ -5,7 +5,7 @@ import {
 } from "@langchain/core/tools";
 import SumUp from "@sumup/sdk";
 import type z from "zod";
-import { registerTools } from "../common";
+import { executeTool, registerTools, type ToolObservability } from "../common";
 
 class SumUpAgentToolkit implements BaseToolkit {
   private _sumup: SumUp;
@@ -15,9 +15,11 @@ class SumUpAgentToolkit implements BaseToolkit {
   constructor({
     apiKey,
     host,
+    observability,
   }: {
     apiKey: string;
     host?: string;
+    observability?: ToolObservability;
   }) {
     this._sumup = new SumUp({
       apiKey,
@@ -31,7 +33,7 @@ class SumUpAgentToolkit implements BaseToolkit {
           async (
             input: z.infer<typeof t.parameters>,
           ): Promise<z.infer<typeof t.result>> => {
-            return t.result.parse(await t.callback(this._sumup, input));
+            return await executeTool(t, this._sumup, input, observability);
           },
           {
             name: t.name,

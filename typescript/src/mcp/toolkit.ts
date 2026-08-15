@@ -6,10 +6,12 @@ import SumUp, { APIError } from "@sumup/sdk";
 import { z } from "zod";
 import {
   constructResourceMetadata,
+  executeTool,
   parseWWWAuthenticateChallenges,
   registerTools,
   stringifyWWWAuthenticateChallenges,
   TOOL_OAUTH_SCOPES_META_KEY,
+  type ToolObservability,
   VERSION,
 } from "../common";
 
@@ -18,6 +20,7 @@ export type SumUpAgentToolkitOptions = {
   host?: string;
   resource?: string;
   resourceMetadata?: string;
+  observability?: ToolObservability;
   configuration: ServerOptions;
 };
 
@@ -38,6 +41,7 @@ class SumUpAgentToolkit extends McpServer {
     host,
     resource,
     resourceMetadata,
+    observability,
   }: SumUpAgentToolkitOptions) {
     super(
       {
@@ -125,7 +129,7 @@ class SumUpAgentToolkit extends McpServer {
         ): Promise<CallToolResult> => {
           try {
             const sumup = this.createClient(extra?.authInfo?.token);
-            const result = tool.result.parse(await tool.callback(sumup, args));
+            const result = await executeTool(tool, sumup, args, observability);
             const structuredContent =
               typeof result === "object" && result !== null
                 ? (result as Record<string, unknown>)

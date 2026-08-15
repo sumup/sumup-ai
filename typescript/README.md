@@ -22,6 +22,26 @@ npm install @sumup/agent-toolkit
 yarn add @sumup/agent-toolkit
 ```
 
+### Observability
+
+Every adapter accepts optional redaction-safe lifecycle callbacks. Events include
+the tool name, start time, duration, and errors, but never tool arguments or
+results. Callback failures are ignored so telemetry cannot break tool execution.
+
+```ts
+const sumupAgentToolkit = new SumUpAgentToolkit({
+  apiKey: process.env.SUMUP_API_KEY!,
+  observability: {
+    onToolEnd: ({ toolName, durationMs }) => {
+      metrics.histogram("sumup.agent_tool.duration", durationMs, { toolName });
+    },
+    onToolError: ({ toolName, error }) => {
+      logger.error({ toolName, error }, "SumUp agent tool failed");
+    },
+  },
+});
+```
+
 ## [LangChain](https://www.langchain.com/)
 
 ```ts
