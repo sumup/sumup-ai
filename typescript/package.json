@@ -58,15 +58,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.1",
+    "@biomejs/biome": "^2.5.7",
     "@rslib/core": "^0.23.2",
     "@types/jest": "^30.0.0",
-    "@types/node": "^26.0.0",
+    "@types/node": "^26.2.0",
     "jest": "^30.4.2",
     "rsbuild-plugin-publint": "^1.0.0",
-    "ts-jest": "^29.4.11",
+    "ts-jest": "^29.4.12",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.28.19",
+    "typedoc": "^0.28.20",
     "typescript": "^6.0.3"
   },
   "files": [
