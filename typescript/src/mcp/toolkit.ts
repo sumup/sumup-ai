@@ -1,22 +1,16 @@
 import type { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
-import SumUp, { APIError } from "@sumup/sdk";
+import SumUp from "@sumup/sdk";
 import { z } from "zod";
-import {
-  constructResourceMetadata,
-  parseWWWAuthenticateChallenges,
-  registerTools,
-  stringifyWWWAuthenticateChallenges,
-  TOOL_OAUTH_SCOPES_META_KEY,
-  VERSION,
-} from "../common";
+import { registerTools, TOOL_OAUTH_SCOPES_META_KEY, VERSION } from "../common";
 
 export type SumUpAgentToolkitOptions = {
   apiKey?: string;
   host?: string;
+  /** @deprecated Enforce remote MCP authorization at the HTTP transport boundary. */
   resource?: string;
+  /** @deprecated Enforce remote MCP authorization at the HTTP transport boundary. */
   resourceMetadata?: string;
   configuration: ServerOptions;
 };
@@ -24,7 +18,6 @@ export type SumUpAgentToolkitOptions = {
 class SumUpAgentToolkit extends McpServer {
   private _apiKey?: string;
   private _host?: string;
-  private _resourceMetadata?: string;
 
   /**
    * Builds a SumUp MCP server.
@@ -33,12 +26,7 @@ class SumUpAgentToolkit extends McpServer {
    * leave it unset and rely on the validated bearer token propagated through
    * the MCP request's auth context.
    */
-  constructor({
-    apiKey,
-    host,
-    resource,
-    resourceMetadata,
-  }: SumUpAgentToolkitOptions) {
+  constructor({ apiKey, host }: SumUpAgentToolkitOptions) {
     super(
       {
         name: "SumUp",
@@ -53,8 +41,6 @@ class SumUpAgentToolkit extends McpServer {
       },
     );
 
-    this._resourceMetadata =
-      resourceMetadata ?? constructResourceMetadata(resource);
     this._apiKey = apiKey;
     this._host = host;
 
@@ -123,71 +109,22 @@ class SumUpAgentToolkit extends McpServer {
           args: z.infer<typeof tool.parameters>,
           extra,
         ): Promise<CallToolResult> => {
-          try {
-            const sumup = this.createClient(extra?.authInfo?.token);
-            const result = tool.result.parse(await tool.callback(sumup, args));
-            const structuredContent =
-              typeof result === "object" && result !== null
-                ? (result as Record<string, unknown>)
-                : undefined;
+          const sumup = this.createClient(extra?.authInfo?.token);
+          const result = tool.result.parse(await tool.callback(sumup, args));
+          const structuredContent =
+            typeof result === "object" && result !== null
+              ? (result as Record<string, unknown>)
+              : undefined;
 
-            return {
-              structuredContent,
-              content: [
-                {
-                  type: "text" as const,
-                  text: JSON.stringify(structuredContent, null, 2),
-                },
-              ],
-            };
-          } catch (error) {
-            // Handle OAuth authorization errors
-            if (error instanceof APIError && error.status === 401) {
-              const wwwAuthenticate =
-                error.response.headers.get("www-authenticate");
-
-              if (wwwAuthenticate && this._resourceMetadata) {
-                const challenges =
-                  parseWWWAuthenticateChallenges(wwwAuthenticate);
-                if (
-                  challenges?.some((challenge) => challenge.scheme === "bearer")
-                ) {
-                  const enhancedHeader = stringifyWWWAuthenticateChallenges(
-                    challenges.map((challenge) => {
-                      if (challenge.scheme !== "bearer" || challenge.token68) {
-                        return challenge;
-                      }
-
-                      return {
-                        ...challenge,
-                        parameters: {
-                          ...challenge.parameters,
-                          resource_metadata: this._resourceMetadata,
-                        },
-                      };
-                    }),
-                  );
-
-                  // Throw McpError with www-authenticate header in data
-                  // This follows the MCP error protocol for authorization errors
-                  throw new McpError(
-                    ErrorCode.InternalError,
-                    "Authentication required",
-                    {
-                      wwwAuthenticate: enhancedHeader,
-                    },
-                  );
-                }
-              }
-            }
-
-            // For any other errors, re-throw to let MCP SDK handle them
-            if (error instanceof Error) {
-              throw error;
-            }
-
-            throw new Error(String(error));
-          }
+          return {
+            structuredContent,
+            content: [
+              {
+                type: "text" as const,
+                text: JSON.stringify(structuredContent, null, 2),
+              },
+            ],
+          };
         },
       );
     });

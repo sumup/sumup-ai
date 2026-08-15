@@ -1,4 +1,3 @@
-import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import type SumUp from "@sumup/sdk";
 import { APIError } from "@sumup/sdk";
 
@@ -83,24 +82,19 @@ describe("mcp toolkit auth error handling", () => {
     });
   });
 
-  test("maps @sumup/sdk APIError(401) with WWW-Authenticate to McpError", async () => {
+  test("does not encode HTTP authentication challenges as tool errors", async () => {
+    const response = new Response(JSON.stringify({ error: "invalid_token" }), {
+      status: 401,
+      headers: {
+        "www-authenticate": 'Bearer error="invalid_token"',
+      },
+    });
+    const apiError = new APIError(401, { error: "invalid_token" }, response);
     mockToolkitState.callback = async () => {
-      const response = new Response(
-        JSON.stringify({ error: "invalid_token" }),
-        {
-          status: 401,
-          headers: {
-            "www-authenticate": 'Bearer error="invalid_token"',
-          },
-        },
-      );
-
-      throw new APIError(401, { error: "invalid_token" }, response);
+      throw apiError;
     };
 
     const toolkit = new SumUpAgentToolkit({
-      resourceMetadata:
-        "https://api.sumup.example/.well-known/oauth-protected-resource",
       configuration: {},
     });
 
@@ -108,17 +102,6 @@ describe("mcp toolkit auth error handling", () => {
       // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
       (toolkit as any)._registeredTools.mock_tool;
 
-    await expect(tool.handler({})).rejects.toBeInstanceOf(McpError);
-
-    try {
-      await tool.handler({});
-    } catch (error) {
-      const mcpError = error as McpError;
-      const data = mcpError.data as { wwwAuthenticate?: string } | undefined;
-      expect(mcpError.code).toBe(ErrorCode.InternalError);
-      expect(data?.wwwAuthenticate).toBe(
-        'bearer error="invalid_token", resource_metadata="https://api.sumup.example/.well-known/oauth-protected-resource"',
-      );
-    }
+    await expect(tool.handler({})).rejects.toBe(apiError);
   });
 });
