@@ -21,6 +21,7 @@ jest.mock("../common", () => {
         result: ReturnType<typeof z.object>;
         annotations?: {
           oauthScopes?: string[];
+          readOnly?: boolean;
         };
         callback: typeof mockToolkitState.callback;
       }) => void,
@@ -35,6 +36,21 @@ jest.mock("../common", () => {
         }),
         annotations: {
           oauthScopes: ["mock.read", "mock.write"],
+          readOnly: true,
+        },
+        callback: async (sumup: SumUp) => mockToolkitState.callback(sumup),
+      });
+      reg({
+        name: "mutating_tool",
+        title: "Mutating tool",
+        description: "Mock mutating tool for catalog filtering tests",
+        parameters: z.object({}),
+        result: z.object({
+          ok: z.boolean(),
+        }),
+        annotations: {
+          oauthScopes: ["mock.write"],
+          readOnly: false,
         },
         callback: async (sumup: SumUp) => mockToolkitState.callback(sumup),
       });
@@ -120,5 +136,66 @@ describe("mcp toolkit auth error handling", () => {
         'bearer error="invalid_token", resource_metadata="https://api.sumup.example/.well-known/oauth-protected-resource"',
       );
     }
+  });
+});
+
+describe("mcp toolkit catalog configuration", () => {
+  const registeredTools = (toolkit: SumUpAgentToolkit) =>
+    Object.keys(
+      // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
+      (toolkit as any)._registeredTools,
+    );
+
+  test("omits output schemas by default while retaining result validation", async () => {
+    mockToolkitState.callback = async () => ({ ok: true });
+    const toolkit = new SumUpAgentToolkit({ configuration: {} });
+    const tool =
+      // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
+      (toolkit as any)._registeredTools.mock_tool;
+
+    expect(tool.outputSchema).toBeUndefined();
+    await expect(tool.handler({})).resolves.toMatchObject({
+      structuredContent: { ok: true },
+      content: [{ text: '{"ok":true}' }],
+    });
+
+    mockToolkitState.callback = async () =>
+      ({ ok: "invalid" }) as unknown as { ok: boolean };
+    await expect(tool.handler({})).rejects.toThrow();
+  });
+
+  test("can opt in to advertised output schemas", () => {
+    const toolkit = new SumUpAgentToolkit({
+      configuration: {},
+      includeOutputSchemas: true,
+    });
+    const tool =
+      // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
+      (toolkit as any)._registeredTools.mock_tool;
+
+    expect(tool.outputSchema).toBeDefined();
+  });
+
+  test("supports include and exclude filters", () => {
+    const included = new SumUpAgentToolkit({
+      configuration: {},
+      includeTools: ["mock_tool"],
+    });
+    const excluded = new SumUpAgentToolkit({
+      configuration: {},
+      excludeTools: ["mutating_tool"],
+    });
+
+    expect(registeredTools(included)).toEqual(["mock_tool"]);
+    expect(registeredTools(excluded)).toEqual(["mock_tool"]);
+  });
+
+  test("can expose only read-only tools", () => {
+    const toolkit = new SumUpAgentToolkit({
+      configuration: {},
+      readOnly: true,
+    });
+
+    expect(registeredTools(toolkit)).toEqual(["mock_tool"]);
   });
 });
