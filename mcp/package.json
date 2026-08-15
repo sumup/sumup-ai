@@ -25,7 +25,7 @@
     "build": "rslib build",
     "build:watch": "rslib build --watch",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "npm run build && node --test test/*.test.mjs"
   },
   "bugs": {
     "url": "https://github.com/sumup/sumup-ai/issues"
