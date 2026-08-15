@@ -29,6 +29,7 @@ export const createMerchantRole: Tool<
   annotations: {
     title: `Create a role`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -50,6 +51,7 @@ export const deleteMerchantRole: Tool<
   annotations: {
     title: `Delete a role`,
     readOnly: false,
+    requiresApproval: true,
     destructive: true,
     idempotent: false,
     oauthScopes: [],
@@ -71,6 +73,7 @@ export const getMerchantRole: Tool<
   annotations: {
     title: `Retrieve a role`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -92,6 +95,7 @@ export const listMerchantRoles: Tool<
   annotations: {
     title: `List roles`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -113,6 +117,7 @@ export const updateMerchantRole: Tool<
   annotations: {
     title: `Update a role`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: [],

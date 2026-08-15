@@ -35,6 +35,7 @@ export const createReader: Tool<
   annotations: {
     title: `Create a Reader`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.write"],
@@ -66,6 +67,7 @@ There are some caveats when using this endpoint:
   annotations: {
     title: `Create a Reader Checkout`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.write"],
@@ -100,6 +102,7 @@ If a transaction is successfully terminated and \`return_url\` was provided on C
   annotations: {
     title: `Terminate a Reader Checkout`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.write"],
@@ -121,6 +124,7 @@ export const deleteReader: Tool<
   annotations: {
     title: `Delete a reader`,
     readOnly: false,
+    requiresApproval: true,
     destructive: true,
     idempotent: false,
     oauthScopes: ["readers.write"],
@@ -142,6 +146,7 @@ export const getReader: Tool<
   annotations: {
     title: `Retrieve a Reader`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.read"],
@@ -181,6 +186,7 @@ Device Status
   annotations: {
     title: `Get a Reader Status`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.read"],
@@ -202,6 +208,7 @@ export const listReaders: Tool<
   annotations: {
     title: `List Readers`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.read"],
@@ -223,6 +230,7 @@ export const updateReader: Tool<
   annotations: {
     title: `Update a Reader`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: ["readers.write"],

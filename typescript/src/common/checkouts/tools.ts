@@ -36,6 +36,7 @@ session object that your frontend should pass to Apple's JavaScript API.`,
   annotations: {
     title: `Create an Apple Pay session`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: true,
     oauthScopes: [],
@@ -62,6 +63,7 @@ Follow by processing a checkout to charge the provided payment instrument.`,
   annotations: {
     title: `Create a checkout`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: ["payments"],
@@ -83,6 +85,7 @@ export const deactivateCheckout: Tool<
   annotations: {
     title: `Deactivate a checkout`,
     readOnly: false,
+    requiresApproval: true,
     destructive: true,
     idempotent: false,
     oauthScopes: ["payments"],
@@ -104,6 +107,7 @@ export const getCheckout: Tool<
   annotations: {
     title: `Retrieve a checkout`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["payments"],
@@ -128,6 +132,7 @@ export const getPaymentMethods: Tool<
   annotations: {
     title: `Get available payment methods`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -149,6 +154,7 @@ export const listCheckouts: Tool<
   annotations: {
     title: `List checkouts`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["payments"],

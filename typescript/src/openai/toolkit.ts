@@ -1,6 +1,7 @@
 import { tool } from "@openai/agents";
 import SumUp from "@sumup/sdk";
 import { registerTools } from "../common";
+import type { ApprovalPolicy } from "../common/types";
 
 type AgentFunctionTool = ReturnType<typeof tool>;
 
@@ -12,9 +13,11 @@ class SumUpAgentToolkit {
   constructor({
     apiKey,
     host,
+    approvalPolicy,
   }: {
     apiKey: string;
     host?: string;
+    approvalPolicy?: ApprovalPolicy;
   }) {
     this._sumup = new SumUp({
       apiKey,
@@ -29,7 +32,9 @@ class SumUpAgentToolkit {
           description: t.description,
           strict: true,
           parameters: t.parameters,
-          needsApproval: !!t.annotations?.destructive,
+          needsApproval: approvalPolicy
+            ? async (_runContext, input) => await approvalPolicy(t, input)
+            : !!t.annotations?.requiresApproval,
           execute: async (input) => {
             const res = await t.callback(this._sumup, input);
             return t.result.parse(res);
