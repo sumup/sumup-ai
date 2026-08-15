@@ -460,6 +460,7 @@ async function writeToolsFile(
       `  annotations: {`,
       `    title: ${toTemplateLiteral(operation.summary)},`,
       `    readOnly: ${operation.method === OpenAPIV3.HttpMethods.GET},`,
+      `    requiresApproval: ${operation.method !== OpenAPIV3.HttpMethods.GET},`,
       `    destructive: ${operation.method === OpenAPIV3.HttpMethods.DELETE},`,
       `    idempotent: ${operation.method === OpenAPIV3.HttpMethods.PUT},`,
       `    oauthScopes: [${operation.oauthScopes.map((scope) => JSON.stringify(scope)).join(", ")}],`,

@@ -29,6 +29,7 @@ export const createCustomer: Tool<
   annotations: {
     title: `Create a customer`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: ["payment_instruments"],
@@ -54,6 +55,7 @@ export const deactivatePaymentInstrument: Tool<
   annotations: {
     title: `Deactivate a payment instrument`,
     readOnly: false,
+    requiresApproval: true,
     destructive: true,
     idempotent: false,
     oauthScopes: ["payment_instruments"],
@@ -75,6 +77,7 @@ export const getCustomer: Tool<
   annotations: {
     title: `Retrieve a customer`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["payment_instruments"],
@@ -96,6 +99,7 @@ export const listPaymentInstruments: Tool<
   annotations: {
     title: `List payment instruments`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["payment_instruments"],
@@ -119,6 +123,7 @@ The request only overwrites the parameters included in the request, all other pa
   annotations: {
     title: `Update a customer`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: true,
     oauthScopes: ["payment_instruments"],

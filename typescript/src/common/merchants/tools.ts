@@ -25,6 +25,7 @@ export const getMerchant: Tool<
   annotations: {
     title: `Retrieve a Merchant`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["user.profile", "user.profile_readonly"],
@@ -46,6 +47,7 @@ export const getPerson: Tool<
   annotations: {
     title: `Retrieve a Person`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["user.profile", "user.profile_readonly"],
@@ -67,6 +69,7 @@ export const listPersons: Tool<
   annotations: {
     title: `List Persons`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["user.profile", "user.profile_readonly"],

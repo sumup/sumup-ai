@@ -24,6 +24,7 @@ Results are sorted by payout date in the requested \`order\`.`,
   annotations: {
     title: `List payouts`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: ["user.profile", "user.profile_readonly"],

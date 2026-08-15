@@ -29,6 +29,7 @@ export const createMerchantMember: Tool<
   annotations: {
     title: `Create a member`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -50,6 +51,7 @@ export const deleteMerchantMember: Tool<
   annotations: {
     title: `Delete a member`,
     readOnly: false,
+    requiresApproval: true,
     destructive: true,
     idempotent: false,
     oauthScopes: [],
@@ -71,6 +73,7 @@ export const getMerchantMember: Tool<
   annotations: {
     title: `Retrieve a member`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -92,6 +95,7 @@ export const listMerchantMembers: Tool<
   annotations: {
     title: `List members`,
     readOnly: true,
+    requiresApproval: false,
     destructive: false,
     idempotent: false,
     oauthScopes: [],
@@ -113,6 +117,7 @@ export const updateMerchantMember: Tool<
   annotations: {
     title: `Update a member`,
     readOnly: false,
+    requiresApproval: true,
     destructive: false,
     idempotent: true,
     oauthScopes: [],

@@ -14,7 +14,7 @@ export type Tool<
   annotations?: Annotations;
 };
 
-type Annotations = {
+export type Annotations = {
   /**
    * A human-readable title for the tool.
    */
@@ -25,6 +25,13 @@ type Annotations = {
    * Default: false
    */
   readOnly?: boolean;
+  /**
+   * If true, agent-framework adapters should require human approval before
+   * executing the tool.
+   *
+   * Default: false
+   */
+  requiresApproval?: boolean;
   /**
    * If true, the tool may perform destructive updates to its environment.
    * If false, the tool performs only additive updates.
@@ -48,3 +55,8 @@ type Annotations = {
    */
   oauthScopes?: string[];
 };
+
+export type ApprovalPolicy = (
+  tool: Pick<Tool, "name" | "title" | "annotations">,
+  input: unknown,
+) => boolean | Promise<boolean>;
