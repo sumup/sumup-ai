@@ -22,6 +22,18 @@ npm install @sumup/agent-toolkit
 yarn add @sumup/agent-toolkit
 ```
 
+### Remote MCP authentication
+
+When serving the MCP toolkit over HTTP, validate bearer tokens before MCP tool
+dispatch and attach the validated token to the request's `authInfo`. Missing or
+invalid credentials must produce an HTTP `401` response with a
+`WWW-Authenticate` challenge at the transport boundary, as required by the
+[MCP authorization specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization).
+
+Do not rely on a downstream SumUp API `401` as an OAuth challenge: by that
+point the request is already inside JSON-RPC tool execution and cannot produce
+the HTTP response expected by MCP clients.
+
 ## [LangChain](https://www.langchain.com/)
 
 ```ts
