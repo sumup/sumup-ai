@@ -14,7 +14,7 @@ async function main() {
     tools: sumupAgentToolkit.getTools(),
   });
 
-  await withTrace("Web search example", async () => {
+  await withTrace("SumUp transactions example", async () => {
     const result = await run(agent, "tell me about my last 10 transactions");
     console.log(result.finalOutput);
 
