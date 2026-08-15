@@ -10,9 +10,13 @@ function handleError(error: any) {
 }
 
 async function main() {
+  const apiKey = process.env.SUMUP_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error("SUMUP_API_KEY environment variable is required");
+  }
+
   const server = new SumUpAgentToolkit({
-    // biome-ignore lint/style/noNonNullAssertion: it's ok to fail here
-    apiKey: process.env.SUMUP_API_KEY!,
+    apiKey,
     configuration: {},
   });
 
@@ -24,4 +28,5 @@ async function main() {
 
 main().catch((error) => {
   handleError(error);
+  process.exitCode = 1;
 });
