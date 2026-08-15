@@ -21,6 +21,10 @@ export type SumUpAgentToolkitOptions = {
   resource?: string;
   resourceMetadata?: string;
   observability?: ToolObservability;
+  includeTools?: string[];
+  excludeTools?: string[];
+  readOnly?: boolean;
+  includeOutputSchemas?: boolean;
   configuration: ServerOptions;
 };
 
@@ -42,6 +46,10 @@ class SumUpAgentToolkit extends McpServer {
     resource,
     resourceMetadata,
     observability,
+    includeTools,
+    excludeTools = [],
+    readOnly = false,
+    includeOutputSchemas = false,
   }: SumUpAgentToolkitOptions) {
     super(
       {
@@ -102,7 +110,18 @@ class SumUpAgentToolkit extends McpServer {
       },
     );
 
+    const includedToolNames = includeTools ? new Set(includeTools) : undefined;
+    const excludedToolNames = new Set(excludeTools);
+
     registerTools((tool) => {
+      if (
+        (includedToolNames && !includedToolNames.has(tool.name)) ||
+        excludedToolNames.has(tool.name) ||
+        (readOnly && !tool.annotations?.readOnly)
+      ) {
+        return;
+      }
+
       this.registerTool(
         tool.name,
         {
@@ -110,7 +129,9 @@ class SumUpAgentToolkit extends McpServer {
           description: tool.description,
           inputSchema: tool.parameters.shape,
           outputSchema:
-            tool.result instanceof z.ZodObject ? tool.result.shape : undefined,
+            includeOutputSchemas && tool.result instanceof z.ZodObject
+              ? tool.result.shape
+              : undefined,
           annotations: {
             title: tool.annotations?.title,
             readOnlyHint: tool.annotations?.readOnly,
@@ -140,7 +161,7 @@ class SumUpAgentToolkit extends McpServer {
               content: [
                 {
                   type: "text" as const,
-                  text: JSON.stringify(structuredContent, null, 2),
+                  text: JSON.stringify(structuredContent),
                 },
               ],
             };
