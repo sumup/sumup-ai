@@ -6,6 +6,11 @@ const mockToolState = {
   }),
 };
 
+jest.mock("ai", () => ({
+  tool: (options: unknown) => options,
+  zodSchema: (schema: unknown) => schema,
+}));
+
 jest.mock("./common", () => {
   const actual = jest.requireActual("./common");
   const { z } = jest.requireActual("zod");
@@ -55,6 +60,7 @@ describe("agent framework adapter contracts", () => {
           toolCallId: "tool-call-id",
           messages: [],
           abortSignal: new AbortController().signal,
+          context: undefined,
         },
       ),
     ).resolves.toEqual({ value: "hello" });
@@ -68,6 +74,7 @@ describe("agent framework adapter contracts", () => {
           toolCallId: "tool-call-id",
           messages: [],
           abortSignal: new AbortController().signal,
+          context: undefined,
         },
       ),
     ).rejects.toThrow();
