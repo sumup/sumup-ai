@@ -22,7 +22,8 @@ class SumUpAgentToolkit {
     registerTools((t) => {
       this.tools[t.name] = tool<
         z.infer<typeof t.parameters>,
-        z.infer<typeof t.result>
+        z.infer<typeof t.result>,
+        Record<string, never>
       >({
         title: t.title,
         description: t.description,
