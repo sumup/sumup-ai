@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.11.2](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.1...mcp-v0.11.2) (2026-08-15)
+
+
+### Bug Fixes
+
+* **mcp:** fail fast on invalid startup ([#527](https://github.com/sumup/sumup-ai/issues/527)) ([b9035d0](https://github.com/sumup/sumup-ai/commit/b9035d07783af346fe8a65ce6e85f6590ed054de))
+* **mcp:** require Node.js 22 ([#526](https://github.com/sumup/sumup-ai/issues/526)) ([4f492cc](https://github.com/sumup/sumup-ai/commit/4f492cc230588bafcddf0e56835955a1eb81538d))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @rslib/core ([#474](https://github.com/sumup/sumup-ai/issues/474)) ([f36df54](https://github.com/sumup/sumup-ai/commit/f36df54aa70a874cec716b3519092728be1ab35d))
+* **deps-dev:** bump the tooling group across 1 directory with 3 updates ([#490](https://github.com/sumup/sumup-ai/issues/490)) ([b214fe7](https://github.com/sumup/sumup-ai/commit/b214fe76165e0ba343765109c985a254b072dab8))
+* **deps:** bump fast-uri from 3.1.2 to 3.1.5 in /mcp ([#508](https://github.com/sumup/sumup-ai/issues/508)) ([10e2a24](https://github.com/sumup/sumup-ai/commit/10e2a24ffe929b485b4b24e143b4b1317f6ca768))
+* **deps:** bump hono from 4.12.5 to 4.13.1 in /mcp ([#515](https://github.com/sumup/sumup-ai/issues/515)) ([b6bad72](https://github.com/sumup/sumup-ai/commit/b6bad7248c85661c99cb84790377847d98f73123))
+* **deps:** bump hono from 4.13.1 to 4.13.2 in /mcp ([#519](https://github.com/sumup/sumup-ai/issues/519)) ([287bade](https://github.com/sumup/sumup-ai/commit/287bade9abc10982ffdbc73e522a1513ae89c676))
+* **deps:** bump the mcp-runtime group across 1 directory with 2 updates ([#511](https://github.com/sumup/sumup-ai/issues/511)) ([09e1cc7](https://github.com/sumup/sumup-ai/commit/09e1cc71f4b644ddab97aae7915e853132e84f5a))
+* **deps:** bump ws from 8.20.0 to 8.21.3 in /mcp ([#517](https://github.com/sumup/sumup-ai/issues/517)) ([073ce54](https://github.com/sumup/sumup-ai/commit/073ce543ff9a391acbbc5ab85f4cc95689464dda))
+* **mcp:** use npm ci in the image ([#528](https://github.com/sumup/sumup-ai/issues/528)) ([98f6508](https://github.com/sumup/sumup-ai/commit/98f6508f9bb6930576fded3327b735cd38647abb))
+
 ## [0.11.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.0...mcp-v0.11.1) (2026-07-11)
 
 

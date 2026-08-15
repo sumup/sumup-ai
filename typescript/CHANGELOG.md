@@ -4,6 +4,42 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.14.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.13.0...typescript-v0.14.0) (2026-08-15)
+
+
+### Features
+
+* **toolkit:** add tool execution observability ([#530](https://github.com/sumup/sumup-ai/issues/530)) ([545b4a0](https://github.com/sumup/sumup-ai/commit/545b4a085c80df7242dc149fe57cb71efc9371f6))
+
+
+### Bug Fixes
+
+* **codegen:** generate the tool registry ([#523](https://github.com/sumup/sumup-ai/issues/523)) ([d6d84f6](https://github.com/sumup/sumup-ai/commit/d6d84f6e2bca35dba4f15f7d45babb669d72c2d3))
+* **toolkit:** require approval for mutating tools ([#521](https://github.com/sumup/sumup-ai/issues/521)) ([ae4ff30](https://github.com/sumup/sumup-ai/commit/ae4ff302a8519c198289a3cb5e4c8214085f3f1b))
+
+
+### Performance Improvements
+
+* **mcp:** reduce tool catalog context ([#522](https://github.com/sumup/sumup-ai/issues/522)) ([a3968a2](https://github.com/sumup/sumup-ai/commit/a3968a29aa06d59c3de40f398dd51019d748c46e))
+
+
+### Documentation
+
+* **toolkit:** align framework examples ([#525](https://github.com/sumup/sumup-ai/issues/525)) ([7776581](https://github.com/sumup/sumup-ai/commit/777658189c9b28276bc6854f04729e370edba3d1))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @rslib/core ([#473](https://github.com/sumup/sumup-ai/issues/473)) ([0ac754e](https://github.com/sumup/sumup-ai/commit/0ac754e97762078ed7eece0957effcd4c5a4c19b))
+* **deps-dev:** bump linkify-it from 5.0.0 to 5.0.2 in /typescript ([#496](https://github.com/sumup/sumup-ai/issues/496)) ([0f9f88d](https://github.com/sumup/sumup-ai/commit/0f9f88de673ba08e7dd4176f716f28cc69b6399b))
+* **deps-dev:** bump the tooling group across 1 directory with 4 updates ([#512](https://github.com/sumup/sumup-ai/issues/512)) ([22e3b28](https://github.com/sumup/sumup-ai/commit/22e3b2898687564bc299a3943f2c116015a35eac))
+* **deps:** bump brace-expansion in /typescript ([#506](https://github.com/sumup/sumup-ai/issues/506)) ([ca5f9d3](https://github.com/sumup/sumup-ai/commit/ca5f9d32f59845523c4dbf99e3a03e02b3f18bb1))
+* **deps:** bump fast-uri ([#500](https://github.com/sumup/sumup-ai/issues/500)) ([a25e93f](https://github.com/sumup/sumup-ai/commit/a25e93f837c8c63356be9e720c4d1e70de0f7cc1))
+* **deps:** bump fast-uri from 3.1.2 to 3.1.5 in /typescript ([#510](https://github.com/sumup/sumup-ai/issues/510)) ([63a7091](https://github.com/sumup/sumup-ai/commit/63a709180d076a07b8574086c2ea0882068e1902))
+* **deps:** bump hono from 4.12.4 to 4.13.2 in /typescript ([#520](https://github.com/sumup/sumup-ai/issues/520)) ([f324158](https://github.com/sumup/sumup-ai/commit/f32415827d2d8475eb9b010a630ecd26586ecdd9))
+* **deps:** bump the ai-runtime group across 1 directory with 4 updates ([#513](https://github.com/sumup/sumup-ai/issues/513)) ([9ef2bcb](https://github.com/sumup/sumup-ai/commit/9ef2bcbf161fb34d1fa832ed3b722da1de3179e0))
+* **deps:** bump ws from 8.18.3 to 8.21.3 in /typescript ([#518](https://github.com/sumup/sumup-ai/issues/518)) ([fdf33b3](https://github.com/sumup/sumup-ai/commit/fdf33b3e5a892708a6088b293ecd9e4054d5573d))
+
 ## [0.13.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.12.0...typescript-v0.13.0) (2026-07-11)
 
 
