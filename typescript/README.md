@@ -2,7 +2,7 @@
 
 # SumUp Agent Toolkit - Typescript
 
-Allow LLM agents to integrate with the SumUp API using function calling from frameworks such as [LangChain](https://www.langchain.com/), and [Vercel's AI SDK](https://sdk.vercel.ai/). For full documentation, see [sumup.github.io/sumup-ai](https://sumup.github.io/sumup-ai/).
+Allow LLM agents to integrate with the SumUp API using function calling from frameworks such as [LangChain](https://www.langchain.com/), [AI SDK](https://ai-sdk.dev/), and the [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/). For full documentation, see [sumup.github.io/sumup-ai](https://sumup.github.io/sumup-ai/).
 
 [![NPM Version](https://img.shields.io/npm/v/@sumup/agent-toolkit.svg)](https://www.npmjs.org/package/@sumup/agent-toolkit)
 [![JSR Version](https://jsr.io/badges/@sumup/agent-toolkit)](https://jsr.io/@sumup/agent-toolkit)
@@ -25,105 +25,70 @@ yarn add @sumup/agent-toolkit
 ## [LangChain](https://www.langchain.com/)
 
 ```ts
-import { SumUpAgentToolkit } from '@sumup/agent-toolkit/langchain';
-import { AgentExecutor, createStructuredChatAgent } from 'langchain/agents';
+import { SumUpAgentToolkit } from "@sumup/agent-toolkit/langchain";
+import { createAgent } from "langchain";
 
 const sumupAgentToolkit = new SumUpAgentToolkit({
   apiKey: process.env.SUMUP_API_KEY!,
 });
 
-const llm = new ChatOpenAI({
-  model: 'gpt-4o',
+const agent = createAgent({
+  model: "openai:gpt-4o",
+  tools: sumupAgentToolkit.getTools(),
 });
 
-const prompt = await pull<ChatPromptTemplate>(
-  'hwchase17/structured-chat-agent'
-);
-
-const tools = sumupAgentToolkit.getTools();
-
-const agent = await createStructuredChatAgent({
-  llm,
-  tools,
-  prompt,
-});
-
-const agentExecutor = new AgentExecutor({
-  agent,
-  tools,
-});
-
-const response = await agentExecutor.invoke({
-  input: "Tell me about my last 10 transactions please.",
+const response = await agent.invoke({
+  messages: [
+    {
+      role: "user",
+      content: "Tell me about my last 10 transactions please.",
+    },
+  ],
 });
 ```
 
-For full example see [Langchain Example](./examples/langchain/).
-
-## [AI SDK](https://sdk.vercel.ai/)
+## [AI SDK](https://ai-sdk.dev/)
 
 ```ts
-import { SumUpAgentToolkit } from '@sumup/agent-toolkit/langchain';
-import { openai } from "@ai-sdk/openai";
-import { generateText } from "ai";
+import { SumUpAgentToolkit } from "@sumup/agent-toolkit/ai";
+import { generateText, stepCountIs } from "ai";
 
 const sumupAgentToolkit = new SumUpAgentToolkit({
   apiKey: process.env.SUMUP_API_KEY!,
 });
 
-const model = openai("gpt-4o");
-
 const response = await generateText({
-  model: model,
-  tools: {
-    ...sumupAgentToolkit.getTools(),
-  },
-  maxSteps: 5,
+  model: "openai/gpt-4o",
+  tools: sumupAgentToolkit.getTools(),
+  stopWhen: stepCountIs(5),
   prompt: "Tell me about my last 10 transactions please.",
 });
 ```
 
 For full example see [AI SDK Example](./examples/ai/).
 
-## [OpenAI](https://github.com/openai/openai-node)
+## [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/)
 
 ```ts
+import { Agent, run } from "@openai/agents";
 import { SumUpAgentToolkit } from "@sumup/agent-toolkit/openai";
-import OpenAI from "openai";
-import type { ChatCompletionMessageParam } from "openai/resources";
-
-const openai = new OpenAI();
 
 const sumupAgentToolkit = new SumUpAgentToolkit({
   apiKey: process.env.SUMUP_API_KEY!,
 });
 
-let messages: ChatCompletionMessageParam[] = [
-  {
-    role: "user",
-    content: "Tell me about my last 10 transactions please.",
-  },
-];
-
-const completion = await openai.chat.completions.create({
-  model: "gpt-4o",
-  messages,
+const agent = new Agent({
+  name: "Transactions reporter",
+  instructions: "You are a helpful payments assistant.",
   tools: sumupAgentToolkit.getTools(),
 });
 
-const message = completion.choices[0].message;
+const result = await run(
+  agent,
+  "Tell me about my last 10 transactions please.",
+);
 
-messages.push(message);
-
-if (message.tool_calls) {
-  const toolMessages = await Promise.all(
-    message.tool_calls.map((tc) => sumupAgentToolkit.handleToolCall(tc)),
-  );
-  messages = [...messages, ...toolMessages];
-} else {
-  console.log(completion.choices[0].message);
-  break;
-}
+console.log(result.finalOutput);
 ```
 
 For full example see [OpenAI Example](./examples/openai/).

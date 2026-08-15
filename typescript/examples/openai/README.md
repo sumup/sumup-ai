@@ -1,9 +1,9 @@
 # OpenAI Example
 
-Example usage of the [SumUp Agent Toolkit](/README.md) with the [OpenAI](https://github.com/openai/openai-node).
+Example usage of the [SumUp Agent Toolkit](/README.md) with the [OpenAI Agents SDK](https://openai.github.io/openai-agents-js/).
 
 ## Run
 
 ```sh
-npx ts-node index.ts --env
+npx ts-node index.ts
 ```

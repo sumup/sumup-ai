@@ -1,9 +1,9 @@
 # AI SDK Example
 
-Example usage of the [SumUp Agent Toolkit](/README.md) with the [AI SDK](https://sdk.vercel.ai/).
+Example usage of the [SumUp Agent Toolkit](/README.md) with the [AI SDK](https://ai-sdk.dev/).
 
 ## Run
 
 ```sh
-npx ts-node index.ts --env
+npx ts-node index.ts
 ```

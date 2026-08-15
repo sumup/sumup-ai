@@ -1,7 +1,7 @@
 {
   "name": "@sumup/agent-toolkit-example-openai",
   "version": "0.0.1",
-  "description": "Example of using the SumUp Agent Toolkit with OpenAI SDK.",
+  "description": "Example of using the SumUp Agent Toolkit with the OpenAI Agents SDK.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,7 @@
   "license": "Apache-2.0",
   "author": "SumUp <support@sumup.com> (https://sumup.com/)",
   "dependencies": {
-    "@openai/agents": "^0.3.3",
+    "@openai/agents": "^0.14.3",
     "@sumup/agent-toolkit": "file:../.."
   }
 }
