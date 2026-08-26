@@ -50,11 +50,11 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@langchain/core": "^1.2.5",
+    "@langchain/core": "^1.2.8",
     "@modelcontextprotocol/sdk": "^1.30.0",
-    "@openai/agents": "^0.14.3",
+    "@openai/agents": "^0.16.1",
     "@sumup/sdk": "^0.1.6",
-    "ai": "^7.0.58",
+    "ai": "^7.0.68",
     "zod": "^4.4.3"
   },
   "devDependencies": {
