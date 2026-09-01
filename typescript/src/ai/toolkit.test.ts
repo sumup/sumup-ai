@@ -1,4 +1,4 @@
-jest.mock("ai", () => ({
+rs.mock("ai", () => ({
   tool: (options: unknown) => options,
   zodSchema: (schema: unknown) => schema,
 }));

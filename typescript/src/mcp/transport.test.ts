@@ -2,9 +2,9 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type SumUp from "@sumup/sdk";
 
-jest.mock("../common", () => {
-  const actual = jest.requireActual("../common");
-  const { z } = jest.requireActual("zod");
+rs.mock("../common", () => {
+  const actual = rs.requireActual<typeof import("../common")>("../common");
+  const { z } = rs.requireActual<typeof import("zod")>("zod");
 
   return {
     ...actual,

@@ -6,9 +6,9 @@ const mockToolkitState = {
   callback: async (_sumup: SumUp) => ({ ok: true }),
 };
 
-jest.mock("../common", () => {
-  const actual = jest.requireActual("../common");
-  const { z } = jest.requireActual("zod");
+rs.mock("../common", () => {
+  const actual = rs.requireActual<typeof import("../common")>("../common");
+  const { z } = rs.requireActual<typeof import("zod")>("zod");
 
   return {
     ...actual,

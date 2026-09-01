@@ -49,7 +49,7 @@ describe("executeTool", () => {
         throw error;
       },
     };
-    const onToolError = jest.fn();
+    const onToolError = rs.fn();
 
     await expect(
       executeTool(failingTool, sumup, { value: "hello" }, { onToolError }),
