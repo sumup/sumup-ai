@@ -1,7 +1,6 @@
+import "dotenv/config";
 import { SumUpAgentToolkit } from "@sumup/agent-toolkit/ai";
 import { generateText, stepCountIs } from "ai";
-
-require("dotenv").config();
 
 const sumupAgentToolkit = new SumUpAgentToolkit({
   apiKey: process.env.SUMUP_API_KEY!,

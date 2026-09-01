@@ -1,5 +1,5 @@
 import type { OpenAPIV3_1 } from "openapi-types";
-import { formatPropertyKey, toTemplateLiteral } from "./utils";
+import { formatPropertyKey, toTemplateLiteral } from "./utils.js";
 
 export type SchemaResult = {
   code: string;

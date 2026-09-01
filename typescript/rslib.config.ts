@@ -27,6 +27,7 @@ export default defineConfig({
     },
   ],
   source: {
+    tsconfigPath: "./tsconfig.build.json",
     entry: {
       langchain: "./src/langchain/index.ts",
       mcp: "./src/mcp/index.ts",

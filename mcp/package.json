@@ -1,12 +1,16 @@
 {
   "name": "@sumup/mcp",
   "version": "0.12.0",
+  "type": "module",
   "description": "MCP server for interacting with SumUp",
   "homepage": "https://github.com/sumup/sumup-ai",
   "license": "Apache-2.0",
   "author": "SumUp <support@sumup.com> (https://sumup.com/)",
   "mcpName": "io.github.sumup/mcp",
   "main": "dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
   "bin": {
     "mcp": "dist/index.mjs"
   },
@@ -24,6 +28,7 @@
     "inspect": "npx @modelcontextprotocol/inspector node dist/index.mjs",
     "build": "rslib build",
     "build:watch": "rslib build --watch",
+    "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build",
     "test": "npm run build && node --test test/*.test.mjs"
   },

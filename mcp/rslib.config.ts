@@ -6,6 +6,11 @@ export default defineConfig({
     {
       format: "esm",
       syntax: "esnext",
+      output: {
+        filename: {
+          js: "index.mjs",
+        },
+      },
     },
   ],
   output: {

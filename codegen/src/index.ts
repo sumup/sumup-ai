@@ -4,7 +4,7 @@ import path from "node:path";
 import SwaggerParser from "@apidevtools/swagger-parser";
 import { program } from "commander";
 import type { OpenAPIV3_1 } from "openapi-types";
-import { generate } from "./generator";
+import { generate } from "./generator.js";
 
 const DEFAULT_EXCLUDED_OPERATION_IDS = ["ProcessCheckout"] as const;
 const DEFAULT_REGISTRATION_EXCLUSIONS = {
