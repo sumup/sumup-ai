@@ -14,6 +14,8 @@ import {
   getPaymentMethodsResult,
   listCheckoutsParameters,
   listCheckoutsResult,
+  updateCheckoutParameters,
+  updateCheckoutResult,
 } from "./parameters";
 
 export const createApplePaySession: Tool<
@@ -66,7 +68,7 @@ Follow by processing a checkout to charge the provided payment instrument.`,
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payments"],
+    oauthScopes: ["checkouts.write", "payments"],
   },
 };
 
@@ -88,7 +90,7 @@ export const deactivateCheckout: Tool<
     requiresApproval: true,
     destructive: true,
     idempotent: false,
-    oauthScopes: ["payments"],
+    oauthScopes: ["checkouts.write", "payments"],
   },
 };
 
@@ -110,7 +112,7 @@ export const getCheckout: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payments"],
+    oauthScopes: ["checkouts.read", "payments"],
   },
 };
 
@@ -157,6 +159,28 @@ export const listCheckouts: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payments"],
+    oauthScopes: ["checkouts.read", "payments"],
+  },
+};
+
+export const updateCheckout: Tool<
+  typeof updateCheckoutParameters,
+  typeof updateCheckoutResult
+> = {
+  name: "update_checkout",
+  title: `Update a checkout`,
+  description: `Updates an identified checkout resource.`,
+  parameters: updateCheckoutParameters,
+  result: updateCheckoutResult,
+  callback: async (sumup: SumUp, { checkoutId, ...args }) => {
+    return await sumup.checkouts.update(checkoutId, args);
+  },
+  annotations: {
+    title: `Update a checkout`,
+    readOnly: false,
+    requiresApproval: true,
+    destructive: false,
+    idempotent: false,
+    oauthScopes: ["checkouts.write", "payments"],
   },
 };

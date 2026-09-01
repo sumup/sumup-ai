@@ -10,7 +10,7 @@ export const createMerchantMemberParameters = z.object({
       `True if the user is managed by the merchant. In this case, we'll created a virtual user with the provided password and nickname.`,
     )
     .optional(),
-  email: z.string().describe(`Email address of the member to add.`),
+  email: z.string().max(256).describe(`Email address of the member to add.`),
   password: z
     .string()
     .min(8)
@@ -20,12 +20,14 @@ export const createMerchantMemberParameters = z.object({
     .optional(),
   nickname: z
     .string()
+    .max(64)
     .describe(
       `Nickname of the member to add. Only used if \`is_managed_user\` is true. Used for display purposes only.`,
     )
     .optional(),
   roles: z
-    .array(z.string())
+    .array(z.string().max(64))
+    .max(124)
     .describe(`List of roles to assign to the new member.`),
   metadata: z
     .object({})
@@ -262,6 +264,16 @@ export const listMerchantMembersParameters = z.object({
     .optional()
     .describe(`Filter the returned members by email address prefix.`),
   "user.id": z.string().optional().describe(`Search for a member by user id.`),
+  "user.type": z
+    .array(
+      z
+        .enum(["user", "managed_user", "service_account", "system_account"])
+        .describe(`Type of the user account.`),
+    )
+    .optional()
+    .describe(
+      `Filter the returned members by user type. Repeat this parameter to include multiple user types.`,
+    ),
   status: z
     .enum(["accepted", "pending", "expired", "disabled", "unknown"])
     .describe(`The status of the membership.`)
@@ -382,7 +394,7 @@ export const updateMerchantMemberParameters = z.object({
     .string()
     .describe(`Short unique identifier for the merchant.`),
   memberId: z.string().describe(`The ID of the member to retrieve.`),
-  roles: z.array(z.string()).optional(),
+  roles: z.array(z.string().max(64)).max(124).optional(),
   metadata: z
     .object({})
     .catchall(z.unknown())
@@ -402,6 +414,7 @@ export const updateMerchantMemberParameters = z.object({
     .object({
       nickname: z
         .string()
+        .max(64)
         .describe(`User's nickname. Used for display purposes only.`)
         .optional(),
       password: z

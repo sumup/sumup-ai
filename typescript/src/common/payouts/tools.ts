@@ -27,6 +27,6 @@ Results are sorted by payout date in the requested \`order\`.`,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["user.profile", "user.profile_readonly"],
+    oauthScopes: ["payouts.read", "user.profile", "user.profile_readonly"],
   },
 };

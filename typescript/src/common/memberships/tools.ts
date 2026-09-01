@@ -21,6 +21,6 @@ export const listMemberships: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["user.profile", "user.profile_readonly"],
   },
 };

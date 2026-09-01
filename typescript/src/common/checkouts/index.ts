@@ -5,6 +5,7 @@ export {
   getCheckoutParameters,
   getPaymentMethodsParameters,
   listCheckoutsParameters,
+  updateCheckoutParameters,
 } from "./parameters";
 export {
   createApplePaySession,
@@ -13,4 +14,5 @@ export {
   getCheckout,
   getPaymentMethods,
   listCheckouts,
+  updateCheckout,
 } from "./tools";

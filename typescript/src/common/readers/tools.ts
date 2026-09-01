@@ -2,6 +2,8 @@ import type SumUp from "@sumup/sdk";
 import type { Tool } from "../types";
 
 import {
+  createGoReaderCheckoutParameters,
+  createGoReaderCheckoutResult,
   createReaderCheckoutParameters,
   createReaderCheckoutResult,
   createReaderParameters,
@@ -10,6 +12,8 @@ import {
   createReaderTerminateResult,
   deleteReaderParameters,
   deleteReaderResult,
+  getReaderCheckoutParameters,
+  getReaderCheckoutResult,
   getReaderParameters,
   getReaderResult,
   getReaderStatusParameters,
@@ -19,6 +23,30 @@ import {
   updateReaderParameters,
   updateReaderResult,
 } from "./parameters";
+
+export const createGoReaderCheckout: Tool<
+  typeof createGoReaderCheckoutParameters,
+  typeof createGoReaderCheckoutResult
+> = {
+  name: "create_go_reader_checkout",
+  title: `Create a Go Reader Payment`,
+  description: `Initiates a payment on the SumUp Go terminal identified by the reader ID.
+
+Use \`client_transaction_id\` as an idempotency key: retrying the request with the same value returns the result of the original payment instead of creating a duplicate.`,
+  parameters: createGoReaderCheckoutParameters,
+  result: createGoReaderCheckoutResult,
+  callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
+    return await sumup.readers.createGoCheckout(merchantCode, readerId, args);
+  },
+  annotations: {
+    title: `Create a Go Reader Payment`,
+    readOnly: false,
+    requiresApproval: true,
+    destructive: false,
+    idempotent: false,
+    oauthScopes: ["payments", "readers.write"],
+  },
+};
 
 export const createReader: Tool<
   typeof createReaderParameters,
@@ -38,7 +66,7 @@ export const createReader: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["readers.write"],
+    oauthScopes: ["readers.write", "terminals.write"],
   },
 };
 
@@ -127,7 +155,7 @@ export const deleteReader: Tool<
     requiresApproval: true,
     destructive: true,
     idempotent: false,
-    oauthScopes: ["readers.write"],
+    oauthScopes: ["readers.write", "terminals.write"],
   },
 };
 
@@ -145,6 +173,36 @@ export const getReader: Tool<
   },
   annotations: {
     title: `Retrieve a Reader`,
+    readOnly: true,
+    requiresApproval: false,
+    destructive: false,
+    idempotent: false,
+    oauthScopes: ["readers.read", "terminals.read"],
+  },
+};
+
+export const getReaderCheckout: Tool<
+  typeof getReaderCheckoutParameters,
+  typeof getReaderCheckoutResult
+> = {
+  name: "get_reader_checkout",
+  title: `Get a Reader Checkout`,
+  description: `Get a Checkout for a Reader.`,
+  parameters: getReaderCheckoutParameters,
+  result: getReaderCheckoutResult,
+  callback: async (
+    sumup: SumUp,
+    { merchantCode, readerId, checkoutId, ...args },
+  ) => {
+    return await sumup.readers.getCheckout(
+      merchantCode,
+      readerId,
+      checkoutId,
+      args,
+    );
+  },
+  annotations: {
+    title: `Get a Reader Checkout`,
     readOnly: true,
     requiresApproval: false,
     destructive: false,
@@ -211,7 +269,7 @@ export const listReaders: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["readers.read"],
+    oauthScopes: ["readers.read", "terminals.read"],
   },
 };
 
@@ -233,6 +291,6 @@ export const updateReader: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["readers.write"],
+    oauthScopes: ["readers.write", "terminals.write"],
   },
 };

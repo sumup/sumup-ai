@@ -21,6 +21,6 @@ export const getReceipt: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["receipts.read", "transactions.history"],
   },
 };

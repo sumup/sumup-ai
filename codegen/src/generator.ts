@@ -258,7 +258,12 @@ function normalizeParameters(params: OpenAPIV3_1.ParameterObject[]) {
     const schema = resolveParameterSchema(param);
     if (!schema) continue;
 
-    const name = param.in === "path" ? camelCase(param.name) : param.name;
+    const name =
+      param.in === "path"
+        ? camelCase(param.name)
+        : schema.type === "array" && param.name.endsWith("[]")
+          ? param.name.slice(0, -2)
+          : param.name;
     const key = `${param.in}:${name}`;
 
     if (seen.has(key)) {

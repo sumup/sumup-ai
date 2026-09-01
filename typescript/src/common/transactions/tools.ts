@@ -32,7 +32,7 @@ export const getTransactionV2_1: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["transactions.history"],
+    oauthScopes: ["transactions.history", "transactions.read"],
   },
 };
 
@@ -54,7 +54,7 @@ export const listTransactionsV2_1: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["transactions.history"],
+    oauthScopes: ["transactions.history", "transactions.read"],
   },
 };
 
@@ -76,6 +76,6 @@ export const refundTransaction: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payments"],
+    oauthScopes: ["payments", "refunds.write"],
   },
 };

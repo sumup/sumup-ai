@@ -15,15 +15,15 @@ export const getMerchant: Tool<
   typeof getMerchantResult
 > = {
   name: "get_merchant",
-  title: `Retrieve a Merchant`,
-  description: `Retrieve a merchant.`,
+  title: `Get Merchant`,
+  description: `Returns a Merchant for a valid Merchant code.`,
   parameters: getMerchantParameters,
   result: getMerchantResult,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {
     return await sumup.merchants.get(merchantCode, args);
   },
   annotations: {
-    title: `Retrieve a Merchant`,
+    title: `Get Merchant`,
     readOnly: true,
     requiresApproval: false,
     destructive: false,
@@ -37,15 +37,15 @@ export const getPerson: Tool<
   typeof getPersonResult
 > = {
   name: "get_person",
-  title: `Retrieve a Person`,
-  description: `Returns a single person related to the merchant.`,
+  title: `Get Person`,
+  description: `Returns a single Person related to a Merchant.`,
   parameters: getPersonParameters,
   result: getPersonResult,
   callback: async (sumup: SumUp, { merchantCode, personId, ...args }) => {
     return await sumup.merchants.getPerson(merchantCode, personId, args);
   },
   annotations: {
-    title: `Retrieve a Person`,
+    title: `Get Person`,
     readOnly: true,
     requiresApproval: false,
     destructive: false,
@@ -60,7 +60,7 @@ export const listPersons: Tool<
 > = {
   name: "list_persons",
   title: `List Persons`,
-  description: `Returns a list of persons related to the merchant.`,
+  description: `Returns the Persons related to a Merchant.`,
   parameters: listPersonsParameters,
   result: listPersonsResult,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {

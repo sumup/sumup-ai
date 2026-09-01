@@ -32,7 +32,7 @@ export const createCustomer: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payment_instruments"],
+    oauthScopes: ["customers.write", "payment_instruments"],
   },
 };
 
@@ -58,7 +58,7 @@ export const deactivatePaymentInstrument: Tool<
     requiresApproval: true,
     destructive: true,
     idempotent: false,
-    oauthScopes: ["payment_instruments"],
+    oauthScopes: ["customers.write", "payment_instruments"],
   },
 };
 
@@ -80,7 +80,7 @@ export const getCustomer: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payment_instruments"],
+    oauthScopes: ["customers.read", "payment_instruments"],
   },
 };
 
@@ -102,7 +102,7 @@ export const listPaymentInstruments: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: ["payment_instruments"],
+    oauthScopes: ["customers.read", "payment_instruments"],
   },
 };
 
@@ -126,6 +126,6 @@ The request only overwrites the parameters included in the request, all other pa
     requiresApproval: true,
     destructive: false,
     idempotent: true,
-    oauthScopes: ["payment_instruments"],
+    oauthScopes: ["customers.write", "payment_instruments"],
   },
 };
