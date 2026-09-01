@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.3](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.2...mcp-v0.11.3) (2026-09-01)
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @biomejs/biome in /mcp in the tooling group ([#532](https://github.com/sumup/sumup-ai/issues/532)) ([1560e8c](https://github.com/sumup/sumup-ai/commit/1560e8ca2143bc55d4e72126dcb351ef6aa4992b))
+* **deps:** bump ip-address and express-rate-limit in /mcp ([#541](https://github.com/sumup/sumup-ai/issues/541)) ([6e52a63](https://github.com/sumup/sumup-ai/commit/6e52a63fe0da2e6ae9b79cd50db680e5612e2df5))
+
 ## [0.11.2](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.1...mcp-v0.11.2) (2026-08-15)
 
 
