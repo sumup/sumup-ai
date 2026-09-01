@@ -14,6 +14,37 @@ permissions:
   packages: read
 
 jobs:
+  lint-codegen:
+    name: Lint and typecheck codegen
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./codegen
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ./codegen/package-lock.json
+
+      - name: Setup Biome CLI
+        uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51 # v2.7.1
+        with:
+          working-dir: ./codegen
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: biome ci --diagnostic-level=error --reporter=github
+
   lint-typescript:
     name: Lint Typescript SDK
     runs-on: ubuntu-latest
@@ -41,6 +72,25 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Install OpenAI example dependencies
+        run: npm ci
+        working-directory: ./typescript/examples/openai
+
+      - name: Typecheck OpenAI example
+        run: npm run typecheck
+        working-directory: ./typescript/examples/openai
+
+      - name: Install AI SDK example dependencies
+        run: npm ci
+        working-directory: ./typescript/examples/ai
+
+      - name: Typecheck AI SDK example
+        run: npm run typecheck
+        working-directory: ./typescript/examples/ai
 
       - name: Lint
         run: biome ci --diagnostic-level=error --reporter=github
@@ -101,6 +151,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
 
       - name: Lint
         run: biome ci --diagnostic-level=error --reporter=github

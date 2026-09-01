@@ -5,5 +5,5 @@ Example usage of the [SumUp Agent Toolkit](/README.md) with the [AI SDK](https:/
 ## Run
 
 ```sh
-npx ts-node index.ts
+npm start
 ```

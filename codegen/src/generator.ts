@@ -3,8 +3,8 @@ import { join, resolve } from "node:path";
 import { camelCase, kebabCase, snakeCase } from "change-case";
 import { OpenAPIV3, type OpenAPIV3_1 } from "openapi-types";
 import { format } from "prettier";
-import { formatPropertyKey, toTemplateLiteral } from "./utils";
-import { collectObjectFields, type ObjectField, schemaToZod } from "./zod";
+import { formatPropertyKey, toTemplateLiteral } from "./utils.js";
+import { collectObjectFields, type ObjectField, schemaToZod } from "./zod.js";
 
 type NormalizedField = ObjectField & {
   originalName: string;

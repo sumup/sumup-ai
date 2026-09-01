@@ -1,7 +1,6 @@
+import "dotenv/config";
 import { Agent, run, withTrace } from "@openai/agents";
 import { SumUpAgentToolkit } from "@sumup/agent-toolkit/openai";
-
-require("dotenv").config();
 
 const sumupAgentToolkit = new SumUpAgentToolkit({
   apiKey: process.env.SUMUP_API_KEY!,

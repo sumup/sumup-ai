@@ -8,6 +8,7 @@
   "scripts": {
     "build": "rslib build",
     "build:watch": "rslib build --watch",
+    "typecheck": "tsc --noEmit",
     "generate": "npm --prefix ../codegen run generate",
     "inspect": "rslib inspect",
     "lint": "biome check",
