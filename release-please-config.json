@@ -1,8 +1,8 @@
 {
-	"$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
-	"include-component-in-tag": true,
-	"draft": true,
-	"extra-label": "release",
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "include-component-in-tag": true,
+  "draft": true,
+  "extra-label": "release",
   "pull-request-title-pattern": "release: ${version}",
   "changelog-sections": [
     {
@@ -52,22 +52,22 @@
       "hidden": true
     }
   ],
-	"packages": {
-		"mcp": {
-			"release-type": "node",
-			"component": "mcp"
-		},
-		"typescript": {
-			"release-type": "node",
-			"component": "typescript",
-			"extra-files": [
-				"src/common/const.ts",
+  "packages": {
+    "mcp": {
+      "release-type": "node",
+      "component": "mcp"
+    },
+    "typescript": {
+      "release-type": "node",
+      "component": "typescript",
+      "extra-files": [
+        "src/common/const.ts",
         {
           "type": "json",
           "path": "jsr.json",
           "jsonpath": "$.version"
         }
-			]
-		}
-	}
+      ]
+    }
+  }
 }
