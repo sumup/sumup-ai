@@ -4,6 +4,13 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.15.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.15.0...typescript-v0.15.1) (2026-09-01)
+
+
+### Chores
+
+* **typescript:** modernize compiler configuration ([#547](https://github.com/sumup/sumup-ai/issues/547)) ([c09fab5](https://github.com/sumup/sumup-ai/commit/c09fab5bfdfeecacee94693537c4d22cdfe01c1a))
+
 ## [0.15.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.14.1...typescript-v0.15.0) (2026-09-01)
 
 
