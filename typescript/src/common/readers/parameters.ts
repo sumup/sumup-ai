@@ -1,5 +1,62 @@
 import { z } from "zod";
 
+export const createGoReaderCheckoutParameters = z.object({
+  merchantCode: z
+    .string()
+    .describe(`Short unique identifier for the merchant.`),
+  readerId: z
+    .string()
+    .min(30)
+    .max(30)
+    .describe(
+      `Unique identifier of the reader that the payment is initiated on.`,
+    ),
+  affiliate: z
+    .object({
+      app_id: z.string(),
+      key: z.string(),
+    })
+    .optional(),
+  client_transaction_id: z
+    .string()
+    .describe(
+      `Caller-supplied correlation identifier, used as the idempotency key.`,
+    ),
+  tip_amount: z
+    .number()
+    .int()
+    .describe(
+      `Optional tip amount in minor units, added on top of total_amount.`,
+    )
+    .optional(),
+  total_amount: z.object({
+    currency: z.string().describe(`Currency ISO 4217 code`),
+    value: z.number().int().describe(`Amount in minor units (e.g. cents).`),
+  }),
+});
+
+export const createGoReaderCheckoutResult = z
+  .object({
+    data: z
+      .object({
+        client_transaction_id: z
+          .string()
+          .describe(
+            `Caller-supplied correlation identifier that was provided in the request.`,
+          )
+          .optional(),
+        transaction_code: z
+          .string()
+          .describe(
+            `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+          )
+          .optional(),
+      })
+      .optional(),
+  })
+  .loose()
+  .describe(`Returns the result of the payment initiated on the reader.`);
+
 export const createReaderParameters = z.object({
   merchantCode: z
     .string()
@@ -32,9 +89,9 @@ export const createReaderResult = z
       .string()
       .min(30)
       .max(30)
-      .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+      .describe(
+        `Unique identifier of the reader that the payment is initiated on.`,
+      ),
     name: z
       .string()
       .max(500)
@@ -223,6 +280,13 @@ For example, EUR 1.00 is represented as value 100 with minor unit of 2.
 export const createReaderCheckoutResult = z
   .object({
     data: z.object({
+      checkout_id: z
+        .string()
+        .describe(
+          `The checkout ID is a unique identifier for the checkout.
+`,
+        )
+        .optional(),
       client_transaction_id: z
         .string()
         .describe(`The client transaction ID is a unique identifier for the transaction that is generated for the client.
@@ -249,9 +313,9 @@ export const deleteReaderParameters = z.object({
     .string()
     .min(30)
     .max(30)
-    .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+    .describe(
+      `Unique identifier of the reader that the payment is initiated on.`,
+    ),
 });
 
 export const deleteReaderResult = z.any();
@@ -264,9 +328,9 @@ export const getReaderParameters = z.object({
     .string()
     .min(30)
     .max(30)
-    .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+    .describe(
+      `Unique identifier of the reader that the payment is initiated on.`,
+    ),
 });
 
 export const getReaderResult = z
@@ -275,9 +339,9 @@ export const getReaderResult = z
       .string()
       .min(30)
       .max(30)
-      .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+      .describe(
+        `Unique identifier of the reader that the payment is initiated on.`,
+      ),
     name: z
       .string()
       .max(500)
@@ -333,6 +397,77 @@ This field is currently in beta and may change.`,
   .describe(
     `A physical card reader device that can accept in-person payments.`,
   );
+
+export const getReaderCheckoutParameters = z.object({
+  merchantCode: z.string().describe(`Merchant Code`),
+  readerId: z.string().describe(`The unique identifier of the Reader`),
+  checkoutId: z.string().describe(`The unique identifier of the Checkout`),
+});
+
+export const getReaderCheckoutResult = z
+  .object({
+    data: z.object({
+      card_type: z
+        .enum(["credit", "debit"])
+        .nullable()
+        .describe(`Type of the card. Required for some countries`),
+      checkout_id: z.string().describe(`Unique identifier for the checkout`),
+      client_transaction_id: z
+        .string()
+        .describe(`Client transaction identifier associated with the checkout`),
+      created_at: z.string().describe(`Checkout creation timestamp`),
+      installments: z
+        .number()
+        .int()
+        .nullable()
+        .describe(
+          `Number of installments for the transaction. Required for some countries.`,
+        ),
+      payment_failure_reason: z
+        .string()
+        .nullable()
+        .describe(`Payment failure reason`)
+        .optional(),
+      payment_status: z
+        .string()
+        .nullable()
+        .describe(`Payment status from payments v2 event`),
+      payment_type: z
+        .enum(["card", "pix"])
+        .describe(`Type of the payment. Required for some countries`),
+      reader_firmware_version: z.string().describe(`Reader firmware version`),
+      reader_serial_number: z.string().describe(`Device serial number`),
+      status: z
+        .enum(["pending", "successful", "failed", "cancelled"])
+        .describe(`Current status of the checkout`),
+      total_amount: z
+        .object({
+          currency: z.string().describe(`Currency ISO 4217 code`),
+          minor_unit: z
+            .number()
+            .int()
+            .describe(`The minor units of the currency.
+It represents the number of decimals of the currency. For the currencies CLP, COP and HUF, the minor unit is 0.
+`),
+          value: z.number().int().describe(`Integer value of the amount.`),
+        })
+        .describe(`Amount structure.
+
+The amount is represented as an integer value altogether with the currency and the minor unit.
+
+For example, EUR 1.00 is represented as value 100 with minor unit of 2.
+`),
+      updated_at: z.string().describe(`Checkout last update timestamp`),
+      valid_until: z
+        .string()
+        .nullable()
+        .describe(
+          `Checkout expiration timestamp. After this time, the checkout will be automatically cancelled.`,
+        ),
+    }),
+  })
+  .loose()
+  .describe(`The Checkout got successfully retrieved for the given reader.`);
 
 export const getReaderStatusParameters = z.object({
   merchantCode: z.string().describe(`Merchant Code`),
@@ -392,9 +527,9 @@ export const listReadersResult = z
             .string()
             .min(30)
             .max(30)
-            .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+            .describe(
+              `Unique identifier of the reader that the payment is initiated on.`,
+            ),
           name: z
             .string()
             .max(500)
@@ -462,9 +597,9 @@ export const updateReaderParameters = z.object({
     .string()
     .min(30)
     .max(30)
-    .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+    .describe(
+      `Unique identifier of the reader that the payment is initiated on.`,
+    ),
   name: z
     .string()
     .max(500)
@@ -487,9 +622,9 @@ export const updateReaderResult = z
       .string()
       .min(30)
       .max(30)
-      .describe(`Unique identifier of the object.
-
-Note that this identifies the instance of the physical devices pairing with your SumUp account. If you [delete](https://developer.sumup.com/api/readers/delete-reader) a reader, and pair the device again, the ID will be different. Do not use this ID to refer to a physical device.`),
+      .describe(
+        `Unique identifier of the reader that the payment is initiated on.`,
+      ),
     name: z
       .string()
       .max(500)

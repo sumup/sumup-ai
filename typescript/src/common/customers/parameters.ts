@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const createCustomerParameters = z
   .object({
-    customer_id: z.string().describe(`Unique ID of the customer.`),
+    customer_id: z.string().describe(`Unique identifier of the customer.`),
     personal_details: z
       .object({
         first_name: z
@@ -19,7 +19,9 @@ export const createCustomerParameters = z
         tax_id: z
           .string()
           .max(255)
-          .describe(`An identification number user for tax purposes (e.g. CPF)`)
+          .describe(
+            `Identification number used for tax purposes, such as a CPF in Brazil.`,
+          )
           .optional(),
         address: z
           .object({
@@ -61,7 +63,7 @@ export const createCustomerParameters = z
 
 export const createCustomerResult = z
   .object({
-    customer_id: z.string().describe(`Unique ID of the customer.`),
+    customer_id: z.string().describe(`Unique identifier of the customer.`),
     personal_details: z
       .object({
         first_name: z
@@ -78,7 +80,9 @@ export const createCustomerResult = z
         tax_id: z
           .string()
           .max(255)
-          .describe(`An identification number user for tax purposes (e.g. CPF)`)
+          .describe(
+            `Identification number used for tax purposes, such as a CPF in Brazil.`,
+          )
           .optional(),
         address: z
           .object({
@@ -120,7 +124,9 @@ export const createCustomerResult = z
   .describe(`Saved customer details.`);
 
 export const deactivatePaymentInstrumentParameters = z.object({
-  customerId: z.string().describe(`Unique ID of the saved customer resource.`),
+  customerId: z
+    .string()
+    .describe(`Unique identifier of the saved customer resource.`),
   token: z
     .string()
     .describe(
@@ -131,12 +137,14 @@ export const deactivatePaymentInstrumentParameters = z.object({
 export const deactivatePaymentInstrumentResult = z.any();
 
 export const getCustomerParameters = z.object({
-  customerId: z.string().describe(`Unique ID of the saved customer resource.`),
+  customerId: z
+    .string()
+    .describe(`Unique identifier of the saved customer resource.`),
 });
 
 export const getCustomerResult = z
   .object({
-    customer_id: z.string().describe(`Unique ID of the customer.`),
+    customer_id: z.string().describe(`Unique identifier of the customer.`),
     personal_details: z
       .object({
         first_name: z
@@ -153,7 +161,9 @@ export const getCustomerResult = z
         tax_id: z
           .string()
           .max(255)
-          .describe(`An identification number user for tax purposes (e.g. CPF)`)
+          .describe(
+            `Identification number used for tax purposes, such as a CPF in Brazil.`,
+          )
           .optional(),
         address: z
           .object({
@@ -195,7 +205,9 @@ export const getCustomerResult = z
   .describe(`Saved customer details.`);
 
 export const listPaymentInstrumentsParameters = z.object({
-  customerId: z.string().describe(`Unique ID of the saved customer resource.`),
+  customerId: z
+    .string()
+    .describe(`Unique identifier of the saved customer resource.`),
 });
 
 export const listPaymentInstrumentsResult = z
@@ -274,7 +286,9 @@ export const listPaymentInstrumentsResult = z
               .optional(),
             merchant_code: z
               .string()
-              .describe(`Merchant account for which the mandate is valid.`)
+              .describe(
+                `Short unique identifier for the merchant for which the mandate is valid.`,
+              )
               .optional(),
           })
           .describe(
@@ -283,17 +297,17 @@ export const listPaymentInstrumentsResult = z
           .optional(),
         created_at: z
           .string()
-          .describe(
-            `Creation date of payment instrument. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-          )
+          .describe(`The timestamp of when the payment instrument was created.`)
           .optional(),
       })
-      .describe(`Payment Instrument Response`),
+      .describe(`Details of a saved payment instrument.`),
   )
   .describe(`Returns the list of saved payment instruments for the customer.`);
 
 export const updateCustomerParameters = z.object({
-  customerId: z.string().describe(`Unique ID of the saved customer resource.`),
+  customerId: z
+    .string()
+    .describe(`Unique identifier of the saved customer resource.`),
   personal_details: z
     .object({
       first_name: z.string().describe(`First name of the customer.`).optional(),
@@ -307,7 +321,9 @@ export const updateCustomerParameters = z.object({
       tax_id: z
         .string()
         .max(255)
-        .describe(`An identification number user for tax purposes (e.g. CPF)`)
+        .describe(
+          `Identification number used for tax purposes, such as a CPF in Brazil.`,
+        )
         .optional(),
       address: z
         .object({
@@ -348,7 +364,7 @@ export const updateCustomerParameters = z.object({
 
 export const updateCustomerResult = z
   .object({
-    customer_id: z.string().describe(`Unique ID of the customer.`),
+    customer_id: z.string().describe(`Unique identifier of the customer.`),
     personal_details: z
       .object({
         first_name: z
@@ -365,7 +381,9 @@ export const updateCustomerResult = z
         tax_id: z
           .string()
           .max(255)
-          .describe(`An identification number user for tax purposes (e.g. CPF)`)
+          .describe(
+            `Identification number used for tax purposes, such as a CPF in Brazil.`,
+          )
           .optional(),
         address: z
           .object({

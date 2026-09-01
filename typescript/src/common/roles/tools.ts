@@ -32,7 +32,7 @@ export const createMerchantRole: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["roles.write", "user.subaccounts"],
   },
 };
 
@@ -54,7 +54,7 @@ export const deleteMerchantRole: Tool<
     requiresApproval: true,
     destructive: true,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["roles.write", "user.subaccounts"],
   },
 };
 
@@ -76,7 +76,7 @@ export const getMerchantRole: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["roles.read", "user.subaccounts"],
   },
 };
 
@@ -98,7 +98,7 @@ export const listMerchantRoles: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["roles.read", "user.subaccounts"],
   },
 };
 
@@ -120,6 +120,6 @@ export const updateMerchantRole: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["roles.write", "user.subaccounts"],
   },
 };

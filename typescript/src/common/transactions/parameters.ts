@@ -3,9 +3,7 @@ import { z } from "zod";
 export const getTransactionV2_1Parameters = z.object({
   merchantCode: z
     .string()
-    .describe(
-      `Merchant code of the account whose transaction should be retrieved.`,
-    ),
+    .describe(`Short unique identifier for the merchant.`),
   id: z
     .string()
     .optional()
@@ -21,16 +19,16 @@ export const getTransactionV2_1Parameters = z.object({
   foreign_transaction_id: z
     .string()
     .optional()
-    .describe(`External/foreign transaction id (passed by clients).`),
+    .describe(`External transaction identifier supplied by the client.`),
   client_transaction_id: z
     .string()
     .optional()
-    .describe(`Client transaction id.`),
+    .describe(`Client-supplied identifier of the transaction.`),
 });
 
 export const getTransactionV2_1Result = z
   .object({
-    id: z.string().describe(`Unique ID of the transaction.`).optional(),
+    id: z.string().describe(`Unique identifier of the transaction.`).optional(),
     transaction_code: z
       .string()
       .describe(
@@ -58,14 +56,12 @@ export const getTransactionV2_1Result = z
         "USD",
       ])
       .describe(
-        `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
       )
       .optional(),
     timestamp: z
       .string()
-      .describe(
-        `Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-      )
+      .describe(`The timestamp of when the transaction was created.`)
       .optional(),
     status: z
       .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
@@ -98,7 +94,7 @@ export const getTransactionV2_1Result = z
     installments_count: z
       .number()
       .int()
-      .describe(`Current number of the installment for deferred payments.`)
+      .describe(`Number of installments for a deferred payment.`)
       .optional(),
     merchant_code: z
       .string()
@@ -182,11 +178,11 @@ export const getTransactionV2_1Result = z
       .optional(),
     foreign_transaction_id: z
       .string()
-      .describe(`External/foreign transaction id (passed by clients).`)
+      .describe(`External transaction identifier supplied by the client.`)
       .optional(),
     client_transaction_id: z
       .string()
-      .describe(`Client transaction id.`)
+      .describe(`Client-supplied identifier of the transaction.`)
       .optional(),
     username: z
       .string()
@@ -219,7 +215,7 @@ export const getTransactionV2_1Result = z
     merchant_id: z
       .number()
       .int()
-      .describe(`SumUp merchant internal Id.`)
+      .describe(`Internal SumUp identifier of the merchant.`)
       .optional(),
     device_info: z
       .object({
@@ -323,7 +319,7 @@ export const getTransactionV2_1Result = z
       .optional(),
     local_time: z
       .string()
-      .describe(`Local date and time of the creation of the transaction.`)
+      .describe(`Local timestamp of when the transaction was created.`)
       .optional(),
     payout_date: z.string().describe(`The date of the payout.`).optional(),
     payout_type: z
@@ -332,36 +328,47 @@ export const getTransactionV2_1Result = z
       .optional(),
     process_as: z
       .enum(["CREDIT", "DEBIT"])
-      .describe(`Debit/Credit.`)
+      .describe(`Whether the transaction was processed as credit or debit.`)
       .optional(),
     products: z
       .array(
         z
           .object({
             name: z.string().describe(`Product name.`).optional(),
-            price_label: z.string().describe(`Product description.`).optional(),
+            price_label: z
+              .string()
+              .describe(`Human-readable label for the product price.`)
+              .optional(),
             price: z.number().describe(`Product price.`).optional(),
-            vat_rate: z.number().describe(`VAT percentage.`).optional(),
+            vat_rate: z
+              .number()
+              .describe(`VAT rate applied to the product price.`)
+              .optional(),
             single_vat_amount: z
               .number()
               .describe(`VAT amount for a single product.`)
               .optional(),
             price_with_vat: z
               .number()
-              .describe(`Product price incl. VAT.`)
+              .describe(`Product price including VAT.`)
               .optional(),
-            vat_amount: z.number().describe(`VAT amount.`).optional(),
+            vat_amount: z
+              .number()
+              .describe(`Total VAT amount for the product quantity.`)
+              .optional(),
             quantity: z.number().int().describe(`Product quantity.`).optional(),
             total_price: z
               .number()
-              .describe(`Quantity x product price.`)
+              .describe(
+                `Total price calculated as the product price multiplied by the quantity.`,
+              )
               .optional(),
             total_with_vat: z
               .number()
-              .describe(`Total price incl. VAT.`)
+              .describe(`Total product price including VAT.`)
               .optional(),
           })
-          .describe(`Purchase product.`),
+          .describe(`Product details associated with a transaction.`),
       )
       .describe(
         `List of products from the merchant's catalogue for which the transaction serves as a payment.`,
@@ -394,7 +401,7 @@ export const getTransactionV2_1Result = z
             id: z
               .number()
               .int()
-              .describe(`Unique ID of the transaction event.`)
+              .describe(`Unique identifier of the transaction event.`)
               .optional(),
             event_type: z
               .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
@@ -483,7 +490,9 @@ Not every value is used for every event type.
           .object({
             rel: z
               .string()
-              .describe(`Specifies the relation to the current resource.`)
+              .describe(
+                `Relation of the linked resource to the current resource.`,
+              )
               .optional(),
             href: z
               .string()
@@ -491,15 +500,15 @@ Not every value is used for every event type.
               .optional(),
             type: z
               .string()
-              .describe(`Specifies the media type of the related resource.`)
+              .describe(`Media type of the linked resource.`)
               .optional(),
             min_amount: z
               .number()
-              .describe(`Minimum allowed amount for the refund.`)
+              .describe(`Minimum amount allowed for a refund, in major units.`)
               .optional(),
             max_amount: z
               .number()
-              .describe(`Maximum allowed amount for the refund.`)
+              .describe(`Maximum amount allowed for a refund, in major units.`)
               .optional(),
           })
           .describe(`Details of a link to a related resource.`),
@@ -513,11 +522,11 @@ Not every value is used for every event type.
             id: z
               .number()
               .int()
-              .describe(`Unique ID of the transaction event.`)
+              .describe(`Unique identifier of the transaction event.`)
               .optional(),
             transaction_id: z
               .string()
-              .describe(`Unique ID of the transaction.`)
+              .describe(`Unique identifier of the transaction.`)
               .optional(),
             type: z
               .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
@@ -547,27 +556,40 @@ Not every value is used for every event type.
 - \`FAILED\`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.`,
               )
               .optional(),
-            amount: z.number().describe(`Amount of the event.`).optional(),
+            amount: z
+              .number()
+              .describe(
+                `Amount associated with the transaction event, in major units.`,
+              )
+              .optional(),
             timestamp: z
               .string()
-              .describe(`Date and time of the transaction event.`)
+              .describe(`The timestamp of when the transaction event occurred.`)
               .optional(),
             fee_amount: z
               .number()
-              .describe(`Amount of the fee related to the event.`)
+              .describe(
+                `Fee associated with the transaction event, in major units.`,
+              )
               .optional(),
             installment_number: z
               .number()
               .int()
-              .describe(`Consecutive number of the installment.`)
+              .describe(
+                `Consecutive number of the installment associated with the event.`,
+              )
               .optional(),
             deducted_amount: z
               .number()
-              .describe(`Amount deducted for the event.`)
+              .describe(
+                `Amount deducted from the merchant for the event, in major units.`,
+              )
               .optional(),
             deducted_fee_amount: z
               .number()
-              .describe(`Amount of the fee deducted for the event.`)
+              .describe(
+                `Fee deducted from the merchant for the event, in major units.`,
+              )
               .optional(),
           })
           .describe(`High-level transaction event details.`),
@@ -614,9 +636,7 @@ Not every value is used for every event type.
 export const listTransactionsV2_1Parameters = z.object({
   merchantCode: z
     .string()
-    .describe(
-      `Merchant code of the account whose transaction history should be listed.`,
-    ),
+    .describe(`Short unique identifier for the merchant.`),
   transaction_code: z
     .string()
     .optional()
@@ -636,11 +656,11 @@ export const listTransactionsV2_1Parameters = z.object({
     .describe(
       `Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.`,
     ),
-  "users[]": z
+  users: z
     .array(z.string())
     .optional()
     .describe(`Filters the returned results by user email.`),
-  "statuses[]": z
+  statuses: z
     .array(
       z.enum(["SUCCESSFUL", "CANCELLED", "FAILED", "REFUNDED", "CHARGE_BACK"]),
     )
@@ -648,7 +668,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .describe(
       `Filters the returned results by the specified list of final statuses of the transactions.`,
     ),
-  "payment_types[]": z
+  payment_types: z
     .array(
       z
         .enum([
@@ -670,7 +690,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .describe(
       `Filters the returned results by the specified list of payment types used for the transactions.`,
     ),
-  "entry_modes[]": z
+  entry_modes: z
     .array(
       z
         .enum([
@@ -708,7 +728,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .describe(
       `Filters the returned results by the specified list of entry modes.`,
     ),
-  "types[]": z
+  types: z
     .array(z.enum(["PAYMENT", "REFUND", "CHARGE_BACK"]))
     .optional()
     .describe(
@@ -752,7 +772,10 @@ export const listTransactionsV2_1Result = z
       .array(
         z
           .object({
-            id: z.string().describe(`Unique ID of the transaction.`).optional(),
+            id: z
+              .string()
+              .describe(`Unique identifier of the transaction.`)
+              .optional(),
             transaction_code: z
               .string()
               .describe(
@@ -783,14 +806,12 @@ export const listTransactionsV2_1Result = z
                 "USD",
               ])
               .describe(
-                `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+                `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
               )
               .optional(),
             timestamp: z
               .string()
-              .describe(
-                `Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-              )
+              .describe(`The timestamp of when the transaction was created.`)
               .optional(),
             status: z
               .enum([
@@ -829,9 +850,7 @@ export const listTransactionsV2_1Result = z
             installments_count: z
               .number()
               .int()
-              .describe(
-                `Current number of the installment for deferred payments.`,
-              )
+              .describe(`Number of installments for a deferred payment.`)
               .optional(),
             product_summary: z
               .string()
@@ -865,11 +884,11 @@ export const listTransactionsV2_1Result = z
               .optional(),
             transaction_id: z
               .string()
-              .describe(`Unique ID of the transaction.`)
+              .describe(`Unique identifier of the transaction.`)
               .optional(),
             client_transaction_id: z
               .string()
-              .describe(`Client-specific ID of the transaction.`)
+              .describe(`Client-supplied identifier of the transaction.`)
               .optional(),
             user: z
               .string()
@@ -929,6 +948,7 @@ export const listTransactionsV2_1Result = z
           })
           .describe(`Transaction entry returned in history listing responses.`),
       )
+      .describe(`Transactions in the current result page.`)
       .optional(),
     links: z
       .array(
@@ -939,6 +959,7 @@ export const listTransactionsV2_1Result = z
           })
           .describe(`Hypermedia link used for transaction history pagination.`),
       )
+      .describe(`Pagination links for navigating the transaction history.`)
       .optional(),
   })
   .loose()
@@ -948,10 +969,8 @@ export const refundTransactionParameters = z
   .object({
     merchantCode: z
       .string()
-      .describe(
-        `Merchant code of the account that owns the payment to refund.`,
-      ),
-    transactionId: z.string().describe(`Unique ID of the transaction.`),
+      .describe(`Short unique identifier for the merchant.`),
+    transactionId: z.string().describe(`Unique identifier of the transaction.`),
     amount: z
       .number()
       .describe(
@@ -961,4 +980,10 @@ export const refundTransactionParameters = z
   })
   .describe(`Optional amount for partial refunds of transactions.`);
 
-export const refundTransactionResult = z.any();
+export const refundTransactionResult = z
+  .object({})
+  .catchall(z.unknown())
+  .loose()
+  .describe(
+    `The transaction was refunded in full or partially based on the request.`,
+  );

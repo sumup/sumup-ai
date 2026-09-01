@@ -3,7 +3,7 @@ import { z } from "zod";
 export const listPayoutsV1Parameters = z.object({
   merchantCode: z
     .string()
-    .describe(`Merchant code of the account whose payouts should be listed.`),
+    .describe(`Short unique identifier for the merchant.`),
   start_date: z
     .string()
     .describe(

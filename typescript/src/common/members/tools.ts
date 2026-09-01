@@ -32,7 +32,7 @@ export const createMerchantMember: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["members.write", "user.subaccounts"],
   },
 };
 
@@ -54,7 +54,7 @@ export const deleteMerchantMember: Tool<
     requiresApproval: true,
     destructive: true,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["members.write", "user.subaccounts"],
   },
 };
 
@@ -76,7 +76,7 @@ export const getMerchantMember: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["members.read", "user.subaccounts"],
   },
 };
 
@@ -98,7 +98,7 @@ export const listMerchantMembers: Tool<
     requiresApproval: false,
     destructive: false,
     idempotent: false,
-    oauthScopes: [],
+    oauthScopes: ["members.read", "user.subaccounts"],
   },
 };
 
@@ -120,6 +120,6 @@ export const updateMerchantMember: Tool<
     requiresApproval: true,
     destructive: false,
     idempotent: true,
-    oauthScopes: [],
+    oauthScopes: ["members.write", "user.subaccounts"],
   },
 };

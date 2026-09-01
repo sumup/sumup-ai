@@ -4,11 +4,6 @@ export const getMerchantParameters = z.object({
   merchantCode: z
     .string()
     .describe(`Short unique identifier for the merchant.`),
-  version: z
-    .string()
-    .optional()
-    .describe(`The version of the resource. At the moment, the only supported value is \`latest\`. When provided and the requested resource's \`change_status\` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The \`change_status\` in the response body will reflect the current state of the resource.
-`),
 });
 
 export const getMerchantResult = z
@@ -347,6 +342,7 @@ Whether an address is valid or not depends on whether the locally required field
 `),
               value: z
                 .string()
+                .min(1)
                 .max(100)
                 .describe(`The company identifier value.
 `),
@@ -367,6 +363,7 @@ Whether an address is valid or not depends on whether the locally required field
           .optional(),
         website: z
           .string()
+          .min(1)
           .max(255)
           .describe(
             `HTTP(S) URL of the company's website.
@@ -415,11 +412,13 @@ The more recognisable your descriptor is, the less risk you have of receiving di
           .optional(),
         website: z
           .string()
+          .min(1)
           .max(255)
           .describe(`The business's publicly available website.`)
           .optional(),
         email: z
           .string()
+          .min(1)
           .max(255)
           .describe(`A publicly available email address.`)
           .optional(),
@@ -574,6 +573,15 @@ Whether an address is valid or not depends on whether the locally required field
           .optional(),
         branding: z
           .object({
+            footer_text: z
+              .string()
+              .min(1)
+              .max(500)
+              .describe(
+                `Footer text rendered on receipts and other customer-facing products.
+`,
+              )
+              .optional(),
             icon: z
               .string()
               .describe(
@@ -696,7 +704,7 @@ In multilingual countries this is the merchant's preferred locale out of those, 
     change_status: z
       .string()
       .describe(
-        `Reflects the status of changes submitted through the \`PATCH\` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be \`pending\`. If all changes have been applied, the status \`done\`.
+        `Reflects the status of changes submitted through the \`PATCH\` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be \`pending\`. If all changes have been applied, the status \`done\`.
 The status is only returned after write operations or on read endpoints when the \`version\` query parameter is provided.
 `,
       )
@@ -718,23 +726,18 @@ export const getPersonParameters = z.object({
     .string()
     .describe(`Short unique identifier for the merchant.`),
   personId: z.string().describe(`Person ID`),
-  version: z
-    .string()
-    .optional()
-    .describe(`The version of the resource. At the moment, the only supported value is \`latest\`. When provided and the requested resource's \`change_status\` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The \`change_status\` in the response body will reflect the current state of the resource.
-`),
 });
 
 export const getPersonResult = z
   .object({
     id: z
       .string()
-      .describe(`The unique identifier for the person. This is a [typeid](https://github.com/sumup/typeid).
+      .describe(`The unique identifier for the Person. This is a [typeid](https://github.com/sumup/typeid).
 `),
     user_id: z
       .string()
       .describe(
-        `A corresponding identity user ID for the person, if they have a user account.
+        `A corresponding identity user ID for the Person, if they have a user account.
 `,
       )
       .optional(),
@@ -747,16 +750,19 @@ export const getPersonResult = z
       .optional(),
     given_name: z
       .string()
+      .min(1)
       .max(60)
       .describe(`The first name(s) of the individual.`)
       .optional(),
     family_name: z
       .string()
+      .min(1)
       .max(60)
       .describe(`The last name(s) of the individual.`)
       .optional(),
     middle_name: z
       .string()
+      .min(1)
       .max(60)
       .describe(
         `Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
@@ -775,15 +781,15 @@ export const getPersonResult = z
       .array(
         z
           .string()
-          .describe(`* \`representative\`: The person is the primary contact for SumUp and has full administrative power over the merchant account.
-* \`owner\`: The person is a business owner. If this value is set, the \`ownership_percent\` should be set as well.
-* \`officer\`: The person is an officer at the company.
+          .describe(`* \`representative\`: The Person is the primary contact for SumUp and has full administrative power over the merchant account.
+* \`owner\`: The Person is a business owner. If this value is set, the \`ownership_percent\` should be set as well.
+* \`officer\`: The Person is an officer at the company.
 `),
       )
       .min(1)
       .max(1)
       .describe(
-        `A list of roles the person has in the merchant or towards SumUp. A merchant must have at least one person with the relationship \`representative\`.
+        `A list of roles the Person has in the Merchant or towards SumUp. A Merchant must have at least one Person with the relationship \`representative\`.
 `,
       )
       .optional(),
@@ -792,7 +798,7 @@ export const getPersonResult = z
         share: z
           .number()
           .int()
-          .describe(`The percent of ownership shares held by the person expressed in percent mille (1/100000). Only persons with the relationship \`owner\` can have ownership.
+          .describe(`The percent of ownership shares held by the Person expressed in percent mille (1/100000). Only Persons with the relationship \`owner\` can have ownership.
 `),
       })
       .optional(),
@@ -942,7 +948,7 @@ Whether an address is valid or not depends on whether the locally required field
             .string()
             .max(32)
             .describe(`The unique reference for the personal identifier type.`),
-          value: z.string().max(128).describe(`The company identifier value.`),
+          value: z.string().max(128).describe(`The personal identifier value.`),
         }),
       )
       .max(32)
@@ -962,17 +968,15 @@ type to allow for support of future countries in client code.`,
       .string()
       .nullable()
       .describe(
-        `The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
+        `The Person's nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
 `,
       )
       .optional(),
     country_of_residence: z
       .string()
-      .min(2)
-      .max(2)
       .nullable()
       .describe(
-        `An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.
+        `An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the Person resides.
 `,
       )
       .optional(),
@@ -986,7 +990,7 @@ type to allow for support of future countries in client code.`,
     change_status: z
       .string()
       .describe(
-        `Reflects the status of changes submitted through the \`PATCH\` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be \`pending\`. If all changes have been applied, the status \`done\`.
+        `Reflects the status of changes submitted through the \`PATCH\` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be \`pending\`. If all changes have been applied, the status \`done\`.
 The status is only returned after write operations or on read endpoints when the \`version\` query parameter is provided.
 `,
       )
@@ -999,11 +1003,6 @@ export const listPersonsParameters = z.object({
   merchantCode: z
     .string()
     .describe(`Short unique identifier for the merchant.`),
-  version: z
-    .string()
-    .optional()
-    .describe(`The version of the resource. At the moment, the only supported value is \`latest\`. When provided and the requested resource's \`change_status\` is pending, the resource will be returned with all pending changes applied. When no changes are pending the resource is returned as is. The \`change_status\` in the response body will reflect the current state of the resource.
-`),
 });
 
 export const listPersonsResult = z
@@ -1012,12 +1011,12 @@ export const listPersonsResult = z
       z.object({
         id: z
           .string()
-          .describe(`The unique identifier for the person. This is a [typeid](https://github.com/sumup/typeid).
+          .describe(`The unique identifier for the Person. This is a [typeid](https://github.com/sumup/typeid).
 `),
         user_id: z
           .string()
           .describe(
-            `A corresponding identity user ID for the person, if they have a user account.
+            `A corresponding identity user ID for the Person, if they have a user account.
 `,
           )
           .optional(),
@@ -1030,16 +1029,19 @@ export const listPersonsResult = z
           .optional(),
         given_name: z
           .string()
+          .min(1)
           .max(60)
           .describe(`The first name(s) of the individual.`)
           .optional(),
         family_name: z
           .string()
+          .min(1)
           .max(60)
           .describe(`The last name(s) of the individual.`)
           .optional(),
         middle_name: z
           .string()
+          .min(1)
           .max(60)
           .describe(
             `Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
@@ -1058,15 +1060,15 @@ export const listPersonsResult = z
           .array(
             z
               .string()
-              .describe(`* \`representative\`: The person is the primary contact for SumUp and has full administrative power over the merchant account.
-* \`owner\`: The person is a business owner. If this value is set, the \`ownership_percent\` should be set as well.
-* \`officer\`: The person is an officer at the company.
+              .describe(`* \`representative\`: The Person is the primary contact for SumUp and has full administrative power over the merchant account.
+* \`owner\`: The Person is a business owner. If this value is set, the \`ownership_percent\` should be set as well.
+* \`officer\`: The Person is an officer at the company.
 `),
           )
           .min(1)
           .max(1)
           .describe(
-            `A list of roles the person has in the merchant or towards SumUp. A merchant must have at least one person with the relationship \`representative\`.
+            `A list of roles the Person has in the Merchant or towards SumUp. A Merchant must have at least one Person with the relationship \`representative\`.
 `,
           )
           .optional(),
@@ -1075,7 +1077,7 @@ export const listPersonsResult = z
             share: z
               .number()
               .int()
-              .describe(`The percent of ownership shares held by the person expressed in percent mille (1/100000). Only persons with the relationship \`owner\` can have ownership.
+              .describe(`The percent of ownership shares held by the Person expressed in percent mille (1/100000). Only Persons with the relationship \`owner\` can have ownership.
 `),
           })
           .optional(),
@@ -1232,7 +1234,7 @@ Whether an address is valid or not depends on whether the locally required field
               value: z
                 .string()
                 .max(128)
-                .describe(`The company identifier value.`),
+                .describe(`The personal identifier value.`),
             }),
           )
           .max(32)
@@ -1252,17 +1254,15 @@ type to allow for support of future countries in client code.`,
           .string()
           .nullable()
           .describe(
-            `The persons nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
+            `The Person's nationality. May be an [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code, but legacy data may not conform to this standard.
 `,
           )
           .optional(),
         country_of_residence: z
           .string()
-          .min(2)
-          .max(2)
           .nullable()
           .describe(
-            `An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the person resides.
+            `An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code representing the country where the Person resides.
 `,
           )
           .optional(),
@@ -1276,7 +1276,7 @@ type to allow for support of future countries in client code.`,
         change_status: z
           .string()
           .describe(
-            `Reflects the status of changes submitted through the \`PATCH\` endpoints for the merchant or persons. If some changes have not been applied yet, the status will be \`pending\`. If all changes have been applied, the status \`done\`.
+            `Reflects the status of changes submitted through the \`PATCH\` endpoints for the Merchant or Persons. If some changes have not been applied yet, the status will be \`pending\`. If all changes have been applied, the status \`done\`.
 The status is only returned after write operations or on read endpoints when the \`version\` query parameter is provided.
 `,
           )
@@ -1285,4 +1285,4 @@ The status is only returned after write operations or on read endpoints when the
     ),
   })
   .loose()
-  .describe(`Returns a list of persons for a valid merchant identifier.`);
+  .describe(`Returns a list of Persons for a valid Merchant identifier.`);

@@ -6,46 +6,80 @@ export const getReceiptParameters = z.object({
     .describe(
       `SumUp unique transaction ID or transaction code, e.g. TS7HDYLSKD.`,
     ),
-  mid: z.string().describe(`Merchant code.`),
+  mid: z.string().describe(`Short unique identifier for the merchant.`),
   tx_event_id: z
     .number()
     .int()
     .optional()
-    .describe(`The ID of the transaction event (refund).`),
+    .describe(
+      `Unique identifier of the transaction event to include on the receipt.`,
+    ),
 });
 
 export const getReceiptResult = z
   .object({
     transaction_data: z
       .object({
-        transaction_code: z.string().describe(`Transaction code.`).optional(),
+        transaction_code: z
+          .string()
+          .describe(
+            `Transaction code returned after processing the transaction.`,
+          )
+          .optional(),
         transaction_id: z
           .string()
-          .describe(`Unique ID of the transaction.`)
+          .describe(`Unique identifier of the transaction.`)
           .optional(),
-        merchant_code: z.string().describe(`Merchant code.`).optional(),
-        amount: z.string().describe(`Transaction amount.`).optional(),
-        vat_amount: z.string().describe(`Transaction VAT amount.`).optional(),
+        merchant_code: z
+          .string()
+          .describe(`Short unique identifier for the merchant.`)
+          .optional(),
+        amount: z
+          .string()
+          .describe(`Total transaction amount, in major units.`)
+          .optional(),
+        vat_amount: z
+          .string()
+          .describe(`VAT included in the transaction amount, in major units.`)
+          .optional(),
         tip_amount: z
           .string()
-          .describe(`Tip amount (included in transaction amount).`)
+          .describe(`Tip included in the transaction amount, in major units.`)
           .optional(),
-        currency: z.string().describe(`Transaction currency.`).optional(),
-        timestamp: z.string().describe(`Time created at.`).optional(),
+        currency: z
+          .string()
+          .describe(`Three-letter ISO 4217 currency code of the transaction.`)
+          .optional(),
+        timestamp: z
+          .string()
+          .describe(`The timestamp of when the transaction was created.`)
+          .optional(),
         status: z
           .string()
-          .describe(`Transaction processing status.`)
+          .describe(`Current processing status of the transaction.`)
           .optional(),
-        payment_type: z.string().describe(`Transaction type.`).optional(),
-        entry_mode: z.string().describe(`Transaction entry mode.`).optional(),
+        payment_type: z
+          .string()
+          .describe(`Payment type used for the transaction.`)
+          .optional(),
+        entry_mode: z
+          .string()
+          .describe(`Entry mode of the payment details.`)
+          .optional(),
         verification_method: z
           .string()
           .describe(`Cardholder verification method.`)
           .optional(),
         card_reader: z
           .object({
-            code: z.string().describe(`Reader serial number.`).optional(),
-            type: z.string().describe(`Reader type.`).optional(),
+            code: z
+              .string()
+              .describe(`Unique identifier of the physical card reader.`)
+              .optional(),
+            type: z
+              .string()
+              .describe(`Model of the physical card reader.`)
+              .optional(),
           })
           .describe(`Card reader details displayed on the receipt.`)
           .optional(),
@@ -53,9 +87,12 @@ export const getReceiptResult = z
           .object({
             last_4_digits: z
               .string()
-              .describe(`Card last 4 digits.`)
+              .describe(`Last four digits of the payment card number.`)
               .optional(),
-            type: z.string().describe(`Card Scheme.`).optional(),
+            type: z
+              .string()
+              .describe(`Issuing card network of the payment card.`)
+              .optional(),
           })
           .describe(`Payment card details displayed on the receipt.`)
           .optional(),
@@ -66,54 +103,71 @@ export const getReceiptResult = z
           .optional(),
         process_as: z
           .enum(["CREDIT", "DEBIT"])
-          .describe(`Debit/Credit.`)
+          .describe(`Whether the transaction was processed as credit or debit.`)
           .optional(),
         products: z
           .array(
             z.object({
-              name: z.string().describe(`Product name`).optional(),
+              name: z.string().describe(`Product name.`).optional(),
               description: z
                 .string()
-                .describe(`Product description`)
+                .describe(`Product description.`)
                 .optional(),
-              price: z.string().describe(`Product price`).optional(),
-              vat_rate: z.string().describe(`VAT rate`).optional(),
+              price: z.string().describe(`Product price.`).optional(),
+              vat_rate: z.string().describe(`VAT rate.`).optional(),
               single_vat_amount: z
                 .string()
-                .describe(`VAT amount for a single product`)
+                .describe(`VAT amount for a single product.`)
                 .optional(),
               price_with_vat: z
                 .string()
-                .describe(`Product price including VAT`)
+                .describe(`Product price including VAT.`)
                 .optional(),
-              vat_amount: z.string().describe(`VAT amount`).optional(),
+              vat_amount: z
+                .string()
+                .describe(`Total VAT amount for the product quantity.`)
+                .optional(),
               quantity: z
                 .number()
                 .int()
-                .describe(`Product quantity`)
+                .describe(`Product quantity.`)
                 .optional(),
               total_price: z
                 .string()
-                .describe(`Quantity x product price`)
+                .describe(
+                  `Total price calculated as the product price multiplied by the quantity.`,
+                )
                 .optional(),
               total_with_vat: z
                 .string()
-                .describe(`Total price including VAT`)
+                .describe(`Total product price including VAT.`)
                 .optional(),
             }),
           )
-          .describe(`Products`)
+          .describe(`Products associated with the transaction.`)
           .optional(),
         vat_rates: z
           .array(
             z.object({
-              gross: z.number().describe(`Gross`).optional(),
-              net: z.number().describe(`Net`).optional(),
-              rate: z.number().describe(`Rate`).optional(),
-              vat: z.number().describe(`Vat`).optional(),
+              gross: z
+                .number()
+                .describe(`Gross amount to which the VAT rate applies.`)
+                .optional(),
+              net: z
+                .number()
+                .describe(`Net amount to which the VAT rate applies.`)
+                .optional(),
+              rate: z
+                .number()
+                .describe(`VAT rate applied to the transaction amount.`)
+                .optional(),
+              vat: z
+                .number()
+                .describe(`VAT amount included in the gross amount.`)
+                .optional(),
             }),
           )
-          .describe(`Vat rates.`)
+          .describe(`VAT breakdown for the transaction.`)
           .optional(),
         events: z
           .array(
@@ -122,11 +176,11 @@ export const getReceiptResult = z
                 id: z
                   .number()
                   .int()
-                  .describe(`Unique ID of the transaction event.`)
+                  .describe(`Unique identifier of the transaction event.`)
                   .optional(),
                 transaction_id: z
                   .string()
-                  .describe(`Unique ID of the transaction.`)
+                  .describe(`Unique identifier of the transaction.`)
                   .optional(),
                 type: z
                   .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
@@ -156,10 +210,17 @@ Not every value is used for every event type.
 - \`FAILED\`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.`,
                   )
                   .optional(),
-                amount: z.string().describe(`Amount of the event.`).optional(),
+                amount: z
+                  .string()
+                  .describe(
+                    `Amount associated with the transaction event, in major units.`,
+                  )
+                  .optional(),
                 timestamp: z
                   .string()
-                  .describe(`Date and time of the transaction event.`)
+                  .describe(
+                    `The timestamp of when the transaction event occurred.`,
+                  )
                   .optional(),
                 receipt_no: z
                   .string()
@@ -170,35 +231,90 @@ Not every value is used for every event type.
                 `Transaction event details as rendered on the receipt.`,
               ),
           )
-          .describe(`Events`)
+          .describe(`Transaction events displayed on the receipt.`)
           .optional(),
-        receipt_no: z.string().describe(`Receipt number`).optional(),
+        receipt_no: z
+          .string()
+          .describe(`Receipt number associated with the transaction.`)
+          .optional(),
       })
-      .describe(`Transaction information.`)
+      .describe(`Transaction details displayed on a receipt.`)
       .optional(),
     merchant_data: z
       .object({
         merchant_profile: z
           .object({
-            merchant_code: z.string().optional(),
-            business_name: z.string().optional(),
-            company_registration_number: z.string().optional(),
-            vat_id: z.string().optional(),
-            website: z.string().optional(),
-            email: z.string().optional(),
-            language: z.string().optional(),
+            merchant_code: z
+              .string()
+              .describe(`Short unique identifier for the merchant.`)
+              .optional(),
+            business_name: z
+              .string()
+              .describe(`Business name of the merchant.`)
+              .optional(),
+            company_registration_number: z
+              .string()
+              .describe(`Company registration number of the merchant.`)
+              .optional(),
+            vat_id: z
+              .string()
+              .describe(`VAT identification number of the merchant.`)
+              .optional(),
+            website: z.string().describe(`Website of the merchant.`).optional(),
+            email: z
+              .string()
+              .describe(`Email address of the merchant.`)
+              .optional(),
+            language: z
+              .string()
+              .describe(`Language configured for the merchant profile.`)
+              .optional(),
             address: z
               .object({
-                address_line1: z.string().optional(),
-                address_line2: z.string().optional(),
-                city: z.string().optional(),
-                country: z.string().optional(),
-                country_en_name: z.string().optional(),
-                country_native_name: z.string().optional(),
-                region_name: z.string().optional(),
-                post_code: z.string().optional(),
-                landline: z.string().optional(),
+                address_line1: z
+                  .string()
+                  .describe(`First line of the merchant address.`)
+                  .optional(),
+                address_line2: z
+                  .string()
+                  .describe(`Second line of the merchant address.`)
+                  .optional(),
+                city: z
+                  .string()
+                  .describe(`City of the merchant address.`)
+                  .optional(),
+                country: z
+                  .string()
+                  .describe(
+                    `Two-letter ISO 3166-1 alpha-2 country code of the merchant address.`,
+                  )
+                  .optional(),
+                country_en_name: z
+                  .string()
+                  .describe(
+                    `English name of the country in the merchant address.`,
+                  )
+                  .optional(),
+                country_native_name: z
+                  .string()
+                  .describe(
+                    `Localized name of the country in the merchant address.`,
+                  )
+                  .optional(),
+                region_name: z
+                  .string()
+                  .describe(`Region or state of the merchant address.`)
+                  .optional(),
+                post_code: z
+                  .string()
+                  .describe(`Postal code of the merchant address.`)
+                  .optional(),
+                landline: z
+                  .string()
+                  .describe(`Landline phone number of the merchant.`)
+                  .optional(),
               })
+              .describe(`Business address of the merchant.`)
               .optional(),
           })
           .describe(`Merchant profile details displayed on the receipt.`)
@@ -208,7 +324,7 @@ Not every value is used for every event type.
           .describe(`Locale used for rendering localized receipt fields.`)
           .optional(),
       })
-      .describe(`Receipt merchant data`)
+      .describe(`Merchant details displayed on a transaction receipt.`)
       .optional(),
     emv_data: z
       .object({})
@@ -217,10 +333,22 @@ Not every value is used for every event type.
       .optional(),
     acquirer_data: z
       .object({
-        tid: z.string().optional(),
-        authorization_code: z.string().optional(),
-        return_code: z.string().optional(),
-        local_time: z.string().optional(),
+        tid: z
+          .string()
+          .describe(`Identifier of the terminal used for the authorization.`)
+          .optional(),
+        authorization_code: z
+          .string()
+          .describe(`Authorization code returned by the acquirer.`)
+          .optional(),
+        return_code: z
+          .string()
+          .describe(`Return code reported by the acquirer.`)
+          .optional(),
+        local_time: z
+          .string()
+          .describe(`Local timestamp of the card authorization.`)
+          .optional(),
       })
       .describe(`Acquirer-specific metadata related to the card authorization.`)
       .optional(),

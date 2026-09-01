@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const createApplePaySessionParameters = z.object({
-  checkoutId: z.string().describe(`Unique ID of the checkout resource.`),
+  checkoutId: z
+    .string()
+    .describe(`Unique identifier of the checkout resource.`),
   context: z.string().describe(`the context to create this apple pay session.`),
   target: z
     .string()
@@ -20,7 +22,7 @@ export const createCheckoutParameters = z
   .object({
     checkout_reference: z
       .string()
-      .max(90)
+      .max(64)
       .describe(
         `Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.`,
       ),
@@ -47,11 +49,13 @@ export const createCheckoutParameters = z
         "USD",
       ])
       .describe(
-        `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
       ),
     merchant_code: z
       .string()
-      .describe(`Merchant account that should receive the payment.`),
+      .describe(
+        `Short unique identifier for the merchant that should receive the payment.`,
+      ),
     description: z
       .string()
       .describe(
@@ -139,12 +143,14 @@ export const createCheckoutResult = z
         "USD",
       ])
       .describe(
-        `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
       )
       .optional(),
     merchant_code: z
       .string()
-      .describe(`Merchant account that receives the payment.`)
+      .describe(
+        `Short unique identifier for the merchant that receives the payment.`,
+      )
       .optional(),
     description: z
       .string()
@@ -170,9 +176,7 @@ export const createCheckoutResult = z
       .optional(),
     date: z
       .string()
-      .describe(
-        `Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-      )
+      .describe(`The timestamp of when the checkout was created.`)
       .optional(),
     valid_until: z
       .string()
@@ -201,7 +205,9 @@ export const createCheckoutResult = z
           .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant account for which the mandate is valid.`)
+          .describe(
+            `Short unique identifier for the merchant for which the mandate is valid.`,
+          )
           .optional(),
       })
       .describe(
@@ -217,7 +223,10 @@ export const createCheckoutResult = z
     transactions: z
       .array(
         z.object({
-          id: z.string().describe(`Unique ID of the transaction.`).optional(),
+          id: z
+            .string()
+            .describe(`Unique identifier of the transaction.`)
+            .optional(),
           transaction_code: z
             .string()
             .describe(
@@ -248,14 +257,12 @@ export const createCheckoutResult = z
               "USD",
             ])
             .describe(
-              `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+              `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
             )
             .optional(),
           timestamp: z
             .string()
-            .describe(
-              `Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-            )
+            .describe(`The timestamp of when the transaction was created.`)
             .optional(),
           status: z
             .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
@@ -288,9 +295,7 @@ export const createCheckoutResult = z
           installments_count: z
             .number()
             .int()
-            .describe(
-              `Current number of the installment for deferred payments.`,
-            )
+            .describe(`Number of installments for a deferred payment.`)
             .optional(),
           merchant_code: z
             .string()
@@ -361,7 +366,9 @@ export const createCheckoutResult = z
   );
 
 export const deactivateCheckoutParameters = z.object({
-  checkoutId: z.string().describe(`Unique ID of the checkout resource.`),
+  checkoutId: z
+    .string()
+    .describe(`Unique identifier of the checkout resource.`),
 });
 
 export const deactivateCheckoutResult = z
@@ -397,12 +404,14 @@ export const deactivateCheckoutResult = z
         "USD",
       ])
       .describe(
-        `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
       )
       .optional(),
     merchant_code: z
       .string()
-      .describe(`Merchant account that receives the payment.`)
+      .describe(
+        `Short unique identifier for the merchant that receives the payment.`,
+      )
       .optional(),
     description: z
       .string()
@@ -428,9 +437,7 @@ export const deactivateCheckoutResult = z
       .optional(),
     date: z
       .string()
-      .describe(
-        `Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-      )
+      .describe(`The timestamp of when the checkout was created.`)
       .optional(),
     valid_until: z
       .string()
@@ -459,7 +466,9 @@ export const deactivateCheckoutResult = z
           .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant account for which the mandate is valid.`)
+          .describe(
+            `Short unique identifier for the merchant for which the mandate is valid.`,
+          )
           .optional(),
       })
       .describe(
@@ -475,7 +484,10 @@ export const deactivateCheckoutResult = z
     transactions: z
       .array(
         z.object({
-          id: z.string().describe(`Unique ID of the transaction.`).optional(),
+          id: z
+            .string()
+            .describe(`Unique identifier of the transaction.`)
+            .optional(),
           transaction_code: z
             .string()
             .describe(
@@ -506,14 +518,12 @@ export const deactivateCheckoutResult = z
               "USD",
             ])
             .describe(
-              `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+              `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
             )
             .optional(),
           timestamp: z
             .string()
-            .describe(
-              `Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-            )
+            .describe(`The timestamp of when the transaction was created.`)
             .optional(),
           status: z
             .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
@@ -546,9 +556,7 @@ export const deactivateCheckoutResult = z
           installments_count: z
             .number()
             .int()
-            .describe(
-              `Current number of the installment for deferred payments.`,
-            )
+            .describe(`Number of installments for a deferred payment.`)
             .optional(),
           merchant_code: z
             .string()
@@ -619,7 +627,9 @@ export const deactivateCheckoutResult = z
   );
 
 export const getCheckoutParameters = z.object({
-  checkoutId: z.string().describe(`Unique ID of the checkout resource.`),
+  checkoutId: z
+    .string()
+    .describe(`Unique identifier of the checkout resource.`),
 });
 
 export const getCheckoutResult = z
@@ -655,12 +665,14 @@ export const getCheckoutResult = z
         "USD",
       ])
       .describe(
-        `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
       )
       .optional(),
     merchant_code: z
       .string()
-      .describe(`Merchant account that receives the payment.`)
+      .describe(
+        `Short unique identifier for the merchant that receives the payment.`,
+      )
       .optional(),
     description: z
       .string()
@@ -686,9 +698,7 @@ export const getCheckoutResult = z
       .optional(),
     date: z
       .string()
-      .describe(
-        `Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-      )
+      .describe(`The timestamp of when the checkout was created.`)
       .optional(),
     valid_until: z
       .string()
@@ -717,7 +727,9 @@ export const getCheckoutResult = z
           .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant account for which the mandate is valid.`)
+          .describe(
+            `Short unique identifier for the merchant for which the mandate is valid.`,
+          )
           .optional(),
       })
       .describe(
@@ -733,7 +745,10 @@ export const getCheckoutResult = z
     transactions: z
       .array(
         z.object({
-          id: z.string().describe(`Unique ID of the transaction.`).optional(),
+          id: z
+            .string()
+            .describe(`Unique identifier of the transaction.`)
+            .optional(),
           transaction_code: z
             .string()
             .describe(
@@ -764,14 +779,12 @@ export const getCheckoutResult = z
               "USD",
             ])
             .describe(
-              `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+              `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
             )
             .optional(),
           timestamp: z
             .string()
-            .describe(
-              `Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-            )
+            .describe(`The timestamp of when the transaction was created.`)
             .optional(),
           status: z
             .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
@@ -804,9 +817,7 @@ export const getCheckoutResult = z
           installments_count: z
             .number()
             .int()
-            .describe(
-              `Current number of the installment for deferred payments.`,
-            )
+            .describe(`Number of installments for a deferred payment.`)
             .optional(),
           merchant_code: z
             .string()
@@ -879,10 +890,10 @@ export const getCheckoutResult = z
     transaction_id: z
       .string()
       .describe(
-        `Transaction ID of the successful transaction with which the payment for the checkout is completed.`,
+        `Unique identifier of the successful transaction that completed payment for the checkout.`,
       )
       .optional(),
-    merchant_name: z.string().describe(`Name of the merchant`).optional(),
+    merchant_name: z.string().describe(`Name of the merchant.`).optional(),
     redirect_url: z
       .string()
       .describe(
@@ -891,7 +902,10 @@ export const getCheckoutResult = z
       .optional(),
     payment_instrument: z
       .object({
-        token: z.string().describe(`Token value`).optional(),
+        token: z
+          .string()
+          .describe(`Unique token of the saved payment instrument.`)
+          .optional(),
       })
       .describe(
         `Details of the saved payment instrument created or reused during checkout processing.`,
@@ -904,7 +918,9 @@ export const getCheckoutResult = z
   );
 
 export const getPaymentMethodsParameters = z.object({
-  merchantCode: z.string().describe(`The SumUp merchant code.`),
+  merchantCode: z
+    .string()
+    .describe(`Short unique identifier for the merchant.`),
   amount: z
     .number()
     .optional()
@@ -922,9 +938,10 @@ export const getPaymentMethodsResult = z
     available_payment_methods: z
       .array(
         z.object({
-          id: z.string().describe(`The ID of the payment method.`),
+          id: z.string().describe(`Unique identifier of the payment method.`),
         }),
       )
+      .describe(`Payment methods available to the merchant for the checkout.`)
       .optional(),
   })
   .loose()
@@ -935,7 +952,7 @@ export const listCheckoutsParameters = z.object({
     .string()
     .optional()
     .describe(
-      `Filters the list of checkout resources by the unique ID of the checkout.`,
+      `Filters the list of checkout resources by the unique reference of the checkout.`,
     ),
 });
 
@@ -976,12 +993,14 @@ export const listCheckoutsResult = z
             "USD",
           ])
           .describe(
-            `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+            `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
           )
           .optional(),
         merchant_code: z
           .string()
-          .describe(`Merchant account that receives the payment.`)
+          .describe(
+            `Short unique identifier for the merchant that receives the payment.`,
+          )
           .optional(),
         description: z
           .string()
@@ -1007,9 +1026,7 @@ export const listCheckoutsResult = z
           .optional(),
         date: z
           .string()
-          .describe(
-            `Date and time of the creation of the payment checkout. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-          )
+          .describe(`The timestamp of when the checkout was created.`)
           .optional(),
         valid_until: z
           .string()
@@ -1038,7 +1055,9 @@ export const listCheckoutsResult = z
               .optional(),
             merchant_code: z
               .string()
-              .describe(`Merchant account for which the mandate is valid.`)
+              .describe(
+                `Short unique identifier for the merchant for which the mandate is valid.`,
+              )
               .optional(),
           })
           .describe(
@@ -1056,7 +1075,7 @@ export const listCheckoutsResult = z
             z.object({
               id: z
                 .string()
-                .describe(`Unique ID of the transaction.`)
+                .describe(`Unique identifier of the transaction.`)
                 .optional(),
               transaction_code: z
                 .string()
@@ -1088,14 +1107,12 @@ export const listCheckoutsResult = z
                   "USD",
                 ])
                 .describe(
-                  `Three-letter [ISO4217](https://en.wikipedia.org/wiki/ISO_4217) code of the currency for the amount. Currently supported currency values are enumerated above.`,
+                  `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
                 )
                 .optional(),
               timestamp: z
                 .string()
-                .describe(
-                  `Date and time of the creation of the transaction. Response format expressed according to [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) code.`,
-                )
+                .describe(`The timestamp of when the transaction was created.`)
                 .optional(),
               status: z
                 .enum([
@@ -1134,9 +1151,7 @@ export const listCheckoutsResult = z
               installments_count: z
                 .number()
                 .int()
-                .describe(
-                  `Current number of the installment for deferred payments.`,
-                )
+                .describe(`Number of installments for a deferred payment.`)
                 .optional(),
               merchant_code: z
                 .string()
@@ -1209,10 +1224,10 @@ export const listCheckoutsResult = z
         transaction_id: z
           .string()
           .describe(
-            `Transaction ID of the successful transaction with which the payment for the checkout is completed.`,
+            `Unique identifier of the successful transaction that completed payment for the checkout.`,
           )
           .optional(),
-        merchant_name: z.string().describe(`Name of the merchant`).optional(),
+        merchant_name: z.string().describe(`Name of the merchant.`).optional(),
         redirect_url: z
           .string()
           .describe(
@@ -1221,7 +1236,10 @@ export const listCheckoutsResult = z
           .optional(),
         payment_instrument: z
           .object({
-            token: z.string().describe(`Token value`).optional(),
+            token: z
+              .string()
+              .describe(`Unique token of the saved payment instrument.`)
+              .optional(),
           })
           .describe(
             `Details of the saved payment instrument created or reused during checkout processing.`,
@@ -1233,3 +1251,321 @@ export const listCheckoutsResult = z
       ),
   )
   .describe(`Returns a list of checkout resources.`);
+
+export const updateCheckoutParameters = z
+  .object({
+    checkoutId: z
+      .string()
+      .describe(`Unique identifier of the checkout resource.`),
+    amount: z
+      .number()
+      .describe(
+        `Updated amount to be charged to the payer, expressed in major units.`,
+      )
+      .optional(),
+    currency: z
+      .enum([
+        "BGN",
+        "BRL",
+        "CHF",
+        "CLP",
+        "COP",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HRK",
+        "HUF",
+        "NOK",
+        "PLN",
+        "RON",
+        "SEK",
+        "USD",
+      ])
+      .describe(
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
+      )
+      .optional(),
+    description: z
+      .string()
+      .describe(
+        `Updated short merchant-defined description shown in SumUp tools and reporting.`,
+      )
+      .optional(),
+    checkout_reference: z
+      .string()
+      .max(90)
+      .describe(`Updated merchant-defined reference for the checkout.`)
+      .optional(),
+    valid_until: z
+      .string()
+      .nullable()
+      .describe(
+        `Updated expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable.`,
+      )
+      .optional(),
+    customer_id: z
+      .string()
+      .describe(
+        `Updated merchant-scoped customer identifier associated with the checkout.`,
+      )
+      .optional(),
+  })
+  .describe(
+    `Request body for updating an existing checkout. Include only the fields that should be changed.`,
+  );
+
+export const updateCheckoutResult = z
+  .object({
+    checkout_reference: z
+      .string()
+      .max(90)
+      .describe(
+        `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
+      )
+      .optional(),
+    amount: z
+      .number()
+      .describe(`Amount to be charged to the payer, expressed in major units.`)
+      .optional(),
+    currency: z
+      .enum([
+        "BGN",
+        "BRL",
+        "CHF",
+        "CLP",
+        "COP",
+        "CZK",
+        "DKK",
+        "EUR",
+        "GBP",
+        "HRK",
+        "HUF",
+        "NOK",
+        "PLN",
+        "RON",
+        "SEK",
+        "USD",
+      ])
+      .describe(
+        `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
+      )
+      .optional(),
+    merchant_code: z
+      .string()
+      .describe(
+        `Short unique identifier for the merchant that receives the payment.`,
+      )
+      .optional(),
+    description: z
+      .string()
+      .describe(
+        `Short merchant-defined description shown in SumUp tools and reporting. Use it to make the checkout easier to recognize in dashboards, support workflows, and reconciliation.`,
+      )
+      .optional(),
+    return_url: z
+      .string()
+      .describe(
+        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+      )
+      .optional(),
+    id: z
+      .string()
+      .describe(`Unique SumUp identifier of the checkout resource.`)
+      .optional(),
+    status: z
+      .enum(["PENDING", "FAILED", "PAID", "EXPIRED"])
+      .describe(
+        `Current high-level state of the checkout. \`PENDING\` means the checkout exists but is not yet completed, \`PAID\` means a payment succeeded, \`FAILED\` means the latest processing attempt failed, and \`EXPIRED\` means the checkout can no longer be processed.`,
+      )
+      .optional(),
+    date: z
+      .string()
+      .describe(`The timestamp of when the checkout was created.`)
+      .optional(),
+    valid_until: z
+      .string()
+      .nullable()
+      .describe(
+        `Optional expiration timestamp. The checkout must be processed before this moment, otherwise it becomes unusable. If omitted, the checkout does not have an explicit expiry time.`,
+      )
+      .optional(),
+    customer_id: z
+      .string()
+      .describe(
+        `Merchant-scoped identifier of the customer associated with the checkout. Use it when storing payment instruments or reusing saved customer context for recurring and returning-payer flows.`,
+      )
+      .optional(),
+    mandate: z
+      .object({
+        type: z
+          .string()
+          .describe(
+            `Type of mandate stored for the checkout or payment instrument.`,
+          )
+          .optional(),
+        status: z
+          .enum(["active", "inactive"])
+          .describe(`Current lifecycle status of the mandate.`)
+          .optional(),
+        merchant_code: z
+          .string()
+          .describe(
+            `Short unique identifier for the merchant for which the mandate is valid.`,
+          )
+          .optional(),
+      })
+      .describe(
+        `Details of the mandate linked to the saved payment instrument.`,
+      )
+      .optional(),
+    hosted_checkout_url: z
+      .string()
+      .describe(
+        `URL of the SumUp-hosted payment page that handles the payment flow. Returned when Hosted Checkout is enabled for the checkout.`,
+      )
+      .optional(),
+    transactions: z
+      .array(
+        z.object({
+          id: z
+            .string()
+            .describe(`Unique identifier of the transaction.`)
+            .optional(),
+          transaction_code: z
+            .string()
+            .describe(
+              `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+            )
+            .optional(),
+          amount: z
+            .number()
+            .describe(`Total amount of the transaction.`)
+            .optional(),
+          currency: z
+            .enum([
+              "BGN",
+              "BRL",
+              "CHF",
+              "CLP",
+              "COP",
+              "CZK",
+              "DKK",
+              "EUR",
+              "GBP",
+              "HRK",
+              "HUF",
+              "NOK",
+              "PLN",
+              "RON",
+              "SEK",
+              "USD",
+            ])
+            .describe(
+              `Three-letter [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code of the amount.`,
+            )
+            .optional(),
+          timestamp: z
+            .string()
+            .describe(`The timestamp of when the transaction was created.`)
+            .optional(),
+          status: z
+            .enum(["SUCCESSFUL", "CANCELLED", "FAILED", "PENDING", "REFUNDED"])
+            .describe(
+              `Current status of the transaction.
+
+- \`PENDING\`: The transaction has been created but its final outcome is not known yet.
+- \`SUCCESSFUL\`: The transaction completed successfully.
+- \`CANCELLED\`: The transaction was cancelled or otherwise reversed before completion.
+- \`FAILED\`: The transaction attempt did not complete successfully.
+- \`REFUNDED\`: The transaction was refunded in full or in part.`,
+            )
+            .optional(),
+          payment_type: z
+            .enum([
+              "CASH",
+              "POS",
+              "ECOM",
+              "RECURRING",
+              "BITCOIN",
+              "BALANCE",
+              "MOTO",
+              "BOLETO",
+              "DIRECT_DEBIT",
+              "APM",
+              "UNKNOWN",
+            ])
+            .describe(`Payment type used for the transaction.`)
+            .optional(),
+          installments_count: z
+            .number()
+            .int()
+            .describe(`Number of installments for a deferred payment.`)
+            .optional(),
+          merchant_code: z
+            .string()
+            .describe(
+              `Unique code of the registered merchant to whom the payment is made.`,
+            )
+            .optional(),
+          vat_amount: z
+            .number()
+            .describe(
+              `Amount of the applicable VAT (out of the total transaction amount).`,
+            )
+            .optional(),
+          tip_amount: z
+            .number()
+            .describe(
+              `Amount of the tip (out of the total transaction amount).`,
+            )
+            .optional(),
+          entry_mode: z
+            .enum([
+              "BOLETO",
+              "SOFORT",
+              "IDEAL",
+              "BANCONTACT",
+              "EPS",
+              "MYBANK",
+              "SATISPAY",
+              "BLIK",
+              "P24",
+              "GIROPAY",
+              "PIX",
+              "QR_CODE_PIX",
+              "APPLE_PAY",
+              "GOOGLE_PAY",
+              "PAYPAL",
+              "TWINT",
+              "NONE",
+              "CHIP",
+              "MANUAL_ENTRY",
+              "CUSTOMER_ENTRY",
+              "MAGSTRIPE_FALLBACK",
+              "MAGSTRIPE",
+              "DIRECT_DEBIT",
+              "CONTACTLESS",
+              "MOTO",
+              "CONTACTLESS_MAGSTRIPE",
+              "N/A",
+            ])
+            .describe(`Entry mode of the payment details.`)
+            .optional(),
+          auth_code: z
+            .string()
+            .describe(
+              `Authorization code for the transaction sent by the payment card issuer or bank. Applicable only to card payments.`,
+            )
+            .optional(),
+        }),
+      )
+      .describe(
+        `Payment attempts and resulting transaction records linked to this checkout. Use the Transactions endpoints when you need the authoritative payment result and event history.`,
+      )
+      .optional(),
+  })
+  .loose()
+  .describe(
+    `Core checkout resource returned by the Checkouts API. A checkout is created before payment processing and then updated as payment attempts, redirects, and resulting transactions are attached to it.`,
+  );
