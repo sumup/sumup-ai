@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.12.0...mcp-v0.12.1) (2026-09-01)
+
+
+### Chores
+
+* **typescript:** modernize compiler configuration ([#547](https://github.com/sumup/sumup-ai/issues/547)) ([c09fab5](https://github.com/sumup/sumup-ai/commit/c09fab5bfdfeecacee94693537c4d22cdfe01c1a))
+
 ## [0.12.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.3...mcp-v0.12.0) (2026-09-01)
 
 
