@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["node", "jest"],
+    "types": ["node", "@rstest/core/globals"],
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true
   },

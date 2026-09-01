@@ -6,14 +6,14 @@ const mockToolState = {
   }),
 };
 
-jest.mock("ai", () => ({
+rs.mock("ai", () => ({
   tool: (options: unknown) => options,
   zodSchema: (schema: unknown) => schema,
 }));
 
-jest.mock("./common", () => {
-  const actual = jest.requireActual("./common");
-  const { z } = jest.requireActual("zod");
+rs.mock("./common", () => {
+  const actual = rs.requireActual<typeof import("./common")>("./common");
+  const { z } = rs.requireActual<typeof import("zod")>("zod");
 
   return {
     ...actual,
