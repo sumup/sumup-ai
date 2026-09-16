@@ -14,7 +14,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@apidevtools/swagger-parser": "^12.1.0",
+    "@apidevtools/swagger-parser": "^13.0.0",
     "change-case": "^5.4.4",
     "commander": "^15.0.0",
     "openapi-types": "^12.1.3",
