@@ -1,6 +1,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type SumUp from "@sumup/sdk";
+import { z } from "zod";
 
 rs.mock("../common", () => {
   const actual = rs.requireActual<typeof import("../common")>("../common");
@@ -34,6 +35,35 @@ rs.mock("../common", () => {
 import SumUpAgentToolkit from "./toolkit";
 
 describe("MCP transport contract", () => {
+  test("returns array results as MCP text without invalid structured content", async () => {
+    const result = [{ value: "hello" }];
+    const server = new SumUpAgentToolkit({
+      configuration: {},
+      transformTool: (tool) => ({
+        ...tool,
+        result: z.array(z.object({ value: z.string() })),
+        callback: async () => result,
+      }),
+    });
+    const client = new Client({ name: "test-client", version: "1" });
+    const [a, b] = InMemoryTransport.createLinkedPair();
+    await server.connect(a);
+    await client.connect(b);
+    try {
+      const response = await client.callTool({
+        name: "echo_value",
+        arguments: { value: "hello" },
+      });
+      expect(response.isError).not.toBe(true);
+      expect(response.structuredContent).toBeUndefined();
+      expect(response.content).toEqual([
+        { type: "text", text: JSON.stringify(result) },
+      ]);
+    } finally {
+      await client.close();
+      await server.close();
+    }
+  });
   test("lists and calls tools through the MCP client transport", async () => {
     const server = new SumUpAgentToolkit({
       apiKey: "test-api-key",

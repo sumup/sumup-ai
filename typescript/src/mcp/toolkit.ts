@@ -150,7 +150,9 @@ class SumUpAgentToolkit extends McpServer {
             const sumup = this.createClient(extra?.authInfo?.token);
             const result = await executeTool(tool, sumup, args, observability);
             const structuredContent =
-              typeof result === "object" && result !== null
+              typeof result === "object" &&
+              result !== null &&
+              !Array.isArray(result)
                 ? (result as Record<string, unknown>)
                 : undefined;
 
@@ -159,7 +161,7 @@ class SumUpAgentToolkit extends McpServer {
               content: [
                 {
                   type: "text" as const,
-                  text: JSON.stringify(structuredContent),
+                  text: JSON.stringify(result) ?? "null",
                 },
               ],
             };
