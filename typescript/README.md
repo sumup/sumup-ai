@@ -42,6 +42,10 @@ a tool's descriptor, input schema, and callback together. For example, a hosted
 application can restrict checkout creation to Hosted Checkout without changing
 the shared API tool. Keep annotations accurate for the customized behavior.
 
+The MCP adapter wraps array results as `{ items: [...] }` in both structured and
+text content. With `includeOutputSchemas: true`, array tools declare the matching
+object schema. Object results retain their original shape.
+
 ### Observability
 
 Every adapter accepts optional redaction-safe lifecycle callbacks. Events include

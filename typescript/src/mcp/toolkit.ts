@@ -125,10 +125,13 @@ class SumUpAgentToolkit extends McpServer {
           title: tool.title,
           description: tool.description,
           inputSchema: tool.parameters.shape,
-          outputSchema:
-            includeOutputSchemas && tool.result instanceof z.ZodObject
+          outputSchema: includeOutputSchemas
+            ? tool.result instanceof z.ZodObject
               ? tool.result.shape
-              : undefined,
+              : tool.result instanceof z.ZodArray
+                ? { items: tool.result }
+                : undefined
+            : undefined,
           annotations: {
             title: tool.annotations?.title,
             readOnlyHint: tool.annotations?.readOnly,
@@ -149,10 +152,9 @@ class SumUpAgentToolkit extends McpServer {
           try {
             const sumup = this.createClient(extra?.authInfo?.token);
             const result = await executeTool(tool, sumup, args, observability);
-            const structuredContent =
-              typeof result === "object" &&
-              result !== null &&
-              !Array.isArray(result)
+            const structuredContent = Array.isArray(result)
+              ? { items: result }
+              : typeof result === "object" && result !== null
                 ? (result as Record<string, unknown>)
                 : undefined;
 
@@ -161,7 +163,7 @@ class SumUpAgentToolkit extends McpServer {
               content: [
                 {
                   type: "text" as const,
-                  text: JSON.stringify(result) ?? "null",
+                  text: JSON.stringify(structuredContent ?? result) ?? "null",
                 },
               ],
             };
