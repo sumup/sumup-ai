@@ -135,6 +135,7 @@ class SumUpAgentToolkit extends McpServer {
           annotations: {
             title: tool.annotations?.title,
             readOnlyHint: tool.annotations?.readOnly,
+            openWorldHint: tool.annotations?.openWorld,
             destructiveHint: tool.annotations?.destructive,
             idempotentHint: tool.annotations?.idempotent,
           },

@@ -25,6 +25,7 @@ export const getMerchant: Tool<
   annotations: {
     title: `Get Merchant`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -47,6 +48,7 @@ export const getPerson: Tool<
   annotations: {
     title: `Get Person`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -69,6 +71,7 @@ export const listPersons: Tool<
   annotations: {
     title: `List Persons`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,

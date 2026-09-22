@@ -29,6 +29,7 @@ export const getTransactionV2_1: Tool<
   annotations: {
     title: `Retrieve a transaction`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -51,6 +52,7 @@ export const listTransactionsV2_1: Tool<
   annotations: {
     title: `List transactions`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -73,8 +75,9 @@ export const refundTransaction: Tool<
   annotations: {
     title: `Refund a transaction`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["payments", "refunds.write"],
   },

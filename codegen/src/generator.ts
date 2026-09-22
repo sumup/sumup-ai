@@ -3,6 +3,7 @@ import { join, resolve } from "node:path";
 import { camelCase, kebabCase, snakeCase } from "change-case";
 import { OpenAPIV3, type OpenAPIV3_1 } from "openapi-types";
 import { format } from "prettier";
+import { annotationsForOperation } from "./annotations.js";
 import { formatPropertyKey, toTemplateLiteral } from "./utils.js";
 import { collectObjectFields, type ObjectField, schemaToZod } from "./zod.js";
 
@@ -30,6 +31,7 @@ type OperationDetails = {
   bodyDescription?: string;
   responses?: OpenAPIV3_1.ResponsesObject;
   oauthScopes: string[];
+  annotations: ReturnType<typeof annotationsForOperation>;
 };
 
 export type CodegenOptions = {
@@ -193,6 +195,7 @@ function collectOperations(
         bodyDescription,
         responses: operation.responses,
         oauthScopes: collectOAuthScopes(spec, operation),
+        annotations: annotationsForOperation(operationId, method),
       };
 
       const existing = map.get(tag);
@@ -471,9 +474,10 @@ async function writeToolsFile(
       `  },`,
       `  annotations: {`,
       `    title: ${toTemplateLiteral(operation.summary)},`,
-      `    readOnly: ${operation.method === OpenAPIV3.HttpMethods.GET},`,
-      `    requiresApproval: ${operation.method !== OpenAPIV3.HttpMethods.GET},`,
-      `    destructive: ${operation.method === OpenAPIV3.HttpMethods.DELETE},`,
+      `    readOnly: ${operation.annotations.readOnly},`,
+      `    openWorld: ${operation.annotations.openWorld},`,
+      `    requiresApproval: ${!operation.annotations.readOnly},`,
+      `    destructive: ${operation.annotations.destructive},`,
       `    idempotent: ${operation.method === OpenAPIV3.HttpMethods.PUT},`,
       `    oauthScopes: [${operation.oauthScopes.map((scope) => JSON.stringify(scope)).join(", ")}],`,
       `  },`,

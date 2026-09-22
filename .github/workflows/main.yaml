@@ -42,6 +42,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Test codegen
+        run: npm test
+
       - name: Lint
         run: biome ci --diagnostic-level=error --reporter=github
 

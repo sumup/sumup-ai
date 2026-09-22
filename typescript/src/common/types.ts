@@ -26,6 +26,11 @@ export type Annotations = {
    */
   readOnly?: boolean;
   /**
+   * Whether any supported mode can affect public content or external systems,
+   * including sending invitations or invoking external callbacks.
+   */
+  openWorld?: boolean;
+  /**
    * If true, agent-framework adapters should require human approval before
    * executing the tool.
    *

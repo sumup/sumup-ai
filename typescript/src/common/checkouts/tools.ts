@@ -38,6 +38,7 @@ session object that your frontend should pass to Apple's JavaScript API.`,
   annotations: {
     title: `Create an Apple Pay session`,
     readOnly: false,
+    openWorld: true,
     requiresApproval: true,
     destructive: false,
     idempotent: true,
@@ -51,12 +52,12 @@ export const createCheckout: Tool<
 > = {
   name: "create_checkout",
   title: `Create a checkout`,
-  description: `Creates a new payment checkout resource. The unique \`checkout_reference\` created by this request, is used for further manipulation of the checkout.
+  description: `Creates a payment checkout for the specified merchant, amount, and currency. Supply a \`checkout_reference\` to identify the payment attempt in your own systems. Creating a checkout does not charge a payment instrument.
 
-For 3DS checkouts, add the \`redirect_url\` parameter to your request body schema.
-To use the [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) page, set the \`hosted_checkout.enabled\` to \`true\`.
+Set \`hosted_checkout.enabled\` to \`true\` to receive a [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) URL where the customer can complete the payment.
+Use \`redirect_url\` for redirect-based payment and 3DS flows. If \`return_url\` is provided, SumUp sends processing updates to that backend callback URL.
 
-Follow by processing a checkout to charge the provided payment instrument.`,
+Complete the payment through Hosted Checkout, the Payment Widget, or the process-checkout endpoint.`,
   parameters: createCheckoutParameters,
   result: createCheckoutResult,
   callback: async (sumup: SumUp, args) => {
@@ -65,6 +66,7 @@ Follow by processing a checkout to charge the provided payment instrument.`,
   annotations: {
     title: `Create a checkout`,
     readOnly: false,
+    openWorld: true,
     requiresApproval: true,
     destructive: false,
     idempotent: false,
@@ -87,6 +89,7 @@ export const deactivateCheckout: Tool<
   annotations: {
     title: `Deactivate a checkout`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: true,
     idempotent: false,
@@ -109,6 +112,7 @@ export const getCheckout: Tool<
   annotations: {
     title: `Retrieve a checkout`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -134,6 +138,7 @@ export const getPaymentMethods: Tool<
   annotations: {
     title: `Get available payment methods`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -156,6 +161,7 @@ export const listCheckouts: Tool<
   annotations: {
     title: `List checkouts`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -169,7 +175,9 @@ export const updateCheckout: Tool<
 > = {
   name: "update_checkout",
   title: `Update a checkout`,
-  description: `Updates an identified checkout resource.`,
+  description: `Updates the amount, currency, description, reference, expiration, or customer associated with an existing checkout. Only the supplied fields are updated.
+
+This request changes the checkout details; it does not charge a payment instrument. Process the checkout separately to attempt a payment.`,
   parameters: updateCheckoutParameters,
   result: updateCheckoutResult,
   callback: async (sumup: SumUp, { checkoutId, ...args }) => {
@@ -178,8 +186,9 @@ export const updateCheckout: Tool<
   annotations: {
     title: `Update a checkout`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["checkouts.write", "payments"],
   },
