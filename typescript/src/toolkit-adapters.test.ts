@@ -44,6 +44,21 @@ import LangChainToolkit from "./langchain/toolkit";
 import OpenAiToolkit from "./openai/toolkit";
 
 describe("agent framework adapter contracts", () => {
+  test.each([
+    ["AI SDK", AiSdkToolkit],
+    ["LangChain", LangChainToolkit],
+    ["OpenAI Agents", OpenAiToolkit],
+  ] as const)(
+    "%s applies tool selection before registration",
+    (_name, Toolkit) => {
+      const toolkit = new Toolkit({
+        apiKey: "test",
+        excludeTools: ["echo_value"],
+      });
+      expect(Object.values(toolkit.getTools())).toHaveLength(0);
+    },
+  );
+
   beforeEach(() => {
     mockToolState.callback = async (_sumup, input) => ({ value: input.value });
   });

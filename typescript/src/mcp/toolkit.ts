@@ -6,24 +6,26 @@ import SumUp, { APIError } from "@sumup/sdk";
 import { z } from "zod";
 import {
   constructResourceMetadata,
+  createToolFilter,
   executeTool,
   parseWWWAuthenticateChallenges,
   registerTools,
   stringifyWWWAuthenticateChallenges,
   TOOL_OAUTH_SCOPES_META_KEY,
   type ToolObservability,
+  type ToolSelection,
   VERSION,
 } from "../common";
+import type { Tool } from "../common/types";
 
-export type SumUpAgentToolkitOptions = {
+export type SumUpAgentToolkitOptions = ToolSelection & {
   apiKey?: string;
   host?: string;
   resource?: string;
   resourceMetadata?: string;
   observability?: ToolObservability;
-  includeTools?: string[];
-  excludeTools?: string[];
-  readOnly?: boolean;
+  /** Customize selected tools before registration, for example to restrict inputs. */
+  transformTool?: (tool: Tool) => Tool;
   includeOutputSchemas?: boolean;
   configuration: ServerOptions;
 };
@@ -49,6 +51,7 @@ class SumUpAgentToolkit extends McpServer {
     includeTools,
     excludeTools = [],
     readOnly = false,
+    transformTool,
     includeOutputSchemas = false,
   }: SumUpAgentToolkitOptions) {
     super(
@@ -110,17 +113,11 @@ class SumUpAgentToolkit extends McpServer {
       },
     );
 
-    const includedToolNames = includeTools ? new Set(includeTools) : undefined;
-    const excludedToolNames = new Set(excludeTools);
+    const includes = createToolFilter({ includeTools, excludeTools, readOnly });
 
-    registerTools((tool) => {
-      if (
-        (includedToolNames && !includedToolNames.has(tool.name)) ||
-        excludedToolNames.has(tool.name) ||
-        (readOnly && !tool.annotations?.readOnly)
-      ) {
-        return;
-      }
+    registerTools((original) => {
+      if (!includes(original)) return;
+      const tool = transformTool ? transformTool(original) : original;
 
       this.registerTool(
         tool.name,

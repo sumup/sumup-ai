@@ -5,7 +5,13 @@ import {
 } from "@langchain/core/tools";
 import SumUp from "@sumup/sdk";
 import type z from "zod";
-import { executeTool, registerTools, type ToolObservability } from "../common";
+import {
+  createToolFilter,
+  executeTool,
+  registerTools,
+  type ToolObservability,
+  type ToolSelection,
+} from "../common";
 
 class SumUpAgentToolkit implements BaseToolkit {
   private _sumup: SumUp;
@@ -16,7 +22,10 @@ class SumUpAgentToolkit implements BaseToolkit {
     apiKey,
     host,
     observability,
-  }: {
+    includeTools,
+    excludeTools,
+    readOnly,
+  }: ToolSelection & {
     apiKey: string;
     host?: string;
     observability?: ToolObservability;
@@ -27,7 +36,9 @@ class SumUpAgentToolkit implements BaseToolkit {
     });
 
     this.tools = [];
+    const includes = createToolFilter({ includeTools, excludeTools, readOnly });
     registerTools((t) => {
+      if (!includes(t)) return;
       this.tools.push(
         tool(
           async (

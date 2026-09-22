@@ -1,6 +1,12 @@
 import { tool } from "@openai/agents";
 import SumUp from "@sumup/sdk";
-import { executeTool, registerTools, type ToolObservability } from "../common";
+import {
+  createToolFilter,
+  executeTool,
+  registerTools,
+  type ToolObservability,
+  type ToolSelection,
+} from "../common";
 import type { ApprovalPolicy } from "../common/types";
 
 type AgentFunctionTool = ReturnType<typeof tool>;
@@ -15,7 +21,10 @@ class SumUpAgentToolkit {
     host,
     approvalPolicy,
     observability,
-  }: {
+    includeTools,
+    excludeTools,
+    readOnly,
+  }: ToolSelection & {
     apiKey: string;
     host?: string;
     approvalPolicy?: ApprovalPolicy;
@@ -27,7 +36,9 @@ class SumUpAgentToolkit {
     });
 
     this.tools = [];
+    const includes = createToolFilter({ includeTools, excludeTools, readOnly });
     registerTools((t) => {
+      if (!includes(t)) return;
       this.tools.push(
         tool({
           name: t.name,

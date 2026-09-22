@@ -22,6 +22,26 @@ npm install @sumup/agent-toolkit
 yarn add @sumup/agent-toolkit
 ```
 
+### Tool selection
+
+All adapters accept `includeTools`, `excludeTools`, and `readOnly`. Without these
+options, the full catalog remains available. Exclusions take precedence;
+`includeTools: []` exposes no tools. `readOnly: true` only includes tools explicitly
+marked read-only.
+
+```ts
+const sumupAgentToolkit = new SumUpAgentToolkit({
+  apiKey: process.env.SUMUP_API_KEY!,
+  includeTools: ["list_memberships", "list_transactions_v2_1", "get_transaction_v2_1"],
+  readOnly: true,
+});
+```
+
+The MCP adapter also accepts `transformTool`, applied after selection, to customize
+a tool's descriptor, input schema, and callback together. For example, a hosted
+application can restrict checkout creation to Hosted Checkout without changing
+the shared API tool. Keep annotations accurate for the customized behavior.
+
 ### Observability
 
 Every adapter accepts optional redaction-safe lifecycle callbacks. Events include
