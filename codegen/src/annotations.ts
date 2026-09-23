@@ -57,6 +57,14 @@ const writeOperations: Record<string, Omit<Annotations, "readOnly">> = {
   DeleteReader: { openWorld: false, destructive: true },
 };
 
+/**
+ * Returns the reviewed effects of all supported modes, including optional
+ * callbacks. HTTP methods alone miss actions such as refunds and invitations.
+ * Unknown operations or changed read/write methods require review before the
+ * generator writes files, so new endpoints cannot silently inherit safe hints.
+ *
+ * @see https://modelcontextprotocol.io/specification/2025-11-25/schema#toolannotations
+ */
 export function annotationsForOperation(
   operationId: string,
   method: string,

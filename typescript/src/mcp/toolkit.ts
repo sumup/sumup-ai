@@ -24,8 +24,19 @@ export type SumUpAgentToolkitOptions = ToolSelection & {
   resource?: string;
   resourceMetadata?: string;
   observability?: ToolObservability;
-  /** Customize selected tools before registration, for example to restrict inputs. */
+  /**
+   * Customize a selected tool before registration. Keep its input/result schemas,
+   * callback, description, and annotations consistent with the new behavior.
+   * Selection uses the original tool; filters are not reapplied afterward.
+   */
   transformTool?: (tool: Tool) => Tool;
+  /**
+   * Advertise output schemas for object and array results. Defaults to false;
+   * result validation still runs when schemas are not advertised.
+   * Arrays use an object with an `items` field to match structuredContent.
+   *
+   * @see https://modelcontextprotocol.io/specification/2025-11-25/server/tools#output-schema
+   */
   includeOutputSchemas?: boolean;
   configuration: ServerOptions;
 };
@@ -152,6 +163,9 @@ class SumUpAgentToolkit extends McpServer {
           try {
             const sumup = this.createClient(extra?.authInfo?.token);
             const result = await executeTool(tool, sumup, args, observability);
+            // MCP structuredContent must be an object. Serialize the same value
+            // below for clients that consume only text content.
+            // https://modelcontextprotocol.io/specification/2025-11-25/server/tools#structured-content
             const structuredContent = Array.isArray(result)
               ? { items: result }
               : typeof result === "object" && result !== null
