@@ -31,7 +31,6 @@ export type Annotations = {
   title?: string;
   /**
    * True when every supported mode only reads or computes data without writes.
-   * Classify the operation's effects, not just its HTTP method.
    *
    * Default: false
    */
@@ -65,7 +64,6 @@ export type Annotations = {
   /**
    * If true, calling the tool repeatedly with the same arguments
    * will have no additional effect on its environment.
-   * This does not promise identical responses or make retries safe by itself.
    *
    * (This property is meaningful only when `readOnlyHint == false`)
    *
@@ -73,8 +71,7 @@ export type Annotations = {
    */
   idempotent?: boolean;
   /**
-   * Endpoint scopes advertised as adapter metadata. This list does not itself
-   * check granted scopes or preserve OpenAPI security requirement alternatives.
+   * Endpoint scopes advertised as adapter metadata.
    */
   oauthScopes?: string[];
 };

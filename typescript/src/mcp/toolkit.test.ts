@@ -27,7 +27,7 @@ rs.mock("../common", () => {
       }) => void,
     ) => {
       reg({
-        name: "mock_tool",
+        name: "get_checkout",
         title: "Mock tool",
         description: "Mock tool for toolkit error handling tests",
         parameters: z.object({}),
@@ -41,7 +41,7 @@ rs.mock("../common", () => {
         callback: async (sumup: SumUp) => mockToolkitState.callback(sumup),
       });
       reg({
-        name: "mutating_tool",
+        name: "create_checkout",
         title: "Mutating tool",
         description: "Mock mutating tool for catalog filtering tests",
         parameters: z.object({}),
@@ -76,7 +76,7 @@ describe("mcp toolkit auth error handling", () => {
 
     const tool =
       // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
-      (toolkit as any)._registeredTools.mock_tool;
+      (toolkit as any)._registeredTools.get_checkout;
 
     await expect(
       tool.handler({}, { authInfo: { token: "request-token" } }),
@@ -92,7 +92,7 @@ describe("mcp toolkit auth error handling", () => {
 
     const tool =
       // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
-      (toolkit as any)._registeredTools.mock_tool;
+      (toolkit as any)._registeredTools.get_checkout;
 
     expect(tool._meta).toEqual({
       "com.sumup/oauth-scopes": ["mock.read", "mock.write"],
@@ -122,7 +122,7 @@ describe("mcp toolkit auth error handling", () => {
 
     const tool =
       // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
-      (toolkit as any)._registeredTools.mock_tool;
+      (toolkit as any)._registeredTools.get_checkout;
 
     await expect(tool.handler({})).rejects.toBeInstanceOf(McpError);
 
@@ -151,7 +151,7 @@ describe("mcp toolkit catalog configuration", () => {
     const toolkit = new SumUpAgentToolkit({ configuration: {} });
     const tool =
       // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
-      (toolkit as any)._registeredTools.mock_tool;
+      (toolkit as any)._registeredTools.get_checkout;
 
     expect(tool.outputSchema).toBeUndefined();
     await expect(tool.handler({})).resolves.toMatchObject({
@@ -171,7 +171,7 @@ describe("mcp toolkit catalog configuration", () => {
     });
     const tool =
       // biome-ignore lint/suspicious/noExplicitAny: test inspects internal registration
-      (toolkit as any)._registeredTools.mock_tool;
+      (toolkit as any)._registeredTools.get_checkout;
 
     expect(tool.outputSchema).toBeDefined();
   });
@@ -179,15 +179,15 @@ describe("mcp toolkit catalog configuration", () => {
   test("supports include and exclude filters", () => {
     const included = new SumUpAgentToolkit({
       configuration: {},
-      includeTools: ["mock_tool"],
+      includeTools: ["get_checkout"],
     });
     const excluded = new SumUpAgentToolkit({
       configuration: {},
-      excludeTools: ["mutating_tool"],
+      excludeTools: ["create_checkout"],
     });
 
-    expect(registeredTools(included)).toEqual(["mock_tool"]);
-    expect(registeredTools(excluded)).toEqual(["mock_tool"]);
+    expect(registeredTools(included)).toEqual(["get_checkout"]);
+    expect(registeredTools(excluded)).toEqual(["get_checkout"]);
   });
 
   test("can expose only read-only tools", () => {
@@ -196,6 +196,6 @@ describe("mcp toolkit catalog configuration", () => {
       readOnly: true,
     });
 
-    expect(registeredTools(toolkit)).toEqual(["mock_tool"]);
+    expect(registeredTools(toolkit)).toEqual(["get_checkout"]);
   });
 });

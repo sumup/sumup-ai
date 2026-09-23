@@ -1,11 +1,12 @@
+import type { ToolName } from "./registry";
 import type { Tool } from "./types";
 
 /** Selects tools before registration; it does not replace API authorization. */
 export type ToolSelection = {
   /** Exact tool names to expose. Omit for all tools; an empty array selects none. */
-  includeTools?: string[];
+  includeTools?: readonly ToolName[];
   /** Exact tool names to omit, including names present in includeTools. */
-  excludeTools?: string[];
+  excludeTools?: readonly ToolName[];
   /** Include only tools explicitly annotated readOnly: true. Defaults to false. */
   readOnly?: boolean;
 };
@@ -15,8 +16,8 @@ export function createToolFilter({
   excludeTools = [],
   readOnly = false,
 }: ToolSelection) {
-  const included = includeTools ? new Set(includeTools) : undefined;
-  const excluded = new Set(excludeTools);
+  const included = includeTools ? new Set<string>(includeTools) : undefined;
+  const excluded = new Set<string>(excludeTools);
   return (tool: Tool) =>
     (!included || included.has(tool.name)) &&
     !excluded.has(tool.name) &&

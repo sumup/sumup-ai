@@ -33,6 +33,8 @@ test("generates reviewed hints and preserves the API description", async (t) => 
   assert.match(source, /readOnly: false/);
   assert.match(source, /openWorld: false/);
   assert.match(source, /destructive: true/);
+  const registry = await readFile(join(outputDir, "registry.ts"), "utf8");
+  assert.match(registry, /export type ToolName = "refund_transaction";/);
 });
 
 test("rejects an unreviewed operation before writing files", async (t) => {

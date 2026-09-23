@@ -545,6 +545,9 @@ async function writeRegistryFile(
 
   parts.push(
     "",
+    "/** Names of tools available for registration, excluding unsupported operations. */",
+    `export type ToolName = ${registeredOperations.map((operation) => JSON.stringify(operation.toolName)).join(" | ") || "never"};`,
+    "",
     "export const TOOL_REGISTRY_EXCLUSIONS = {",
     ...excludedOperations.map(
       (operation) =>
