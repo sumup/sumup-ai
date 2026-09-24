@@ -1,4 +1,4 @@
-/** OpenAPI operation IDs omitted entirely from generated SDK code. */
+/** OpenAPI operation IDs omitted from generated schemas. */
 export const EXCLUDED_OPERATION_IDS = [
   "ProcessCheckout",
   "DeactivatePaymentInstrument",

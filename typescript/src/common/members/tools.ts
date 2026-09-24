@@ -1,6 +1,4 @@
 import type SumUp from "@sumup/sdk";
-import type { Tool } from "../types";
-
 import {
   createMerchantMemberParameters,
   createMerchantMemberResult,
@@ -12,11 +10,13 @@ import {
   listMerchantMembersResult,
   updateMerchantMemberParameters,
   updateMerchantMemberResult,
-} from "./parameters";
+} from "../generated/members";
+import type { Tool } from "../types";
 
 export const createMerchantMember: Tool<
   typeof createMerchantMemberParameters,
-  typeof createMerchantMemberResult
+  typeof createMerchantMemberResult,
+  "create_merchant_member"
 > = {
   name: "create_merchant_member",
   title: `Create a member`,
@@ -42,7 +42,8 @@ When \`is_managed_user\` is \`true\`, creates a managed user with the provided p
 
 export const deleteMerchantMember: Tool<
   typeof deleteMerchantMemberParameters,
-  typeof deleteMerchantMemberResult
+  typeof deleteMerchantMemberResult,
+  "delete_merchant_member"
 > = {
   name: "delete_merchant_member",
   title: `Delete a member`,
@@ -65,7 +66,8 @@ export const deleteMerchantMember: Tool<
 
 export const getMerchantMember: Tool<
   typeof getMerchantMemberParameters,
-  typeof getMerchantMemberResult
+  typeof getMerchantMemberResult,
+  "get_merchant_member"
 > = {
   name: "get_merchant_member",
   title: `Retrieve a member`,
@@ -88,7 +90,8 @@ export const getMerchantMember: Tool<
 
 export const listMerchantMembers: Tool<
   typeof listMerchantMembersParameters,
-  typeof listMerchantMembersResult
+  typeof listMerchantMembersResult,
+  "list_merchant_members"
 > = {
   name: "list_merchant_members",
   title: `List members`,
@@ -111,7 +114,8 @@ export const listMerchantMembers: Tool<
 
 export const updateMerchantMember: Tool<
   typeof updateMerchantMemberParameters,
-  typeof updateMerchantMemberResult
+  typeof updateMerchantMemberResult,
+  "update_merchant_member"
 > = {
   name: "update_merchant_member",
   title: `Update a member`,

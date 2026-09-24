@@ -1,11 +1,14 @@
 import type SumUp from "@sumup/sdk";
+import {
+  listMembershipsParameters,
+  listMembershipsResult,
+} from "../generated/memberships";
 import type { Tool } from "../types";
-
-import { listMembershipsParameters, listMembershipsResult } from "./parameters";
 
 export const listMemberships: Tool<
   typeof listMembershipsParameters,
-  typeof listMembershipsResult
+  typeof listMembershipsResult,
+  "list_memberships"
 > = {
   name: "list_memberships",
   title: `List memberships`,

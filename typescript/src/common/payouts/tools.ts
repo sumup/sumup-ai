@@ -1,11 +1,14 @@
 import type SumUp from "@sumup/sdk";
+import {
+  listPayoutsV1Parameters,
+  listPayoutsV1Result,
+} from "../generated/payouts";
 import type { Tool } from "../types";
-
-import { listPayoutsV1Parameters, listPayoutsV1Result } from "./parameters";
 
 export const listPayoutsV1: Tool<
   typeof listPayoutsV1Parameters,
-  typeof listPayoutsV1Result
+  typeof listPayoutsV1Result,
+  "list_payouts_v1"
 > = {
   name: "list_payouts_v1",
   title: `List payouts`,

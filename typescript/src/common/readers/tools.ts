@@ -1,6 +1,5 @@
 import type SumUp from "@sumup/sdk";
 import type { Tool } from "../types";
-
 import {
   createGoReaderCheckoutParameters,
   createGoReaderCheckoutResult,
@@ -26,7 +25,8 @@ import {
 
 export const createGoReaderCheckout: Tool<
   typeof createGoReaderCheckoutParameters,
-  typeof createGoReaderCheckoutResult
+  typeof createGoReaderCheckoutResult,
+  "create_go_reader_checkout"
 > = {
   name: "create_go_reader_checkout",
   title: `Create a Go Reader Payment`,
@@ -51,7 +51,8 @@ Use \`client_transaction_id\` as an idempotency key: retrying the request with t
 
 export const createReader: Tool<
   typeof createReaderParameters,
-  typeof createReaderResult
+  typeof createReaderResult,
+  "create_reader"
 > = {
   name: "create_reader",
   title: `Create a Reader`,
@@ -74,7 +75,8 @@ export const createReader: Tool<
 
 export const createReaderCheckout: Tool<
   typeof createReaderCheckoutParameters,
-  typeof createReaderCheckoutResult
+  typeof createReaderCheckoutResult,
+  "create_reader_checkout"
 > = {
   name: "create_reader_checkout",
   title: `Create a Reader Checkout`,
@@ -107,7 +109,8 @@ There are some caveats when using this endpoint:
 
 export const createReaderTerminate: Tool<
   typeof createReaderTerminateParameters,
-  typeof createReaderTerminateResult
+  typeof createReaderTerminateResult,
+  "create_reader_terminate"
 > = {
   name: "create_reader_terminate",
   title: `Terminate a Reader Checkout`,
@@ -143,7 +146,8 @@ If a transaction is successfully terminated and \`return_url\` was provided on C
 
 export const deleteReader: Tool<
   typeof deleteReaderParameters,
-  typeof deleteReaderResult
+  typeof deleteReaderResult,
+  "delete_reader"
 > = {
   name: "delete_reader",
   title: `Delete a reader`,
@@ -166,7 +170,8 @@ export const deleteReader: Tool<
 
 export const getReader: Tool<
   typeof getReaderParameters,
-  typeof getReaderResult
+  typeof getReaderResult,
+  "get_reader"
 > = {
   name: "get_reader",
   title: `Retrieve a Reader`,
@@ -189,7 +194,8 @@ export const getReader: Tool<
 
 export const getReaderCheckout: Tool<
   typeof getReaderCheckoutParameters,
-  typeof getReaderCheckoutResult
+  typeof getReaderCheckoutResult,
+  "get_reader_checkout"
 > = {
   name: "get_reader_checkout",
   title: `Get a Reader Checkout`,
@@ -220,7 +226,8 @@ export const getReaderCheckout: Tool<
 
 export const getReaderStatus: Tool<
   typeof getReaderStatusParameters,
-  typeof getReaderStatusResult
+  typeof getReaderStatusResult,
+  "get_reader_status"
 > = {
   name: "get_reader_status",
   title: `Get a Reader Status`,
@@ -261,7 +268,8 @@ Device Status
 
 export const listReaders: Tool<
   typeof listReadersParameters,
-  typeof listReadersResult
+  typeof listReadersResult,
+  "list_readers"
 > = {
   name: "list_readers",
   title: `List Readers`,
@@ -284,7 +292,8 @@ export const listReaders: Tool<
 
 export const updateReader: Tool<
   typeof updateReaderParameters,
-  typeof updateReaderResult
+  typeof updateReaderResult,
+  "update_reader"
 > = {
   name: "update_reader",
   title: `Update a Reader`,

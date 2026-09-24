@@ -4,7 +4,7 @@ export {
   getMerchantMemberParameters,
   listMerchantMembersParameters,
   updateMerchantMemberParameters,
-} from "./parameters";
+} from "../generated/members";
 export {
   createMerchantMember,
   deleteMerchantMember,

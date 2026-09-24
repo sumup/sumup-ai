@@ -16,7 +16,6 @@ import {
   type ToolSelection,
   VERSION,
 } from "../common";
-import type { Tool } from "../common/types";
 
 export type SumUpAgentToolkitOptions = ToolSelection & {
   apiKey?: string;
@@ -24,12 +23,6 @@ export type SumUpAgentToolkitOptions = ToolSelection & {
   resource?: string;
   resourceMetadata?: string;
   observability?: ToolObservability;
-  /**
-   * Customize a selected tool before registration. Keep its input/result schemas,
-   * callback, description, and annotations consistent with the new behavior.
-   * Selection uses the original tool; filters are not reapplied afterward.
-   */
-  transformTool?: (tool: Tool) => Tool;
   /**
    * Advertise output schemas for object and array results. Defaults to false;
    * result validation still runs when schemas are not advertised.
@@ -62,7 +55,6 @@ class SumUpAgentToolkit extends McpServer {
     includeTools,
     excludeTools = [],
     readOnly = false,
-    transformTool,
     includeOutputSchemas = false,
   }: SumUpAgentToolkitOptions) {
     super(
@@ -126,16 +118,15 @@ class SumUpAgentToolkit extends McpServer {
 
     const includes = createToolFilter({ includeTools, excludeTools, readOnly });
 
-    registerTools((original) => {
-      if (!includes(original)) return;
-      const tool = transformTool ? transformTool(original) : original;
+    registerTools((tool) => {
+      if (!includes(tool)) return;
 
       this.registerTool(
         tool.name,
         {
           title: tool.title,
           description: tool.description,
-          inputSchema: tool.parameters.shape,
+          inputSchema: tool.parameters,
           outputSchema: includeOutputSchemas
             ? tool.result instanceof z.ZodObject
               ? tool.result.shape

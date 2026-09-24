@@ -1,6 +1,5 @@
 import type SumUp from "@sumup/sdk";
 import type { Tool } from "../types";
-
 import {
   createCheckoutParameters,
   createCheckoutResult,
@@ -16,25 +15,24 @@ import {
 
 export const createCheckout: Tool<
   typeof createCheckoutParameters,
-  typeof createCheckoutResult
+  typeof createCheckoutResult,
+  "create_checkout"
 > = {
   name: "create_checkout",
-  title: `Create a checkout`,
-  description: `Creates a payment checkout for the specified merchant, amount, and currency. Supply a \`checkout_reference\` to identify the payment attempt in your own systems. Creating a checkout does not charge a payment instrument.
-
-Set \`hosted_checkout.enabled\` to \`true\` to receive a [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) URL where the customer can complete the payment.
-Use \`redirect_url\` for redirect-based payment and 3DS flows. If \`return_url\` is provided, SumUp sends processing updates to that backend callback URL.
-
-Complete the payment through Hosted Checkout, the Payment Widget, or the process-checkout endpoint.`,
+  title: `Create a hosted checkout`,
+  description: `Creates a SumUp-hosted payment page for the specified merchant, amount, and currency. Returns the checkout and its payment URL so the customer can complete payment securely. Creating the checkout does not charge the customer.`,
   parameters: createCheckoutParameters,
   result: createCheckoutResult,
   callback: async (sumup: SumUp, args) => {
-    return await sumup.checkouts.create(args);
+    return await sumup.checkouts.create({
+      ...createCheckoutParameters.parse(args),
+      hosted_checkout: { enabled: true },
+    });
   },
   annotations: {
-    title: `Create a checkout`,
+    title: `Create a hosted checkout`,
     readOnly: false,
-    openWorld: true,
+    openWorld: false,
     requiresApproval: true,
     destructive: false,
     idempotent: false,
@@ -44,7 +42,8 @@ Complete the payment through Hosted Checkout, the Payment Widget, or the process
 
 export const deactivateCheckout: Tool<
   typeof deactivateCheckoutParameters,
-  typeof deactivateCheckoutResult
+  typeof deactivateCheckoutResult,
+  "deactivate_checkout"
 > = {
   name: "deactivate_checkout",
   title: `Deactivate a checkout`,
@@ -67,7 +66,8 @@ export const deactivateCheckout: Tool<
 
 export const getCheckout: Tool<
   typeof getCheckoutParameters,
-  typeof getCheckoutResult
+  typeof getCheckoutResult,
+  "get_checkout"
 > = {
   name: "get_checkout",
   title: `Retrieve a checkout`,
@@ -90,7 +90,8 @@ export const getCheckout: Tool<
 
 export const listCheckouts: Tool<
   typeof listCheckoutsParameters,
-  typeof listCheckoutsResult
+  typeof listCheckoutsResult,
+  "list_checkouts"
 > = {
   name: "list_checkouts",
   title: `List checkouts`,
@@ -113,7 +114,8 @@ export const listCheckouts: Tool<
 
 export const updateCheckout: Tool<
   typeof updateCheckoutParameters,
-  typeof updateCheckoutResult
+  typeof updateCheckoutResult,
+  "update_checkout"
 > = {
   name: "update_checkout",
   title: `Update a checkout`,

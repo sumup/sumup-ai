@@ -1,6 +1,4 @@
 import type SumUp from "@sumup/sdk";
-import type { Tool } from "../types";
-
 import {
   getTransactionV2_1Parameters,
   getTransactionV2_1Result,
@@ -8,11 +6,13 @@ import {
   listTransactionsV2_1Result,
   refundTransactionParameters,
   refundTransactionResult,
-} from "./parameters";
+} from "../generated/transactions";
+import type { Tool } from "../types";
 
 export const getTransactionV2_1: Tool<
   typeof getTransactionV2_1Parameters,
-  typeof getTransactionV2_1Result
+  typeof getTransactionV2_1Result,
+  "get_transaction_v2_1"
 > = {
   name: "get_transaction_v2_1",
   title: `Retrieve a transaction`,
@@ -39,7 +39,8 @@ export const getTransactionV2_1: Tool<
 
 export const listTransactionsV2_1: Tool<
   typeof listTransactionsV2_1Parameters,
-  typeof listTransactionsV2_1Result
+  typeof listTransactionsV2_1Result,
+  "list_transactions_v2_1"
 > = {
   name: "list_transactions_v2_1",
   title: `List transactions`,
@@ -62,7 +63,8 @@ export const listTransactionsV2_1: Tool<
 
 export const refundTransaction: Tool<
   typeof refundTransactionParameters,
-  typeof refundTransactionResult
+  typeof refundTransactionResult,
+  "refund_transaction"
 > = {
   name: "refund_transaction",
   title: `Refund a transaction`,

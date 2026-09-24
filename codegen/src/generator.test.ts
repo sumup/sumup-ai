@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -15,7 +15,22 @@ function spec(operationId: string): OpenAPIV3_1.Document {
         post: {
           operationId,
           tags: ["Test"],
-          description: "Refunds the specified transaction.",
+          requestBody: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["amount"],
+                  properties: {
+                    amount: {
+                      type: "number",
+                      description: "Amount in major units.",
+                    },
+                  },
+                },
+              },
+            },
+          },
           responses: { "200": { description: "Success" } },
         },
       },
@@ -23,35 +38,40 @@ function spec(operationId: string): OpenAPIV3_1.Document {
   };
 }
 
-test("generates reviewed hints and preserves the API description", async (t) => {
+test("generates only schemas and preserves handwritten files on regeneration", async (t) => {
   const outputDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
   t.after(() => rm(outputDir, { recursive: true, force: true }));
+  const handwritten = "// Handwritten tool registration\n";
+  await writeFile(join(outputDir, "registry.ts"), handwritten);
+  await generate(spec("NewOperation"), { outputDir });
+  const source = await readFile(join(outputDir, "test.ts"), "utf8");
+  assert.match(source, /export const newOperationParameters/);
+  assert.match(source, /Amount in major units/);
+  assert.match(source, /export const newOperationResult/);
+  assert.deepEqual((await readdir(outputDir)).sort(), [
+    "registry.ts",
+    "test.ts",
+  ]);
 
-  await generate(spec("RefundTransaction"), { outputDir });
-  const source = await readFile(join(outputDir, "test/tools.ts"), "utf8");
-  assert.match(source, /Refunds the specified transaction\./);
-  assert.match(source, /readOnly: false/);
-  assert.match(source, /openWorld: false/);
-  assert.match(source, /destructive: true/);
-  const registry = await readFile(join(outputDir, "registry.ts"), "utf8");
-  assert.match(registry, /export type ToolName = "refund_transaction";/);
-});
-
-test("rejects an unreviewed operation before writing files", async (t) => {
-  const outputDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
-  t.after(() => rm(outputDir, { recursive: true, force: true }));
-
-  await assert.rejects(
-    generate(spec("SendNewMessage"), { outputDir }),
-    /Review tool annotations/,
+  const renamed = spec("NewOperation");
+  renamed.paths!["/test"]!.post!.tags = ["Renamed"];
+  await generate(renamed, { outputDir });
+  assert.deepEqual((await readdir(outputDir)).sort(), [
+    "registry.ts",
+    "renamed.ts",
+  ]);
+  assert.equal(
+    await readFile(join(outputDir, "registry.ts"), "utf8"),
+    handwritten,
   );
-  assert.deepEqual(await readdir(outputDir), []);
 });
 
-test("omits excluded operations from all generated code", async (t) => {
+test("omits excluded operations from generated schemas", async (t) => {
   const outputDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
   t.after(() => rm(outputDir, { recursive: true, force: true }));
   const input = spec("RefundTransaction");
+  await generate(input, { outputDir });
+  const expected = await readFile(join(outputDir, "test.ts"), "utf8");
   for (const operationId of [
     "ProcessCheckout",
     "DeactivatePaymentInstrument",
@@ -60,23 +80,6 @@ test("omits excluded operations from all generated code", async (t) => {
   ]) {
     input.paths![`/${operationId}`] = spec(operationId).paths!["/test"]!;
   }
-
-  await generate(input, {
-    outputDir,
-  });
-  // Compare the entire output with a spec containing only the retained operation.
-  const expectedDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
-  t.after(() => rm(expectedDir, { recursive: true, force: true }));
-  await generate(spec("RefundTransaction"), { outputDir: expectedDir });
-  for (const file of [
-    "registry.ts",
-    "test/index.ts",
-    "test/tools.ts",
-    "test/parameters.ts",
-  ]) {
-    assert.equal(
-      await readFile(join(outputDir, file), "utf8"),
-      await readFile(join(expectedDir, file), "utf8"),
-    );
-  }
+  await generate(input, { outputDir });
+  assert.equal(await readFile(join(outputDir, "test.ts"), "utf8"), expected);
 });

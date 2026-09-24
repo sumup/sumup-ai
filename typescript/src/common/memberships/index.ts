@@ -1,2 +1,2 @@
-export { listMembershipsParameters } from "./parameters";
+export { listMembershipsParameters } from "../generated/memberships";
 export { listMemberships } from "./tools";

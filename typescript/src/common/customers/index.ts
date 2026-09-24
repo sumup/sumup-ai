@@ -3,7 +3,7 @@ export {
   getCustomerParameters,
   listPaymentInstrumentsParameters,
   updateCustomerParameters,
-} from "./parameters";
+} from "../generated/customers";
 export {
   createCustomer,
   getCustomer,

@@ -8,12 +8,12 @@ import { generate } from "./generator.js";
 
 program
   .name("agent-toolkit-codegen")
-  .description("Generate SumUp Agent Toolkit helpers from an OpenAPI schema.")
+  .description("Generate reusable Zod schemas from an OpenAPI schema.")
   .argument("<specFile>", "Path to the OpenAPI schema file")
   .option(
     "-o, --output <dir>",
     "Directory where the generated files will be written",
-    path.resolve(process.cwd(), "../typescript/src/common"),
+    path.resolve(process.cwd(), "../typescript/src/common/generated"),
   )
   .action(async (specFile: string, options: { output: string }) => {
     const parser = new SwaggerParser();

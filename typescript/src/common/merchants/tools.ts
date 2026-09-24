@@ -1,6 +1,5 @@
 import type SumUp from "@sumup/sdk";
 import type { Tool } from "../types";
-
 import {
   getMerchantParameters,
   getMerchantResult,
@@ -12,11 +11,12 @@ import {
 
 export const getMerchant: Tool<
   typeof getMerchantParameters,
-  typeof getMerchantResult
+  typeof getMerchantResult,
+  "get_merchant"
 > = {
   name: "get_merchant",
   title: `Get Merchant`,
-  description: `Returns a Merchant for a valid Merchant code.`,
+  description: `Retrieves merchant identity, business names, country, currency, locale, and sandbox status for account selection. Omits contact details and legal identifiers.`,
   parameters: getMerchantParameters,
   result: getMerchantResult,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {
@@ -35,7 +35,8 @@ export const getMerchant: Tool<
 
 export const getPerson: Tool<
   typeof getPersonParameters,
-  typeof getPersonResult
+  typeof getPersonResult,
+  "get_person"
 > = {
   name: "get_person",
   title: `Get Person`,
@@ -58,7 +59,8 @@ export const getPerson: Tool<
 
 export const listPersons: Tool<
   typeof listPersonsParameters,
-  typeof listPersonsResult
+  typeof listPersonsResult,
+  "list_persons"
 > = {
   name: "list_persons",
   title: `List Persons`,

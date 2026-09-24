@@ -25,7 +25,7 @@ describe("MCP catalog", () => {
           ?.annotations,
       ).toMatchObject({
         readOnlyHint: false,
-        openWorldHint: true,
+        openWorldHint: false,
         destructiveHint: false,
       });
       expect(Buffer.byteLength(JSON.stringify(listed))).toBeLessThan(165_000);

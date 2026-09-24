@@ -5,8 +5,9 @@ import type { z } from "zod";
 export type Tool<
   Args extends z.ZodObject<z.ZodRawShape> = z.ZodObject<z.ZodRawShape>,
   Result extends z.ZodTypeAny = z.ZodTypeAny,
+  Name extends string = string,
 > = {
-  name: string;
+  name: Name;
   title: string;
   description: string;
   parameters: Args;

@@ -1,7 +1,8 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import type SumUp from "@sumup/sdk";
-import { z } from "zod";
+
+const mockState = { arrayResult: false };
 
 rs.mock("../common", () => {
   const actual = rs.requireActual<typeof import("../common")>("../common");
@@ -15,7 +16,7 @@ rs.mock("../common", () => {
         title: string;
         description: string;
         parameters: ReturnType<typeof z.object>;
-        result: ReturnType<typeof z.object>;
+        result: import("zod").z.ZodType;
         callback: (sumup: SumUp, input: { value: string }) => Promise<unknown>;
       }) => void,
     ) =>
@@ -24,10 +25,11 @@ rs.mock("../common", () => {
         title: "Echo value",
         description: "Returns the supplied value",
         parameters: z.object({ value: z.string() }),
-        result: z.object({ value: z.string() }),
-        callback: async (_sumup: SumUp, input: { value: string }) => ({
-          value: input.value,
-        }),
+        result: mockState.arrayResult
+          ? z.array(z.object({ value: z.string() }))
+          : z.object({ value: z.string() }),
+        callback: async (_sumup: SumUp, input: { value: string }) =>
+          mockState.arrayResult ? [input] : input,
       }),
   };
 });
@@ -35,16 +37,15 @@ rs.mock("../common", () => {
 import SumUpAgentToolkit from "./toolkit";
 
 describe("MCP transport contract", () => {
+  beforeEach(() => {
+    mockState.arrayResult = false;
+  });
   test("wraps array results with a matching MCP output schema", async () => {
     const result = [{ value: "hello" }];
+    mockState.arrayResult = true;
     const server = new SumUpAgentToolkit({
       configuration: {},
       includeOutputSchemas: true,
-      transformTool: (tool) => ({
-        ...tool,
-        result: z.array(z.object({ value: z.string() })),
-        callback: async () => result,
-      }),
     });
     const client = new Client({ name: "test-client", version: "1" });
     const [a, b] = InMemoryTransport.createLinkedPair();

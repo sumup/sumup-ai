@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Generates SumUp Agent Toolkit helpers from the OpenAPI schema.",
+  "description": "Generates reusable Zod schemas from the SumUp OpenAPI schema.",
   "scripts": {
     "test": "tsx --test src/*.test.ts",
     "generate": "tsx src/index.ts ../../apis/specs/openapi.json",

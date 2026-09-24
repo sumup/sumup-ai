@@ -37,10 +37,9 @@ const sumupAgentToolkit = new SumUpAgentToolkit({
 });
 ```
 
-The MCP adapter also accepts `transformTool`, applied after selection, to customize
-a tool's descriptor, input schema, and callback together. For example, a hosted
-application can restrict checkout creation to Hosted Checkout without changing
-the shared API tool. Keep annotations accurate for the customized behavior.
+Tool inputs, outputs, annotations, and SDK calls are defined explicitly in the
+shared tool modules and apply consistently across adapters. Checkout creation
+creates a Hosted Checkout payment link; customers complete payment on SumUp.
 
 ### Observability
 

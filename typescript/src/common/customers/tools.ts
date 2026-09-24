@@ -1,6 +1,4 @@
 import type SumUp from "@sumup/sdk";
-import type { Tool } from "../types";
-
 import {
   createCustomerParameters,
   createCustomerResult,
@@ -10,11 +8,13 @@ import {
   listPaymentInstrumentsResult,
   updateCustomerParameters,
   updateCustomerResult,
-} from "./parameters";
+} from "../generated/customers";
+import type { Tool } from "../types";
 
 export const createCustomer: Tool<
   typeof createCustomerParameters,
-  typeof createCustomerResult
+  typeof createCustomerResult,
+  "create_customer"
 > = {
   name: "create_customer",
   title: `Create a customer`,
@@ -37,7 +37,8 @@ export const createCustomer: Tool<
 
 export const getCustomer: Tool<
   typeof getCustomerParameters,
-  typeof getCustomerResult
+  typeof getCustomerResult,
+  "get_customer"
 > = {
   name: "get_customer",
   title: `Retrieve a customer`,
@@ -60,7 +61,8 @@ export const getCustomer: Tool<
 
 export const listPaymentInstruments: Tool<
   typeof listPaymentInstrumentsParameters,
-  typeof listPaymentInstrumentsResult
+  typeof listPaymentInstrumentsResult,
+  "list_payment_instruments"
 > = {
   name: "list_payment_instruments",
   title: `List payment instruments`,
@@ -83,7 +85,8 @@ export const listPaymentInstruments: Tool<
 
 export const updateCustomer: Tool<
   typeof updateCustomerParameters,
-  typeof updateCustomerResult
+  typeof updateCustomerResult,
+  "update_customer"
 > = {
   name: "update_customer",
   title: `Update a customer`,

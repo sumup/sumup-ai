@@ -4,7 +4,7 @@ export {
   getMerchantRoleParameters,
   listMerchantRolesParameters,
   updateMerchantRoleParameters,
-} from "./parameters";
+} from "../generated/roles";
 export {
   createMerchantRole,
   deleteMerchantRole,

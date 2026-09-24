@@ -1,6 +1,4 @@
 import type SumUp from "@sumup/sdk";
-import type { Tool } from "../types";
-
 import {
   createMerchantRoleParameters,
   createMerchantRoleResult,
@@ -12,11 +10,13 @@ import {
   listMerchantRolesResult,
   updateMerchantRoleParameters,
   updateMerchantRoleResult,
-} from "./parameters";
+} from "../generated/roles";
+import type { Tool } from "../types";
 
 export const createMerchantRole: Tool<
   typeof createMerchantRoleParameters,
-  typeof createMerchantRoleResult
+  typeof createMerchantRoleResult,
+  "create_merchant_role"
 > = {
   name: "create_merchant_role",
   title: `Create a role`,
@@ -39,7 +39,8 @@ export const createMerchantRole: Tool<
 
 export const deleteMerchantRole: Tool<
   typeof deleteMerchantRoleParameters,
-  typeof deleteMerchantRoleResult
+  typeof deleteMerchantRoleResult,
+  "delete_merchant_role"
 > = {
   name: "delete_merchant_role",
   title: `Delete a role`,
@@ -62,7 +63,8 @@ export const deleteMerchantRole: Tool<
 
 export const getMerchantRole: Tool<
   typeof getMerchantRoleParameters,
-  typeof getMerchantRoleResult
+  typeof getMerchantRoleResult,
+  "get_merchant_role"
 > = {
   name: "get_merchant_role",
   title: `Retrieve a role`,
@@ -85,7 +87,8 @@ export const getMerchantRole: Tool<
 
 export const listMerchantRoles: Tool<
   typeof listMerchantRolesParameters,
-  typeof listMerchantRolesResult
+  typeof listMerchantRolesResult,
+  "list_merchant_roles"
 > = {
   name: "list_merchant_roles",
   title: `List roles`,
@@ -108,7 +111,8 @@ export const listMerchantRoles: Tool<
 
 export const updateMerchantRole: Tool<
   typeof updateMerchantRoleParameters,
-  typeof updateMerchantRoleResult
+  typeof updateMerchantRoleResult,
+  "update_merchant_role"
 > = {
   name: "update_merchant_role",
   title: `Update a role`,

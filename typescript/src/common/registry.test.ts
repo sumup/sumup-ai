@@ -11,7 +11,7 @@ import * as roles from "./roles";
 import * as transactions from "./transactions";
 import type { Tool } from "./types";
 
-const generatedExports = [
+const toolExports = [
   checkouts,
   customers,
   members,
@@ -30,9 +30,9 @@ const isTool = (value: unknown): value is Tool =>
   "name" in value &&
   "callback" in value;
 
-describe("generated tool registry", () => {
-  test("registers every generated tool", () => {
-    const generatedToolNames = generatedExports
+describe("tool registry", () => {
+  test("registers every exported tool", () => {
+    const exportedToolNames = toolExports
       .filter(isTool)
       .map((tool) => tool.name)
       .sort();
@@ -40,6 +40,6 @@ describe("generated tool registry", () => {
     registerTools((tool) => registeredToolNames.push(tool.name));
     registeredToolNames.sort();
 
-    expect(registeredToolNames).toEqual(generatedToolNames);
+    expect(registeredToolNames).toEqual(exportedToolNames);
   });
 });
