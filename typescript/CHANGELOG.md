@@ -4,6 +4,28 @@
 
 * **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.16.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.15.0...typescript-v0.16.0) (2026-09-24)
+
+
+### Features
+
+* support reviewed and curated tool catalogs ([#565](https://github.com/sumup/sumup-ai/issues/565)) ([70e255f](https://github.com/sumup/sumup-ai/commit/70e255f1b156722827739719e8dcd141079ccbaf))
+
+
+### Chores
+
+* **typescript:** modernize compiler configuration ([#547](https://github.com/sumup/sumup-ai/issues/547)) ([c09fab5](https://github.com/sumup/sumup-ai/commit/c09fab5bfdfeecacee94693537c4d22cdfe01c1a))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump the tooling group across 1 directory with 3 updates ([#560](https://github.com/sumup/sumup-ai/issues/560)) ([58ed453](https://github.com/sumup/sumup-ai/commit/58ed4537a7909d1d4451aa88961747e49b4c17d8))
+* **deps:** bump fast-uri ([#556](https://github.com/sumup/sumup-ai/issues/556)) ([9580f2d](https://github.com/sumup/sumup-ai/commit/9580f2da26c5f27d65a1bfd3124a92384024b241))
+* **deps:** bump fast-uri from 3.1.5 to 3.1.7 in /typescript ([#555](https://github.com/sumup/sumup-ai/issues/555)) ([ad49404](https://github.com/sumup/sumup-ai/commit/ad494048b3747fe27e1b53b89a6b9ee0d4ff69f4))
+* **deps:** bump ip-address and express-rate-limit in /typescript ([#553](https://github.com/sumup/sumup-ai/issues/553)) ([6335336](https://github.com/sumup/sumup-ai/commit/6335336d60d4ce7f8a4b8bada52debc8ebfdeb1b))
+* **deps:** bump the ai-runtime group in /typescript with 3 updates ([#551](https://github.com/sumup/sumup-ai/issues/551)) ([7b7da55](https://github.com/sumup/sumup-ai/commit/7b7da5567c26dc3ff911fd87469bf1af8fb1bb8b))
+* **deps:** bump zod from 4.4.3 to 4.6.5 in /typescript ([#559](https://github.com/sumup/sumup-ai/issues/559)) ([81dd315](https://github.com/sumup/sumup-ai/commit/81dd3158e075c7cc1c978e37f8ab5169d8cefec9))
+
 ## [0.15.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.14.1...typescript-v0.15.0) (2026-09-01)
 
 
