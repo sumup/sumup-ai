@@ -37,7 +37,6 @@ type OperationDetails = {
 
 export type CodegenOptions = {
   outputDir: string;
-  excludeOperationIds?: string[];
 };
 
 const HTTP_METHODS = [
@@ -52,10 +51,7 @@ export async function generate(
   spec: OpenAPIV3_1.Document,
   options: CodegenOptions,
 ) {
-  const excludedOperationIds = new Set([
-    ...EXCLUDED_OPERATION_IDS,
-    ...(options.excludeOperationIds ?? []),
-  ]);
+  const excludedOperationIds = new Set<string>(EXCLUDED_OPERATION_IDS);
   const operationsByTag = collectOperations(spec, excludedOperationIds);
   if (!operationsByTag) {
     return;

@@ -15,27 +15,15 @@ program
     "Directory where the generated files will be written",
     path.resolve(process.cwd(), "../typescript/src/common"),
   )
-  .option(
-    "-x, --exclude <operationId...>",
-    "Operation IDs to exclude from code generation",
-  )
-  .action(
-    async (
-      specFile: string,
-      options: { output: string; exclude?: string[] },
-    ) => {
-      const parser = new SwaggerParser();
-      const specPath = path.resolve(process.cwd(), specFile);
-      const outputDir = path.resolve(process.cwd(), options.output);
-      const specs = (await parser.dereference(
-        specPath,
-      )) as OpenAPIV3_1.Document;
-      await generate(specs, {
-        outputDir,
-        excludeOperationIds: options.exclude,
-      });
-    },
-  );
+  .action(async (specFile: string, options: { output: string }) => {
+    const parser = new SwaggerParser();
+    const specPath = path.resolve(process.cwd(), specFile);
+    const outputDir = path.resolve(process.cwd(), options.output);
+    const specs = (await parser.dereference(specPath)) as OpenAPIV3_1.Document;
+    await generate(specs, {
+      outputDir,
+    });
+  });
 
 program.parseAsync(process.argv).catch((error) => {
   console.error(error);

@@ -57,14 +57,12 @@ test("omits excluded operations from all generated code", async (t) => {
     "DeactivatePaymentInstrument",
     "GetPaymentMethods",
     "CreateApplePaySession",
-    "CustomExcludedOperation",
   ]) {
     input.paths![`/${operationId}`] = spec(operationId).paths!["/test"]!;
   }
 
   await generate(input, {
     outputDir,
-    excludeOperationIds: ["CustomExcludedOperation"],
   });
   // Compare the entire output with a spec containing only the retained operation.
   const expectedDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
