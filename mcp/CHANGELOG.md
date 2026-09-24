@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.12.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.12.0...mcp-v0.12.1) (2026-09-24)
+
+
+### Chores
+
+* **typescript:** modernize compiler configuration ([#547](https://github.com/sumup/sumup-ai/issues/547)) ([c09fab5](https://github.com/sumup/sumup-ai/commit/c09fab5bfdfeecacee94693537c4d22cdfe01c1a))
+
+
+### Build System & Dependencies
+
+* **deps-dev:** bump @rslib/core in /mcp in the rslib group ([#561](https://github.com/sumup/sumup-ai/issues/561)) ([8891610](https://github.com/sumup/sumup-ai/commit/8891610f0cea200d3882e6e3ea6b42eb96eeeaa9))
+* **deps-dev:** bump the tooling group across 1 directory with 3 updates ([#560](https://github.com/sumup/sumup-ai/issues/560)) ([58ed453](https://github.com/sumup/sumup-ai/commit/58ed4537a7909d1d4451aa88961747e49b4c17d8))
+* **deps-dev:** bump the tooling group in /mcp with 2 updates ([#549](https://github.com/sumup/sumup-ai/issues/549)) ([e68fb50](https://github.com/sumup/sumup-ai/commit/e68fb50cc4d4f72e2fb77c62991816bd8f3103c9))
+* **deps:** bump fast-uri from 3.1.5 to 3.1.8 in /mcp ([#563](https://github.com/sumup/sumup-ai/issues/563)) ([1f3a7ce](https://github.com/sumup/sumup-ai/commit/1f3a7ceba24bf00886106966cd21136a1b41a6f6))
+* **deps:** bump node from `a2dc166` to `725aeba` in /mcp ([#466](https://github.com/sumup/sumup-ai/issues/466)) ([baf1184](https://github.com/sumup/sumup-ai/commit/baf1184d0addb7cd153cfe43436d4863c5e387ae))
+
 ## [0.12.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.11.3...mcp-v0.12.0) (2026-09-01)
 
 
