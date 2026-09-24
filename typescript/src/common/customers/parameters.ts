@@ -123,19 +123,6 @@ export const createCustomerResult = z
   .loose()
   .describe(`Saved customer details.`);
 
-export const deactivatePaymentInstrumentParameters = z.object({
-  customerId: z
-    .string()
-    .describe(`Unique identifier of the saved customer resource.`),
-  token: z
-    .string()
-    .describe(
-      `Unique token identifying the card saved as a payment instrument resource.`,
-    ),
-});
-
-export const deactivatePaymentInstrumentResult = z.any();
-
 export const getCustomerParameters = z.object({
   customerId: z
     .string()

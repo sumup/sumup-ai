@@ -4,13 +4,11 @@ import {
   createCheckout,
   deactivateCheckout,
   getCheckout,
-  getPaymentMethods,
   listCheckouts,
   updateCheckout,
 } from "./checkouts";
 import {
   createCustomer,
-  deactivatePaymentInstrument,
   getCustomer,
   listPaymentInstruments,
   updateCustomer,
@@ -52,10 +50,46 @@ import {
 } from "./transactions";
 import type { Tool } from "./types";
 
-export const TOOL_REGISTRY_EXCLUSIONS = {
-  create_apple_pay_session:
-    "The current @sumup/sdk version does not expose createApplePaySession.",
-} as const;
+/** Names of tools available for registration, excluding unsupported operations. */
+export type ToolName =
+  | "create_checkout"
+  | "create_customer"
+  | "create_go_reader_checkout"
+  | "create_merchant_member"
+  | "create_merchant_role"
+  | "create_reader"
+  | "create_reader_checkout"
+  | "create_reader_terminate"
+  | "deactivate_checkout"
+  | "delete_merchant_member"
+  | "delete_merchant_role"
+  | "delete_reader"
+  | "get_checkout"
+  | "get_customer"
+  | "get_merchant"
+  | "get_merchant_member"
+  | "get_merchant_role"
+  | "get_person"
+  | "get_reader"
+  | "get_reader_checkout"
+  | "get_reader_status"
+  | "get_receipt"
+  | "get_transaction_v2_1"
+  | "list_checkouts"
+  | "list_memberships"
+  | "list_merchant_members"
+  | "list_merchant_roles"
+  | "list_payment_instruments"
+  | "list_payouts_v1"
+  | "list_persons"
+  | "list_readers"
+  | "list_transactions_v2_1"
+  | "refund_transaction"
+  | "update_checkout"
+  | "update_customer"
+  | "update_merchant_member"
+  | "update_merchant_role"
+  | "update_reader";
 
 export const registerTools = (reg: (tool: Tool) => void) => {
   reg(createCheckout);
@@ -67,7 +101,6 @@ export const registerTools = (reg: (tool: Tool) => void) => {
   reg(createReaderCheckout);
   reg(createReaderTerminate);
   reg(deactivateCheckout);
-  reg(deactivatePaymentInstrument);
   reg(deleteMerchantMember);
   reg(deleteMerchantRole);
   reg(deleteReader);
@@ -76,7 +109,6 @@ export const registerTools = (reg: (tool: Tool) => void) => {
   reg(getMerchant);
   reg(getMerchantMember);
   reg(getMerchantRole);
-  reg(getPaymentMethods);
   reg(getPerson);
   reg(getReader);
   reg(getReaderCheckout);

@@ -2,7 +2,13 @@ import SumUp from "@sumup/sdk";
 
 import { type ToolSet, tool, zodSchema } from "ai";
 import type z from "zod";
-import { executeTool, registerTools, type ToolObservability } from "../common";
+import {
+  createToolFilter,
+  executeTool,
+  registerTools,
+  type ToolObservability,
+  type ToolSelection,
+} from "../common";
 import type { ApprovalPolicy } from "../common/types";
 
 class SumUpAgentToolkit {
@@ -15,7 +21,10 @@ class SumUpAgentToolkit {
     host,
     approvalPolicy,
     observability,
-  }: {
+    includeTools,
+    excludeTools,
+    readOnly,
+  }: ToolSelection & {
     apiKey: string;
     host?: string;
     approvalPolicy?: ApprovalPolicy;
@@ -24,7 +33,9 @@ class SumUpAgentToolkit {
     this._sumup = new SumUp({ apiKey, host });
     this.tools = {};
 
+    const includes = createToolFilter({ includeTools, excludeTools, readOnly });
     registerTools((t) => {
+      if (!includes(t)) return;
       this.tools[t.name] = tool<
         z.infer<typeof t.parameters>,
         z.infer<typeof t.result>,

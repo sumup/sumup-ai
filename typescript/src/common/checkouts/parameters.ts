@@ -1,23 +1,5 @@
 import { z } from "zod";
 
-export const createApplePaySessionParameters = z.object({
-  checkoutId: z
-    .string()
-    .describe(`Unique identifier of the checkout resource.`),
-  context: z.string().describe(`the context to create this apple pay session.`),
-  target: z
-    .string()
-    .describe(`The target url to create this apple pay session.`),
-});
-
-export const createApplePaySessionResult = z
-  .object({})
-  .catchall(z.unknown())
-  .loose()
-  .describe(`Successful request. Returns the Apple Pay merchant session object
-that should be forwarded to the Apple Pay JS SDK to complete merchant
-validation and continue the payment flow.`);
-
 export const createCheckoutParameters = z
   .object({
     checkout_reference: z
@@ -916,36 +898,6 @@ export const getCheckoutResult = z
   .describe(
     `Checkout resource returned after a synchronous processing attempt. In addition to the base checkout fields, it can include the resulting transaction identifiers and any newly created payment instrument token.`,
   );
-
-export const getPaymentMethodsParameters = z.object({
-  merchantCode: z
-    .string()
-    .describe(`Short unique identifier for the merchant.`),
-  amount: z
-    .number()
-    .optional()
-    .describe(
-      `The amount for which the payment methods should be eligible, in major units.`,
-    ),
-  currency: z
-    .string()
-    .optional()
-    .describe(`The currency for which the payment methods should be eligible.`),
-});
-
-export const getPaymentMethodsResult = z
-  .object({
-    available_payment_methods: z
-      .array(
-        z.object({
-          id: z.string().describe(`Unique identifier of the payment method.`),
-        }),
-      )
-      .describe(`Payment methods available to the merchant for the checkout.`)
-      .optional(),
-  })
-  .loose()
-  .describe(`Available payment methods`);
 
 export const listCheckoutsParameters = z.object({
   checkout_reference: z

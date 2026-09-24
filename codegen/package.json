@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Generates SumUp Agent Toolkit helpers from the OpenAPI schema.",
   "scripts": {
+    "test": "tsx --test src/*.test.ts",
     "generate": "tsx src/index.ts ../../apis/specs/openapi.json",
     "typecheck": "tsc --noEmit",
     "lint": "biome check",

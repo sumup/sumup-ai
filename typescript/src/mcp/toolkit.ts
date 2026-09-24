@@ -6,24 +6,37 @@ import SumUp, { APIError } from "@sumup/sdk";
 import { z } from "zod";
 import {
   constructResourceMetadata,
+  createToolFilter,
   executeTool,
   parseWWWAuthenticateChallenges,
   registerTools,
   stringifyWWWAuthenticateChallenges,
   TOOL_OAUTH_SCOPES_META_KEY,
   type ToolObservability,
+  type ToolSelection,
   VERSION,
 } from "../common";
+import type { Tool } from "../common/types";
 
-export type SumUpAgentToolkitOptions = {
+export type SumUpAgentToolkitOptions = ToolSelection & {
   apiKey?: string;
   host?: string;
   resource?: string;
   resourceMetadata?: string;
   observability?: ToolObservability;
-  includeTools?: string[];
-  excludeTools?: string[];
-  readOnly?: boolean;
+  /**
+   * Customize a selected tool before registration. Keep its input/result schemas,
+   * callback, description, and annotations consistent with the new behavior.
+   * Selection uses the original tool; filters are not reapplied afterward.
+   */
+  transformTool?: (tool: Tool) => Tool;
+  /**
+   * Advertise output schemas for object and array results. Defaults to false;
+   * result validation still runs when schemas are not advertised.
+   * Arrays use an object with an `items` field to match structuredContent.
+   *
+   * @see https://modelcontextprotocol.io/specification/2025-11-25/server/tools#output-schema
+   */
   includeOutputSchemas?: boolean;
   configuration: ServerOptions;
 };
@@ -49,6 +62,7 @@ class SumUpAgentToolkit extends McpServer {
     includeTools,
     excludeTools = [],
     readOnly = false,
+    transformTool,
     includeOutputSchemas = false,
   }: SumUpAgentToolkitOptions) {
     super(
@@ -110,17 +124,11 @@ class SumUpAgentToolkit extends McpServer {
       },
     );
 
-    const includedToolNames = includeTools ? new Set(includeTools) : undefined;
-    const excludedToolNames = new Set(excludeTools);
+    const includes = createToolFilter({ includeTools, excludeTools, readOnly });
 
-    registerTools((tool) => {
-      if (
-        (includedToolNames && !includedToolNames.has(tool.name)) ||
-        excludedToolNames.has(tool.name) ||
-        (readOnly && !tool.annotations?.readOnly)
-      ) {
-        return;
-      }
+    registerTools((original) => {
+      if (!includes(original)) return;
+      const tool = transformTool ? transformTool(original) : original;
 
       this.registerTool(
         tool.name,
@@ -128,13 +136,17 @@ class SumUpAgentToolkit extends McpServer {
           title: tool.title,
           description: tool.description,
           inputSchema: tool.parameters.shape,
-          outputSchema:
-            includeOutputSchemas && tool.result instanceof z.ZodObject
+          outputSchema: includeOutputSchemas
+            ? tool.result instanceof z.ZodObject
               ? tool.result.shape
-              : undefined,
+              : tool.result instanceof z.ZodArray
+                ? { items: tool.result }
+                : undefined
+            : undefined,
           annotations: {
             title: tool.annotations?.title,
             readOnlyHint: tool.annotations?.readOnly,
+            openWorldHint: tool.annotations?.openWorld,
             destructiveHint: tool.annotations?.destructive,
             idempotentHint: tool.annotations?.idempotent,
           },
@@ -151,8 +163,12 @@ class SumUpAgentToolkit extends McpServer {
           try {
             const sumup = this.createClient(extra?.authInfo?.token);
             const result = await executeTool(tool, sumup, args, observability);
-            const structuredContent =
-              typeof result === "object" && result !== null
+            // MCP structuredContent must be an object. Serialize the same value
+            // below for clients that consume only text content.
+            // https://modelcontextprotocol.io/specification/2025-11-25/server/tools#structured-content
+            const structuredContent = Array.isArray(result)
+              ? { items: result }
+              : typeof result === "object" && result !== null
                 ? (result as Record<string, unknown>)
                 : undefined;
 
@@ -161,7 +177,7 @@ class SumUpAgentToolkit extends McpServer {
               content: [
                 {
                   type: "text" as const,
-                  text: JSON.stringify(structuredContent),
+                  text: JSON.stringify(structuredContent ?? result) ?? "null",
                 },
               ],
             };

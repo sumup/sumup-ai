@@ -18,6 +18,7 @@ export const listMemberships: Tool<
   annotations: {
     title: `List memberships`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,

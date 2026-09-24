@@ -28,7 +28,7 @@ rs.mock("./common", () => {
       }) => void,
     ) =>
       reg({
-        name: "echo_value",
+        name: "get_checkout",
         title: "Echo value",
         description: "Returns the supplied value",
         parameters: z.object({ value: z.string() }),
@@ -44,13 +44,28 @@ import LangChainToolkit from "./langchain/toolkit";
 import OpenAiToolkit from "./openai/toolkit";
 
 describe("agent framework adapter contracts", () => {
+  test.each([
+    ["AI SDK", AiSdkToolkit],
+    ["LangChain", LangChainToolkit],
+    ["OpenAI Agents", OpenAiToolkit],
+  ] as const)(
+    "%s applies tool selection before registration",
+    (_name, Toolkit) => {
+      const toolkit = new Toolkit({
+        apiKey: "test",
+        excludeTools: ["get_checkout"],
+      });
+      expect(Object.values(toolkit.getTools())).toHaveLength(0);
+    },
+  );
+
   beforeEach(() => {
     mockToolState.callback = async (_sumup, input) => ({ value: input.value });
   });
 
   test("AI SDK tools execute callbacks and validate results", async () => {
     const tool = new AiSdkToolkit({ apiKey: "test-api-key" }).getTools()
-      .echo_value;
+      .get_checkout;
     if (!tool?.execute) throw new Error("AI SDK tool is not executable");
 
     await expect(
@@ -101,7 +116,7 @@ describe("agent framework adapter contracts", () => {
       apiKey: "test-api-key",
     })
       .getTools()
-      .find((candidate) => candidate.name === "echo_value");
+      .find((candidate) => candidate.name === "get_checkout");
     if (tool?.type !== "function") {
       throw new Error("OpenAI function tool was not registered");
     }

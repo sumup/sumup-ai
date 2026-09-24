@@ -18,6 +18,7 @@ export const getReceipt: Tool<
   annotations: {
     title: `Retrieve receipt details`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,

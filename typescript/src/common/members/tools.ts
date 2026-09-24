@@ -20,7 +20,10 @@ export const createMerchantMember: Tool<
 > = {
   name: "create_merchant_member",
   title: `Create a member`,
-  description: `Create a merchant member.`,
+  description: `Adds a member to the merchant account with the specified roles.
+
+By default, sends an invitation email to the provided address. The recipient must accept the invitation to join the account.
+When \`is_managed_user\` is \`true\`, creates a managed user with the provided password and optional nickname and assigns the roles directly, without sending an invitation.`,
   parameters: createMerchantMemberParameters,
   result: createMerchantMemberResult,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {
@@ -29,8 +32,9 @@ export const createMerchantMember: Tool<
   annotations: {
     title: `Create a member`,
     readOnly: false,
+    openWorld: true,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["members.write", "user.subaccounts"],
   },
@@ -51,6 +55,7 @@ export const deleteMerchantMember: Tool<
   annotations: {
     title: `Delete a member`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: true,
     idempotent: false,
@@ -73,6 +78,7 @@ export const getMerchantMember: Tool<
   annotations: {
     title: `Retrieve a member`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -95,6 +101,7 @@ export const listMerchantMembers: Tool<
   annotations: {
     title: `List members`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -108,7 +115,10 @@ export const updateMerchantMember: Tool<
 > = {
   name: "update_merchant_member",
   title: `Update a member`,
-  description: `Update the merchant member.`,
+  description: `Updates a merchant member and returns the updated member.
+
+Providing \`roles\` replaces the member's assigned roles and can grant or revoke access. Providing \`metadata\` replaces the entire metadata object.
+For managed users, \`user.nickname\` changes the display name and \`user.password\` replaces the password. Updating the password also enables the managed user account.`,
   parameters: updateMerchantMemberParameters,
   result: updateMerchantMemberResult,
   callback: async (sumup: SumUp, { merchantCode, memberId, ...args }) => {
@@ -117,8 +127,9 @@ export const updateMerchantMember: Tool<
   annotations: {
     title: `Update a member`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: true,
     oauthScopes: ["members.write", "user.subaccounts"],
   },

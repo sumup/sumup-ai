@@ -4,8 +4,6 @@ import type { Tool } from "../types";
 import {
   createCustomerParameters,
   createCustomerResult,
-  deactivatePaymentInstrumentParameters,
-  deactivatePaymentInstrumentResult,
   getCustomerParameters,
   getCustomerResult,
   listPaymentInstrumentsParameters,
@@ -29,34 +27,9 @@ export const createCustomer: Tool<
   annotations: {
     title: `Create a customer`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: false,
-    idempotent: false,
-    oauthScopes: ["customers.write", "payment_instruments"],
-  },
-};
-
-export const deactivatePaymentInstrument: Tool<
-  typeof deactivatePaymentInstrumentParameters,
-  typeof deactivatePaymentInstrumentResult
-> = {
-  name: "deactivate_payment_instrument",
-  title: `Deactivate a payment instrument`,
-  description: `Deactivates an identified card payment instrument resource for a customer.`,
-  parameters: deactivatePaymentInstrumentParameters,
-  result: deactivatePaymentInstrumentResult,
-  callback: async (sumup: SumUp, { customerId, token, ...args }) => {
-    return await sumup.customers.deactivatePaymentInstrument(
-      customerId,
-      token,
-      args,
-    );
-  },
-  annotations: {
-    title: `Deactivate a payment instrument`,
-    readOnly: false,
-    requiresApproval: true,
-    destructive: true,
     idempotent: false,
     oauthScopes: ["customers.write", "payment_instruments"],
   },
@@ -77,6 +50,7 @@ export const getCustomer: Tool<
   annotations: {
     title: `Retrieve a customer`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -99,6 +73,7 @@ export const listPaymentInstruments: Tool<
   annotations: {
     title: `List payment instruments`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -123,8 +98,9 @@ The request only overwrites the parameters included in the request, all other pa
   annotations: {
     title: `Update a customer`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: true,
     oauthScopes: ["customers.write", "payment_instruments"],
   },

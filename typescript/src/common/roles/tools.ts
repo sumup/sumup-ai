@@ -29,6 +29,7 @@ export const createMerchantRole: Tool<
   annotations: {
     title: `Create a role`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: false,
     idempotent: false,
@@ -51,6 +52,7 @@ export const deleteMerchantRole: Tool<
   annotations: {
     title: `Delete a role`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: true,
     idempotent: false,
@@ -73,6 +75,7 @@ export const getMerchantRole: Tool<
   annotations: {
     title: `Retrieve a role`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -95,6 +98,7 @@ export const listMerchantRoles: Tool<
   annotations: {
     title: `List roles`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -108,7 +112,9 @@ export const updateMerchantRole: Tool<
 > = {
   name: "update_merchant_role",
   title: `Update a role`,
-  description: `Update a custom role.`,
+  description: `Updates a custom role's name, description, or permissions and returns the updated role.
+
+Providing \`permissions\` replaces the role's permission list and changes the access granted to members assigned to that role. Omitted fields remain unchanged.`,
   parameters: updateMerchantRoleParameters,
   result: updateMerchantRoleResult,
   callback: async (sumup: SumUp, { merchantCode, roleId, ...args }) => {
@@ -117,8 +123,9 @@ export const updateMerchantRole: Tool<
   annotations: {
     title: `Update a role`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["roles.write", "user.subaccounts"],
   },

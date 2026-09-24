@@ -41,8 +41,9 @@ Use \`client_transaction_id\` as an idempotency key: retrying the request with t
   annotations: {
     title: `Create a Go Reader Payment`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["payments", "readers.write"],
   },
@@ -63,6 +64,7 @@ export const createReader: Tool<
   annotations: {
     title: `Create a Reader`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: false,
     idempotent: false,
@@ -95,8 +97,9 @@ There are some caveats when using this endpoint:
   annotations: {
     title: `Create a Reader Checkout`,
     readOnly: false,
+    openWorld: true,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["readers.write"],
   },
@@ -130,8 +133,9 @@ If a transaction is successfully terminated and \`return_url\` was provided on C
   annotations: {
     title: `Terminate a Reader Checkout`,
     readOnly: false,
+    openWorld: true,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["readers.write"],
   },
@@ -152,6 +156,7 @@ export const deleteReader: Tool<
   annotations: {
     title: `Delete a reader`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
     destructive: true,
     idempotent: false,
@@ -174,6 +179,7 @@ export const getReader: Tool<
   annotations: {
     title: `Retrieve a Reader`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -204,6 +210,7 @@ export const getReaderCheckout: Tool<
   annotations: {
     title: `Get a Reader Checkout`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -244,6 +251,7 @@ Device Status
   annotations: {
     title: `Get a Reader Status`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -266,6 +274,7 @@ export const listReaders: Tool<
   annotations: {
     title: `List Readers`,
     readOnly: true,
+    openWorld: false,
     requiresApproval: false,
     destructive: false,
     idempotent: false,
@@ -279,7 +288,9 @@ export const updateReader: Tool<
 > = {
   name: "update_reader",
   title: `Update a Reader`,
-  description: `Update a Reader.`,
+  description: `Updates a reader's name or metadata and returns the updated reader.
+
+Providing \`metadata\` replaces the entire metadata object; include all entries that should be retained. Omitted fields remain unchanged.`,
   parameters: updateReaderParameters,
   result: updateReaderResult,
   callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
@@ -288,8 +299,9 @@ export const updateReader: Tool<
   annotations: {
     title: `Update a Reader`,
     readOnly: false,
+    openWorld: false,
     requiresApproval: true,
-    destructive: false,
+    destructive: true,
     idempotent: false,
     oauthScopes: ["readers.write", "terminals.write"],
   },
