@@ -17,3 +17,8 @@ using HTTP DELETE. Invitation emails and external callbacks affect the
 open-world classification; financial changes within SumUp alone do not. These
 annotations describe behavior; they do not enforce user confirmation in an MCP
 client.
+
+To omit an operation entirely from the toolkit, add its OpenAPI `operationId` to
+`src/exclusions.ts` and regenerate. Exclusions remove tool implementations,
+parameter/result schemas, exports, and tool names from the registry.
+The CLI's `--exclude` option adds exclusions for an individual run.

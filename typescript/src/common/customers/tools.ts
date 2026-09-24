@@ -4,8 +4,6 @@ import type { Tool } from "../types";
 import {
   createCustomerParameters,
   createCustomerResult,
-  deactivatePaymentInstrumentParameters,
-  deactivatePaymentInstrumentResult,
   getCustomerParameters,
   getCustomerResult,
   listPaymentInstrumentsParameters,
@@ -32,33 +30,6 @@ export const createCustomer: Tool<
     openWorld: false,
     requiresApproval: true,
     destructive: false,
-    idempotent: false,
-    oauthScopes: ["customers.write", "payment_instruments"],
-  },
-};
-
-export const deactivatePaymentInstrument: Tool<
-  typeof deactivatePaymentInstrumentParameters,
-  typeof deactivatePaymentInstrumentResult
-> = {
-  name: "deactivate_payment_instrument",
-  title: `Deactivate a payment instrument`,
-  description: `Deactivates an identified card payment instrument resource for a customer.`,
-  parameters: deactivatePaymentInstrumentParameters,
-  result: deactivatePaymentInstrumentResult,
-  callback: async (sumup: SumUp, { customerId, token, ...args }) => {
-    return await sumup.customers.deactivatePaymentInstrument(
-      customerId,
-      token,
-      args,
-    );
-  },
-  annotations: {
-    title: `Deactivate a payment instrument`,
-    readOnly: false,
-    openWorld: false,
-    requiresApproval: true,
-    destructive: true,
     idempotent: false,
     oauthScopes: ["customers.write", "payment_instruments"],
   },

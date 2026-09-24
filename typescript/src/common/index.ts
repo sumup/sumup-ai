@@ -9,6 +9,5 @@ export { executeTool, type ToolObservability } from "./execute";
 export { createToolFilter, type ToolSelection } from "./filter";
 export {
   registerTools,
-  TOOL_REGISTRY_EXCLUSIONS,
   type ToolName,
 } from "./registry";

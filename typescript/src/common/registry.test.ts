@@ -6,7 +6,7 @@ import * as merchants from "./merchants";
 import * as payouts from "./payouts";
 import * as readers from "./readers";
 import * as receipts from "./receipts";
-import { registerTools, TOOL_REGISTRY_EXCLUSIONS } from "./registry";
+import { registerTools } from "./registry";
 import * as roles from "./roles";
 import * as transactions from "./transactions";
 import type { Tool } from "./types";
@@ -31,7 +31,7 @@ const isTool = (value: unknown): value is Tool =>
   "callback" in value;
 
 describe("generated tool registry", () => {
-  test("registers every generated tool or records an explicit exclusion", () => {
+  test("registers every generated tool", () => {
     const generatedToolNames = generatedExports
       .filter(isTool)
       .map((tool) => tool.name)
@@ -40,14 +40,6 @@ describe("generated tool registry", () => {
     registerTools((tool) => registeredToolNames.push(tool.name));
     registeredToolNames.sort();
 
-    const excludedToolNames = Object.keys(TOOL_REGISTRY_EXCLUSIONS).sort();
-    const expectedRegisteredToolNames = generatedToolNames.filter(
-      (name) => !excludedToolNames.includes(name),
-    );
-
-    expect(registeredToolNames).toEqual(expectedRegisteredToolNames);
-    expect(
-      excludedToolNames.every((name) => generatedToolNames.includes(name)),
-    ).toBe(true);
+    expect(registeredToolNames).toEqual(generatedToolNames);
   });
 });

@@ -4,13 +4,11 @@ import {
   createCheckout,
   deactivateCheckout,
   getCheckout,
-  getPaymentMethods,
   listCheckouts,
   updateCheckout,
 } from "./checkouts";
 import {
   createCustomer,
-  deactivatePaymentInstrument,
   getCustomer,
   listPaymentInstruments,
   updateCustomer,
@@ -63,7 +61,6 @@ export type ToolName =
   | "create_reader_checkout"
   | "create_reader_terminate"
   | "deactivate_checkout"
-  | "deactivate_payment_instrument"
   | "delete_merchant_member"
   | "delete_merchant_role"
   | "delete_reader"
@@ -72,7 +69,6 @@ export type ToolName =
   | "get_merchant"
   | "get_merchant_member"
   | "get_merchant_role"
-  | "get_payment_methods"
   | "get_person"
   | "get_reader"
   | "get_reader_checkout"
@@ -95,11 +91,6 @@ export type ToolName =
   | "update_merchant_role"
   | "update_reader";
 
-export const TOOL_REGISTRY_EXCLUSIONS = {
-  create_apple_pay_session:
-    "The current @sumup/sdk version does not expose createApplePaySession.",
-} as const;
-
 export const registerTools = (reg: (tool: Tool) => void) => {
   reg(createCheckout);
   reg(createCustomer);
@@ -110,7 +101,6 @@ export const registerTools = (reg: (tool: Tool) => void) => {
   reg(createReaderCheckout);
   reg(createReaderTerminate);
   reg(deactivateCheckout);
-  reg(deactivatePaymentInstrument);
   reg(deleteMerchantMember);
   reg(deleteMerchantRole);
   reg(deleteReader);
@@ -119,7 +109,6 @@ export const registerTools = (reg: (tool: Tool) => void) => {
   reg(getMerchant);
   reg(getMerchantMember);
   reg(getMerchantRole);
-  reg(getPaymentMethods);
   reg(getPerson);
   reg(getReader);
   reg(getReaderCheckout);

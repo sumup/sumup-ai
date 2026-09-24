@@ -12,7 +12,6 @@ const readOnlyOperations = new Set([
   "GetMerchant",
   "GetMerchantMember",
   "GetMerchantRole",
-  "GetPaymentMethods",
   "GetPerson",
   "GetReader",
   "GetReaderCheckout",
@@ -31,7 +30,6 @@ const readOnlyOperations = new Set([
 ]);
 
 const writeOperations: Record<string, Omit<Annotations, "readOnly">> = {
-  CreateApplePaySession: { openWorld: true, destructive: false },
   // Optional caller-supplied external callbacks.
   CreateCheckout: { openWorld: true, destructive: false },
   UpdateCheckout: { openWorld: false, destructive: true },
@@ -46,7 +44,6 @@ const writeOperations: Record<string, Omit<Annotations, "readOnly">> = {
   // Remaining writes are bounded to private merchant-account resources.
   CreateCustomer: { openWorld: false, destructive: false },
   UpdateCustomer: { openWorld: false, destructive: true },
-  DeactivatePaymentInstrument: { openWorld: false, destructive: true },
   CreateMerchantRole: { openWorld: false, destructive: false },
   UpdateMerchantRole: { openWorld: false, destructive: true },
   DeleteMerchantRole: { openWorld: false, destructive: true },

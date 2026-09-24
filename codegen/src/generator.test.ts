@@ -47,3 +47,38 @@ test("rejects an unreviewed operation before writing files", async (t) => {
   );
   assert.deepEqual(await readdir(outputDir), []);
 });
+
+test("omits excluded operations from all generated code", async (t) => {
+  const outputDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
+  t.after(() => rm(outputDir, { recursive: true, force: true }));
+  const input = spec("RefundTransaction");
+  for (const operationId of [
+    "ProcessCheckout",
+    "DeactivatePaymentInstrument",
+    "GetPaymentMethods",
+    "CreateApplePaySession",
+    "CustomExcludedOperation",
+  ]) {
+    input.paths![`/${operationId}`] = spec(operationId).paths!["/test"]!;
+  }
+
+  await generate(input, {
+    outputDir,
+    excludeOperationIds: ["CustomExcludedOperation"],
+  });
+  // Compare the entire output with a spec containing only the retained operation.
+  const expectedDir = await mkdtemp(join(tmpdir(), "sumup-codegen-"));
+  t.after(() => rm(expectedDir, { recursive: true, force: true }));
+  await generate(spec("RefundTransaction"), { outputDir: expectedDir });
+  for (const file of [
+    "registry.ts",
+    "test/index.ts",
+    "test/tools.ts",
+    "test/parameters.ts",
+  ]) {
+    assert.equal(
+      await readFile(join(outputDir, file), "utf8"),
+      await readFile(join(expectedDir, file), "utf8"),
+    );
+  }
+});

@@ -6,12 +6,6 @@ import { program } from "commander";
 import type { OpenAPIV3_1 } from "openapi-types";
 import { generate } from "./generator.js";
 
-const DEFAULT_EXCLUDED_OPERATION_IDS = ["ProcessCheckout"] as const;
-const DEFAULT_REGISTRATION_EXCLUSIONS = {
-  CreateApplePaySession:
-    "The current @sumup/sdk version does not expose createApplePaySession.",
-} as const;
-
 program
   .name("agent-toolkit-codegen")
   .description("Generate SumUp Agent Toolkit helpers from an OpenAPI schema.")
@@ -36,16 +30,9 @@ program
       const specs = (await parser.dereference(
         specPath,
       )) as OpenAPIV3_1.Document;
-      const excludeOperationIds = Array.from(
-        new Set([
-          ...DEFAULT_EXCLUDED_OPERATION_IDS,
-          ...(options.exclude ?? []),
-        ]),
-      );
       await generate(specs, {
         outputDir,
-        excludeOperationIds,
-        registrationExclusions: DEFAULT_REGISTRATION_EXCLUSIONS,
+        excludeOperationIds: options.exclude,
       });
     },
   );

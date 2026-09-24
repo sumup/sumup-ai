@@ -2,49 +2,17 @@ import type SumUp from "@sumup/sdk";
 import type { Tool } from "../types";
 
 import {
-  createApplePaySessionParameters,
-  createApplePaySessionResult,
   createCheckoutParameters,
   createCheckoutResult,
   deactivateCheckoutParameters,
   deactivateCheckoutResult,
   getCheckoutParameters,
   getCheckoutResult,
-  getPaymentMethodsParameters,
-  getPaymentMethodsResult,
   listCheckoutsParameters,
   listCheckoutsResult,
   updateCheckoutParameters,
   updateCheckoutResult,
 } from "./parameters";
-
-export const createApplePaySession: Tool<
-  typeof createApplePaySessionParameters,
-  typeof createApplePaySessionResult
-> = {
-  name: "create_apple_pay_session",
-  title: `Create an Apple Pay session`,
-  description: `Creates an Apple Pay merchant session for the specified checkout.
-
-Use this endpoint after the customer selects Apple Pay and before calling
-\`ApplePaySession.completeMerchantValidation(...)\` in the browser.
-SumUp validates the merchant session request and returns the Apple Pay
-session object that your frontend should pass to Apple's JavaScript API.`,
-  parameters: createApplePaySessionParameters,
-  result: createApplePaySessionResult,
-  callback: async (sumup: SumUp, { checkoutId, ...args }) => {
-    return await sumup.checkouts.createApplePaySession(checkoutId, args);
-  },
-  annotations: {
-    title: `Create an Apple Pay session`,
-    readOnly: false,
-    openWorld: true,
-    requiresApproval: true,
-    destructive: false,
-    idempotent: true,
-    oauthScopes: [],
-  },
-};
 
 export const createCheckout: Tool<
   typeof createCheckoutParameters,
@@ -117,32 +85,6 @@ export const getCheckout: Tool<
     destructive: false,
     idempotent: false,
     oauthScopes: ["checkouts.read", "payments"],
-  },
-};
-
-export const getPaymentMethods: Tool<
-  typeof getPaymentMethodsParameters,
-  typeof getPaymentMethodsResult
-> = {
-  name: "get_payment_methods",
-  title: `Get available payment methods`,
-  description: `Get payment methods available for the given merchant to use with a checkout.`,
-  parameters: getPaymentMethodsParameters,
-  result: getPaymentMethodsResult,
-  callback: async (sumup: SumUp, { merchantCode, ...args }) => {
-    return await sumup.checkouts.listAvailablePaymentMethods(
-      merchantCode,
-      args,
-    );
-  },
-  annotations: {
-    title: `Get available payment methods`,
-    readOnly: true,
-    openWorld: false,
-    requiresApproval: false,
-    destructive: false,
-    idempotent: false,
-    oauthScopes: [],
   },
 };
 
