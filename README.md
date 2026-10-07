@@ -11,17 +11,29 @@ Enable AI Agents to interact with SumUp for smarter payment workflows.
 
 SumUp AI toolkit contains collections of SDKs for building AI-enhanced applications integrated with SumUp. You can build payments processing solutions, reporting, and much more with the AI toolkit.
 
-## Model Context Protocol
+## Set up an AI coding assistant
 
-SumUp hosts a [Model Context Protocol (MCP)](https://modelcontextprotocol.com/) at `https://mcp.sumup.com`, for more details see [sumup/sumup-mcp](https://github.com/sumup/sumup-mcp).
-
-You can also run SumUp MCP server locally:
+Install the [SumUp plugin](https://github.com/sumup/sumup-skills) to get payment integration skills and hosted MCP configuration. For Codex:
 
 ```sh
-SUMUP_API_KEY=YOUR_SUMUP_API_KEY npx -y @sumup/mcp
+codex plugin marketplace add sumup/sumup-skills
+codex plugin add sumup@sumup
+codex plugin list
 ```
 
-For more information, see [MCP installation instruction](/mcp/README.md#installation).
+Start a new session and sign in with SumUp when prompted to use account tools. For Claude Code, Cursor, Gemini CLI, and Kiro instructions, see the [plugin setup guide](https://developer.sumup.com/tools/llms/plugins/).
+
+## Model Context Protocol
+
+SumUp hosts a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server at `https://mcp.sumup.com/mcp`. Connect an OAuth-capable client and sign in with SumUp; hosted connections do not use SumUp API keys. For direct client configuration, see the [MCP setup guide](https://developer.sumup.com/tools/llms/mcp-server/) or [sumup/sumup-mcp](https://github.com/sumup/sumup-mcp).
+
+You can also run the SumUp MCP server locally with Node.js 22 or later and a SumUp API key:
+
+```sh
+SUMUP_API_KEY='sup_sk_...' npx -y @sumup/mcp
+```
+
+For more information, see [local MCP installation instructions](mcp/README.md#installation).
 
 ## Agent Toolkit
 
