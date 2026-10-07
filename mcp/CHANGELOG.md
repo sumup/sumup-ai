@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.12.1...mcp-v0.13.0) (2026-10-07)
+
+
+### Features
+
+* **docs:** update README.md ([3f834c5](https://github.com/sumup/sumup-ai/commit/3f834c5e96d28a580e480abf01471bbc49bf3cf4))
+* **mcp:** codex docs ([d5aa1a8](https://github.com/sumup/sumup-ai/commit/d5aa1a81c8d6f5801f913ccd37f3c3bf769ac2fb))
+
 ## [0.12.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.12.0...mcp-v0.12.1) (2026-09-24)
 
 
