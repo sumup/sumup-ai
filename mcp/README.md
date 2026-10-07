@@ -25,6 +25,29 @@ npx -y @sumup/mcp@latest
 
 ## Installation
 
+### [Codex](https://developers.openai.com/codex/)
+
+Add the following configuration to your `~/.codex/config.toml` file, replacing `sup_sk_...` with your SumUp API key:
+
+```toml
+[mcp_servers.sumup]
+command = "npx"
+args = ["-y", "@sumup/mcp"]
+
+[mcp_servers.sumup.env]
+SUMUP_API_KEY = "sup_sk_..."
+```
+
+Alternatively, add the server using the Codex CLI:
+
+```sh
+codex mcp add sumup --env SUMUP_API_KEY=sup_sk_... -- npx -y @sumup/mcp
+```
+
+Run `codex mcp list` to verify the server is configured, or use `/mcp` in a Codex session to see active servers.
+
+See the [official OpenAI documentation](https://developers.openai.com/codex/mcp) for more details.
+
 ### [Cursor](https://www.cursor.com/)
 
 1. Go to `Cursor Settings` > `MCP`
