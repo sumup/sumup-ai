@@ -23,7 +23,7 @@ jobs:
           sparse-checkout: |
             .github
 
-      - uses: reviewdog/action-actionlint@dbe5299849118fd6f099ba563d263d770955a64a # v1.73.2
+      - uses: reviewdog/action-actionlint@3cbf14efd750961dba35fccbf00f9e14028cb1f5 # v1.80.2
         with:
           filter_mode: nofilter
           fail_on_error: true
