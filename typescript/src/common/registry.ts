@@ -31,9 +31,11 @@ import {
   deleteReader,
   getReader,
   getReaderCheckout,
+  getReaderSettings,
   getReaderStatus,
   listReaders,
   updateReader,
+  updateReaderSettings,
 } from "./readers";
 import { getReceipt } from "./receipts";
 import {
@@ -72,6 +74,7 @@ export type ToolName =
   | "get_person"
   | "get_reader"
   | "get_reader_checkout"
+  | "get_reader_settings"
   | "get_reader_status"
   | "get_receipt"
   | "get_transaction_v2_1"
@@ -89,7 +92,8 @@ export type ToolName =
   | "update_customer"
   | "update_merchant_member"
   | "update_merchant_role"
-  | "update_reader";
+  | "update_reader"
+  | "update_reader_settings";
 
 export const registerTools = (reg: (tool: Tool) => void) => {
   reg(createCheckout);
@@ -112,6 +116,7 @@ export const registerTools = (reg: (tool: Tool) => void) => {
   reg(getPerson);
   reg(getReader);
   reg(getReaderCheckout);
+  reg(getReaderSettings);
   reg(getReaderStatus);
   reg(getReceipt);
   reg(getTransactionV2_1);
@@ -130,4 +135,5 @@ export const registerTools = (reg: (tool: Tool) => void) => {
   reg(updateMerchantMember);
   reg(updateMerchantRole);
   reg(updateReader);
+  reg(updateReaderSettings);
 };

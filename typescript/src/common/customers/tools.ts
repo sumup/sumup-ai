@@ -18,7 +18,7 @@ export const createCustomer: Tool<
 > = {
   name: "create_customer",
   title: `Create a customer`,
-  description: `Creates a new saved customer resource which you can later manipulate and save payment instruments to.`,
+  description: `Creates a customer using the \`customer_id\` you supply. Choose an identifier that maps to the payer in your own system and reuse it when retrieving the customer or associating checkouts and saved payment instruments with them.`,
   parameters: createCustomerParameters,
   result: createCustomerResult,
   callback: async (sumup: SumUp, args) => {
@@ -41,7 +41,7 @@ export const getCustomer: Tool<
 > = {
   name: "get_customer",
   title: `Retrieve a customer`,
-  description: `Retrieves an identified saved customer resource through the unique \`customer_id\` parameter, generated upon customer creation.`,
+  description: `Retrieves a saved customer using the \`customer_id\` you supplied when creating the customer.`,
   parameters: getCustomerParameters,
   result: getCustomerResult,
   callback: async (sumup: SumUp, { customerId, ...args }) => {

@@ -27,6 +27,7 @@ export const createMerchantMemberParameters = z.object({
     .optional(),
   roles: z
     .array(z.string().max(64))
+    .min(1)
     .max(124)
     .describe(`List of roles to assign to the new member.`),
   metadata: z
@@ -264,16 +265,6 @@ export const listMerchantMembersParameters = z.object({
     .optional()
     .describe(`Filter the returned members by email address prefix.`),
   "user.id": z.string().optional().describe(`Search for a member by user id.`),
-  "user.type": z
-    .array(
-      z
-        .enum(["user", "managed_user", "service_account", "system_account"])
-        .describe(`Type of the user account.`),
-    )
-    .optional()
-    .describe(
-      `Filter the returned members by user type. Repeat this parameter to include multiple user types.`,
-    ),
   status: z
     .enum(["accepted", "pending", "expired", "disabled", "unknown"])
     .describe(`The status of the membership.`)
@@ -394,7 +385,7 @@ export const updateMerchantMemberParameters = z.object({
     .string()
     .describe(`Short unique identifier for the merchant.`),
   memberId: z.string().describe(`The ID of the member to retrieve.`),
-  roles: z.array(z.string().max(64)).max(124).optional(),
+  roles: z.array(z.string().max(64)).min(1).max(124).optional(),
   metadata: z
     .object({})
     .catchall(z.unknown())
