@@ -67,12 +67,9 @@ See the [official OpenAI documentation](https://developers.openai.com/codex/mcp)
   "mcpServers": {
     "sumup": {
       "command": "npx",
-      "args": [
-          "-y",
-          "@sumup/mcp"
-      ],
+      "args": ["-y", "@sumup/mcp"],
       "env": {
-      	"SUMUP_API_KEY": "sup_sk_..."
+        "SUMUP_API_KEY": "sup_sk_..."
       }
     }
   }
@@ -90,12 +87,9 @@ Add the following to your `claude_desktop_config.json` file. See the [Claude Des
   "mcpServers": {
     "sumup": {
       "command": "npx",
-      "args": [
-          "-y",
-          "@sumup/mcp"
-      ],
+      "args": ["-y", "@sumup/mcp"],
       "env": {
-      	"SUMUP_API_KEY": "sup_sk_..."
+        "SUMUP_API_KEY": "sup_sk_..."
       }
     }
   }
