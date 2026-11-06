@@ -45,12 +45,17 @@ Possible values are:
     .describe(
       `Filter memberships by the name of the resource the membership is in.`,
     ),
+  "resource.id": z
+    .string()
+    .optional()
+    .describe(
+      `Filter memberships by the ID of the resource the membership is in.`,
+    ),
   "resource.parent.id": z
     .string()
-    .nullable()
     .optional()
     .describe(`Filter memberships by the parent of the resource the membership is in.
-When filtering by parent both \`resource.parent.id\` and \`resource.parent.type\` must be present. Pass explicit null to filter for resources without a parent.`),
+Omit both \`resource.parent.id\` and \`resource.parent.type\` to skip parent filtering. When filtering by parent, both parameters must be present. To select resources without a parent, set each parameter to an empty value. Otherwise, both parameters must identify a parent.`),
   "resource.parent.type": z
     .string()
     .describe(
@@ -59,10 +64,7 @@ Possible values are:
 * \`merchant\` - merchant account(s)
 * \`organization\` - organization(s)`,
     )
-    .nullable()
-    .optional()
-    .describe(`Filter memberships by the parent of the resource the membership is in.
-When filtering by parent both \`resource.parent.id\` and \`resource.parent.type\` must be present. Pass explicit null to filter for resources without a parent.`),
+    .optional(),
   roles: z
     .array(z.string())
     .optional()

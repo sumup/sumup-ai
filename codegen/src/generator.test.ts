@@ -57,6 +57,7 @@ test("omits excluded operations from all generated code", async (t) => {
     "DeactivatePaymentInstrument",
     "GetPaymentMethods",
     "CreateApplePaySession",
+    "CreateMerchantToken",
   ]) {
     input.paths![`/${operationId}`] = spec(operationId).paths!["/test"]!;
   }

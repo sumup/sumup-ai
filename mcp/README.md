@@ -17,7 +17,7 @@ The SumUp Model Context Protocol (MCP) Server requires Node.js 22 or later and a
 
 ## Hosted server and plugins
 
-For an OAuth connection managed by SumUp, use `https://mcp.sumup.com/mcp`. To get both integration skills and hosted MCP configuration, [install the SumUp plugin](https://developer.sumup.com/tools/llms/plugins/). For direct hosted setup, see the [MCP guide](https://developer.sumup.com/tools/llms/mcp-server/).
+For an OAuth connection managed by SumUp, use `https://mcp.sumup.com/mcp`. To get both integration skills and hosted MCP configuration, [install the SumUp plugin](https://developer.sumup.com/tools/llms/setup/). For direct hosted setup, see the [assistant setup guide](https://developer.sumup.com/tools/llms/setup/).
 
 This package runs locally over stdio and reads its API key from `SUMUP_API_KEY`. Use the local instructions below when your client launches MCP processes or your workflow needs API-key authentication.
 

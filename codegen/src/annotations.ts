@@ -16,6 +16,7 @@ const readOnlyOperations = new Set([
   "GetReader",
   "GetReaderCheckout",
   "GetReaderStatus",
+  "GetReaderSettings",
   "GetReceipt",
   "GetTransactionV2.1",
   "ListCheckouts",
@@ -51,6 +52,7 @@ const writeOperations: Record<string, Omit<Annotations, "readOnly">> = {
   DeleteMerchantMember: { openWorld: false, destructive: true },
   CreateReader: { openWorld: false, destructive: false },
   UpdateReader: { openWorld: false, destructive: true },
+  UpdateReaderSettings: { openWorld: false, destructive: true },
   DeleteReader: { openWorld: false, destructive: true },
 };
 

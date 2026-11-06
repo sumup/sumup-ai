@@ -6,14 +6,13 @@ export const createCheckoutParameters = z
       .string()
       .max(64)
       .describe(
-        `Merchant-defined reference for the new checkout. It should be unique enough for you to identify the payment attempt in your own systems.`,
+        `Merchant-defined reference for the new checkout, up to 64 characters. Use it to correlate the checkout with an order or payment attempt in your own system. If a checkout already exists for the supplied unique parameters, creation returns \`409\` with \`DUPLICATED_CHECKOUT\`; see the conflict response.`,
       ),
     amount: z
       .number()
       .describe(`Amount to be charged to the payer, expressed in major units.`),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -47,7 +46,7 @@ export const createCheckoutParameters = z
     return_url: z
       .string()
       .describe(
-        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+        `Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with \`event_type\` and the checkout \`id\`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.`,
       )
       .optional(),
     customer_id: z
@@ -96,7 +95,7 @@ export const createCheckoutResult = z
   .object({
     checkout_reference: z
       .string()
-      .max(90)
+      .max(64)
       .describe(
         `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
@@ -107,7 +106,6 @@ export const createCheckoutResult = z
       .optional(),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -143,7 +141,7 @@ export const createCheckoutResult = z
     return_url: z
       .string()
       .describe(
-        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+        `Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with \`event_type\` and the checkout \`id\`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.`,
       )
       .optional(),
     id: z
@@ -212,16 +210,17 @@ export const createCheckoutResult = z
           transaction_code: z
             .string()
             .describe(
-              `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+              `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
             )
             .optional(),
           amount: z
             .number()
-            .describe(`Total amount of the transaction.`)
+            .describe(
+              `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+            )
             .optional(),
           currency: z
             .enum([
-              "BGN",
               "BRL",
               "CHF",
               "CLP",
@@ -272,7 +271,9 @@ export const createCheckoutResult = z
               "APM",
               "UNKNOWN",
             ])
-            .describe(`Payment type used for the transaction.`)
+            .describe(
+              `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+            )
             .optional(),
           installments_count: z
             .number()
@@ -288,13 +289,13 @@ export const createCheckoutResult = z
           vat_amount: z
             .number()
             .describe(
-              `Amount of the applicable VAT (out of the total transaction amount).`,
+              `VAT included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           tip_amount: z
             .number()
             .describe(
-              `Amount of the tip (out of the total transaction amount).`,
+              `Tip included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           entry_mode: z
@@ -327,7 +328,9 @@ export const createCheckoutResult = z
               "CONTACTLESS_MAGSTRIPE",
               "N/A",
             ])
-            .describe(`Entry mode of the payment details.`)
+            .describe(
+              `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+            )
             .optional(),
           auth_code: z
             .string()
@@ -350,14 +353,16 @@ export const createCheckoutResult = z
 export const deactivateCheckoutParameters = z.object({
   checkoutId: z
     .string()
-    .describe(`Unique identifier of the checkout resource.`),
+    .describe(
+      `SumUp-generated \`id\` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.`,
+    ),
 });
 
 export const deactivateCheckoutResult = z
   .object({
     checkout_reference: z
       .string()
-      .max(90)
+      .max(64)
       .describe(
         `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
@@ -368,7 +373,6 @@ export const deactivateCheckoutResult = z
       .optional(),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -404,7 +408,7 @@ export const deactivateCheckoutResult = z
     return_url: z
       .string()
       .describe(
-        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+        `Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with \`event_type\` and the checkout \`id\`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.`,
       )
       .optional(),
     id: z
@@ -473,16 +477,17 @@ export const deactivateCheckoutResult = z
           transaction_code: z
             .string()
             .describe(
-              `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+              `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
             )
             .optional(),
           amount: z
             .number()
-            .describe(`Total amount of the transaction.`)
+            .describe(
+              `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+            )
             .optional(),
           currency: z
             .enum([
-              "BGN",
               "BRL",
               "CHF",
               "CLP",
@@ -533,7 +538,9 @@ export const deactivateCheckoutResult = z
               "APM",
               "UNKNOWN",
             ])
-            .describe(`Payment type used for the transaction.`)
+            .describe(
+              `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+            )
             .optional(),
           installments_count: z
             .number()
@@ -549,13 +556,13 @@ export const deactivateCheckoutResult = z
           vat_amount: z
             .number()
             .describe(
-              `Amount of the applicable VAT (out of the total transaction amount).`,
+              `VAT included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           tip_amount: z
             .number()
             .describe(
-              `Amount of the tip (out of the total transaction amount).`,
+              `Tip included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           entry_mode: z
@@ -588,7 +595,9 @@ export const deactivateCheckoutResult = z
               "CONTACTLESS_MAGSTRIPE",
               "N/A",
             ])
-            .describe(`Entry mode of the payment details.`)
+            .describe(
+              `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+            )
             .optional(),
           auth_code: z
             .string()
@@ -611,14 +620,16 @@ export const deactivateCheckoutResult = z
 export const getCheckoutParameters = z.object({
   checkoutId: z
     .string()
-    .describe(`Unique identifier of the checkout resource.`),
+    .describe(
+      `SumUp-generated \`id\` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.`,
+    ),
 });
 
 export const getCheckoutResult = z
   .object({
     checkout_reference: z
       .string()
-      .max(90)
+      .max(64)
       .describe(
         `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
@@ -629,7 +640,6 @@ export const getCheckoutResult = z
       .optional(),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -665,7 +675,7 @@ export const getCheckoutResult = z
     return_url: z
       .string()
       .describe(
-        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+        `Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with \`event_type\` and the checkout \`id\`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.`,
       )
       .optional(),
     id: z
@@ -734,16 +744,17 @@ export const getCheckoutResult = z
           transaction_code: z
             .string()
             .describe(
-              `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+              `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
             )
             .optional(),
           amount: z
             .number()
-            .describe(`Total amount of the transaction.`)
+            .describe(
+              `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+            )
             .optional(),
           currency: z
             .enum([
-              "BGN",
               "BRL",
               "CHF",
               "CLP",
@@ -794,7 +805,9 @@ export const getCheckoutResult = z
               "APM",
               "UNKNOWN",
             ])
-            .describe(`Payment type used for the transaction.`)
+            .describe(
+              `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+            )
             .optional(),
           installments_count: z
             .number()
@@ -810,13 +823,13 @@ export const getCheckoutResult = z
           vat_amount: z
             .number()
             .describe(
-              `Amount of the applicable VAT (out of the total transaction amount).`,
+              `VAT included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           tip_amount: z
             .number()
             .describe(
-              `Amount of the tip (out of the total transaction amount).`,
+              `Tip included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           entry_mode: z
@@ -849,7 +862,9 @@ export const getCheckoutResult = z
               "CONTACTLESS_MAGSTRIPE",
               "N/A",
             ])
-            .describe(`Entry mode of the payment details.`)
+            .describe(
+              `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+            )
             .optional(),
           auth_code: z
             .string()
@@ -902,9 +917,8 @@ export const getCheckoutResult = z
 export const listCheckoutsParameters = z.object({
   checkout_reference: z
     .string()
-    .optional()
     .describe(
-      `Filters the list of checkout resources by the unique reference of the checkout.`,
+      `Filters checkouts by the merchant-defined \`checkout_reference\` supplied when creating the checkout. This is separate from the SumUp-generated checkout \`id\`.`,
     ),
 });
 
@@ -914,7 +928,7 @@ export const listCheckoutsResult = z
       .object({
         checkout_reference: z
           .string()
-          .max(90)
+          .max(64)
           .describe(
             `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
           )
@@ -927,7 +941,6 @@ export const listCheckoutsResult = z
           .optional(),
         currency: z
           .enum([
-            "BGN",
             "BRL",
             "CHF",
             "CLP",
@@ -963,7 +976,7 @@ export const listCheckoutsResult = z
         return_url: z
           .string()
           .describe(
-            `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+            `Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with \`event_type\` and the checkout \`id\`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.`,
           )
           .optional(),
         id: z
@@ -1032,16 +1045,17 @@ export const listCheckoutsResult = z
               transaction_code: z
                 .string()
                 .describe(
-                  `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+                  `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
                 )
                 .optional(),
               amount: z
                 .number()
-                .describe(`Total amount of the transaction.`)
+                .describe(
+                  `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+                )
                 .optional(),
               currency: z
                 .enum([
-                  "BGN",
                   "BRL",
                   "CHF",
                   "CLP",
@@ -1098,7 +1112,9 @@ export const listCheckoutsResult = z
                   "APM",
                   "UNKNOWN",
                 ])
-                .describe(`Payment type used for the transaction.`)
+                .describe(
+                  `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+                )
                 .optional(),
               installments_count: z
                 .number()
@@ -1114,13 +1130,13 @@ export const listCheckoutsResult = z
               vat_amount: z
                 .number()
                 .describe(
-                  `Amount of the applicable VAT (out of the total transaction amount).`,
+                  `VAT included in the total transaction amount, in major units of the transaction's currency.`,
                 )
                 .optional(),
               tip_amount: z
                 .number()
                 .describe(
-                  `Amount of the tip (out of the total transaction amount).`,
+                  `Tip included in the total transaction amount, in major units of the transaction's currency.`,
                 )
                 .optional(),
               entry_mode: z
@@ -1153,7 +1169,9 @@ export const listCheckoutsResult = z
                   "CONTACTLESS_MAGSTRIPE",
                   "N/A",
                 ])
-                .describe(`Entry mode of the payment details.`)
+                .describe(
+                  `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+                )
                 .optional(),
               auth_code: z
                 .string()
@@ -1208,7 +1226,9 @@ export const updateCheckoutParameters = z
   .object({
     checkoutId: z
       .string()
-      .describe(`Unique identifier of the checkout resource.`),
+      .describe(
+        `SumUp-generated \`id\` returned when creating a checkout. Use this value to retrieve, update, process, or deactivate the checkout.`,
+      ),
     amount: z
       .number()
       .describe(
@@ -1217,7 +1237,6 @@ export const updateCheckoutParameters = z
       .optional(),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -1246,7 +1265,7 @@ export const updateCheckoutParameters = z
       .optional(),
     checkout_reference: z
       .string()
-      .max(90)
+      .max(64)
       .describe(`Updated merchant-defined reference for the checkout.`)
       .optional(),
     valid_until: z
@@ -1271,7 +1290,7 @@ export const updateCheckoutResult = z
   .object({
     checkout_reference: z
       .string()
-      .max(90)
+      .max(64)
       .describe(
         `Merchant-defined reference for the checkout. Use it to correlate the SumUp checkout with your own order, cart, subscription, or payment attempt in your systems.`,
       )
@@ -1282,7 +1301,6 @@ export const updateCheckoutResult = z
       .optional(),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -1318,7 +1336,7 @@ export const updateCheckoutResult = z
     return_url: z
       .string()
       .describe(
-        `Optional backend callback URL used by SumUp to notify your platform about processing updates for the checkout.`,
+        `Optional backend callback URL for checkout status notifications. SumUp sends an HTTP POST with \`event_type\` and the checkout \`id\`. Retrieve the checkout to verify its current status before updating your order. See the [webhook guide](https://developer.sumup.com/online-payments/webhooks/) for the payload and response requirements.`,
       )
       .optional(),
     id: z
@@ -1387,16 +1405,17 @@ export const updateCheckoutResult = z
           transaction_code: z
             .string()
             .describe(
-              `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+              `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
             )
             .optional(),
           amount: z
             .number()
-            .describe(`Total amount of the transaction.`)
+            .describe(
+              `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+            )
             .optional(),
           currency: z
             .enum([
-              "BGN",
               "BRL",
               "CHF",
               "CLP",
@@ -1447,7 +1466,9 @@ export const updateCheckoutResult = z
               "APM",
               "UNKNOWN",
             ])
-            .describe(`Payment type used for the transaction.`)
+            .describe(
+              `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+            )
             .optional(),
           installments_count: z
             .number()
@@ -1463,13 +1484,13 @@ export const updateCheckoutResult = z
           vat_amount: z
             .number()
             .describe(
-              `Amount of the applicable VAT (out of the total transaction amount).`,
+              `VAT included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           tip_amount: z
             .number()
             .describe(
-              `Amount of the tip (out of the total transaction amount).`,
+              `Tip included in the total transaction amount, in major units of the transaction's currency.`,
             )
             .optional(),
           entry_mode: z
@@ -1502,7 +1523,9 @@ export const updateCheckoutResult = z
               "CONTACTLESS_MAGSTRIPE",
               "N/A",
             ])
-            .describe(`Entry mode of the payment details.`)
+            .describe(
+              `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+            )
             .optional(),
           auth_code: z
             .string()
