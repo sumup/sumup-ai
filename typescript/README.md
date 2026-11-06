@@ -32,7 +32,11 @@ marked read-only.
 ```ts
 const sumupAgentToolkit = new SumUpAgentToolkit({
   apiKey: process.env.SUMUP_API_KEY!,
-  includeTools: ["list_memberships", "list_transactions_v2_1", "get_transaction_v2_1"],
+  includeTools: [
+    "list_memberships",
+    "list_transactions_v2_1",
+    "get_transaction_v2_1",
+  ],
   readOnly: true,
 });
 ```
