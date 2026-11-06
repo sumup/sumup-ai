@@ -52,21 +52,21 @@
   },
   "dependencies": {
     "@langchain/core": "^1.2.9",
-    "@modelcontextprotocol/sdk": "^1.30.0",
+    "@modelcontextprotocol/sdk": "^1.32.0",
     "@openai/agents": "^0.17.0",
-    "@sumup/sdk": "^0.2.0",
+    "@sumup/sdk": "^0.2.3",
     "ai": "^7.0.79",
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.6.3",
-    "@rslib/core": "^0.23.2",
+    "@biomejs/biome": "^2.6.6",
+    "@rslib/core": "^1.0.4",
     "@rstest/core": "^0.12.0",
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "rsbuild-plugin-publint": "^1.0.0",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.20",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   },
   "files": [
     "CHANGELOG.md",

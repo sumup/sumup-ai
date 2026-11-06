@@ -6,9 +6,11 @@ export {
   deleteReaderParameters,
   getReaderCheckoutParameters,
   getReaderParameters,
+  getReaderSettingsParameters,
   getReaderStatusParameters,
   listReadersParameters,
   updateReaderParameters,
+  updateReaderSettingsParameters,
 } from "./parameters";
 export {
   createGoReaderCheckout,
@@ -18,7 +20,9 @@ export {
   deleteReader,
   getReader,
   getReaderCheckout,
+  getReaderSettings,
   getReaderStatus,
   listReaders,
   updateReader,
+  updateReaderSettings,
 } from "./tools";
