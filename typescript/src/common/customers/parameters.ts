@@ -2,7 +2,11 @@ import { z } from "zod";
 
 export const createCustomerParameters = z
   .object({
-    customer_id: z.string().describe(`Unique identifier of the customer.`),
+    customer_id: z
+      .string()
+      .describe(
+        `Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.`,
+      ),
     personal_details: z
       .object({
         first_name: z
@@ -14,7 +18,9 @@ export const createCustomerParameters = z
         phone: z.string().describe(`Phone number of the customer.`).optional(),
         birth_date: z
           .string()
-          .describe(`Date of birth of the customer.`)
+          .describe(
+            `Date of birth of the customer in \`YYYY-MM-DD\` format, without a time or timezone.`,
+          )
           .optional(),
         tax_id: z
           .string()
@@ -59,11 +65,17 @@ export const createCustomerParameters = z
       .describe(`Personal details for the customer.`)
       .optional(),
   })
-  .describe(`Saved customer details.`);
+  .describe(
+    `Saved payer details identified by the \`customer_id\` supplied by your integration. A customer can have saved payment instruments for subsequent payments.`,
+  );
 
 export const createCustomerResult = z
   .object({
-    customer_id: z.string().describe(`Unique identifier of the customer.`),
+    customer_id: z
+      .string()
+      .describe(
+        `Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.`,
+      ),
     personal_details: z
       .object({
         first_name: z
@@ -75,7 +87,9 @@ export const createCustomerResult = z
         phone: z.string().describe(`Phone number of the customer.`).optional(),
         birth_date: z
           .string()
-          .describe(`Date of birth of the customer.`)
+          .describe(
+            `Date of birth of the customer in \`YYYY-MM-DD\` format, without a time or timezone.`,
+          )
           .optional(),
         tax_id: z
           .string()
@@ -121,17 +135,23 @@ export const createCustomerResult = z
       .optional(),
   })
   .loose()
-  .describe(`Saved customer details.`);
+  .describe(
+    `Saved payer details identified by the \`customer_id\` supplied by your integration. A customer can have saved payment instruments for subsequent payments.`,
+  );
 
 export const getCustomerParameters = z.object({
   customerId: z
     .string()
-    .describe(`Unique identifier of the saved customer resource.`),
+    .describe(`The \`customer_id\` you supplied when creating the customer.`),
 });
 
 export const getCustomerResult = z
   .object({
-    customer_id: z.string().describe(`Unique identifier of the customer.`),
+    customer_id: z
+      .string()
+      .describe(
+        `Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.`,
+      ),
     personal_details: z
       .object({
         first_name: z
@@ -143,7 +163,9 @@ export const getCustomerResult = z
         phone: z.string().describe(`Phone number of the customer.`).optional(),
         birth_date: z
           .string()
-          .describe(`Date of birth of the customer.`)
+          .describe(
+            `Date of birth of the customer in \`YYYY-MM-DD\` format, without a time or timezone.`,
+          )
           .optional(),
         tax_id: z
           .string()
@@ -189,12 +211,14 @@ export const getCustomerResult = z
       .optional(),
   })
   .loose()
-  .describe(`Saved customer details.`);
+  .describe(
+    `Saved payer details identified by the \`customer_id\` supplied by your integration. A customer can have saved payment instruments for subsequent payments.`,
+  );
 
 export const listPaymentInstrumentsParameters = z.object({
   customerId: z
     .string()
-    .describe(`Unique identifier of the saved customer resource.`),
+    .describe(`The \`customer_id\` you supplied when creating the customer.`),
 });
 
 export const listPaymentInstrumentsResult = z
@@ -204,7 +228,7 @@ export const listPaymentInstrumentsResult = z
         token: z
           .string()
           .describe(
-            `Unique token identifying the saved payment card for a customer.`,
+            `Token identifying the customer's saved payment card. Pass it as \`token\`, together with the associated \`customer_id\` and \`payment_type = card\`, when processing a checkout with this instrument.`,
           )
           .optional(),
         active: z
@@ -229,6 +253,7 @@ export const listPaymentInstrumentsResult = z
               .enum([
                 "ALELO",
                 "AMEX",
+                "BANCOMAT",
                 "CONECS",
                 "CUP",
                 "DINERS",
@@ -243,6 +268,7 @@ export const listPaymentInstrumentsResult = z
                 "MAESTRO",
                 "MASTERCARD",
                 "PLUXEE",
+                "SUMUP",
                 "SWILE",
                 "TICKET",
                 "VISA",
@@ -294,7 +320,7 @@ export const listPaymentInstrumentsResult = z
 export const updateCustomerParameters = z.object({
   customerId: z
     .string()
-    .describe(`Unique identifier of the saved customer resource.`),
+    .describe(`The \`customer_id\` you supplied when creating the customer.`),
   personal_details: z
     .object({
       first_name: z.string().describe(`First name of the customer.`).optional(),
@@ -303,7 +329,9 @@ export const updateCustomerParameters = z.object({
       phone: z.string().describe(`Phone number of the customer.`).optional(),
       birth_date: z
         .string()
-        .describe(`Date of birth of the customer.`)
+        .describe(
+          `Date of birth of the customer in \`YYYY-MM-DD\` format, without a time or timezone.`,
+        )
         .optional(),
       tax_id: z
         .string()
@@ -351,7 +379,11 @@ export const updateCustomerParameters = z.object({
 
 export const updateCustomerResult = z
   .object({
-    customer_id: z.string().describe(`Unique identifier of the customer.`),
+    customer_id: z
+      .string()
+      .describe(
+        `Identifier you supply when creating the customer. Use an ID from your own system and retain it for subsequent customer, checkout, and saved-payment-instrument requests.`,
+      ),
     personal_details: z
       .object({
         first_name: z
@@ -363,7 +395,9 @@ export const updateCustomerResult = z
         phone: z.string().describe(`Phone number of the customer.`).optional(),
         birth_date: z
           .string()
-          .describe(`Date of birth of the customer.`)
+          .describe(
+            `Date of birth of the customer in \`YYYY-MM-DD\` format, without a time or timezone.`,
+          )
           .optional(),
         tax_id: z
           .string()
@@ -409,4 +443,6 @@ export const updateCustomerResult = z
       .optional(),
   })
   .loose()
-  .describe(`Saved customer details.`);
+  .describe(
+    `Saved payer details identified by the \`customer_id\` supplied by your integration. A customer can have saved payment instruments for subsequent payments.`,
+  );

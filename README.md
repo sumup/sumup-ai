@@ -21,11 +21,11 @@ codex plugin add sumup@sumup
 codex plugin list
 ```
 
-Start a new session and sign in with SumUp when prompted to use account tools. For Claude Code, Cursor, Gemini CLI, and Kiro instructions, see the [plugin setup guide](https://developer.sumup.com/tools/llms/plugins/).
+Start a new session and sign in with SumUp when prompted to use account tools. For Claude Code, Cursor, Gemini CLI, and Kiro instructions, see the [assistant setup guide](https://developer.sumup.com/tools/llms/setup/).
 
 ## Model Context Protocol
 
-SumUp hosts a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server at `https://mcp.sumup.com/mcp`. Connect an OAuth-capable client and sign in with SumUp; hosted connections do not use SumUp API keys. For direct client configuration, see the [MCP setup guide](https://developer.sumup.com/tools/llms/mcp-server/) or [sumup/sumup-mcp](https://github.com/sumup/sumup-mcp).
+SumUp hosts a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) server at `https://mcp.sumup.com/mcp`. Connect an OAuth-capable client and sign in with SumUp; hosted connections do not use SumUp API keys. For direct client configuration, see the [assistant setup guide](https://developer.sumup.com/tools/llms/setup/) or [sumup/sumup-mcp](https://github.com/sumup/sumup-mcp).
 
 You can also run the SumUp MCP server locally with Node.js 22 or later and a SumUp API key:
 

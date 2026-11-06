@@ -5,7 +5,11 @@ export const createMerchantRoleParameters = z.object({
     .string()
     .describe(`Short unique identifier for the merchant.`),
   name: z.string().describe(`User-defined name of the role.`),
-  permissions: z.array(z.string()).max(100).describe(`User's permissions.`),
+  permissions: z
+    .array(z.string())
+    .min(1)
+    .max(100)
+    .describe(`User's permissions.`),
   metadata: z
     .object({})
     .catchall(z.unknown())
@@ -160,6 +164,7 @@ export const updateMerchantRoleParameters = z.object({
   name: z.string().describe(`User-defined name of the role.`).optional(),
   permissions: z
     .array(z.string())
+    .min(1)
     .max(100)
     .describe(`User's permissions.`)
     .optional(),
