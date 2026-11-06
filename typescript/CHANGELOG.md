@@ -4,6 +4,28 @@
 
 - **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.16.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.16.0...typescript-v0.16.1) (2026-11-06)
+
+### Chores
+
+- bump sumup-ts, update stuff ([#603](https://github.com/sumup/sumup-ai/issues/603)) ([89e3cf9](https://github.com/sumup/sumup-ai/commit/89e3cf9e0a4577f1b0d6222156390a1b58e90ffc))
+
+### Build System & Dependencies
+
+- **deps-dev:** bump @rslib/core ([#572](https://github.com/sumup/sumup-ai/issues/572)) ([4ea510a](https://github.com/sumup/sumup-ai/commit/4ea510a5eccaa5668afe0e6a1621857bfc2cf05f))
+- **deps-dev:** bump @rstest/core from 0.11.11 to 0.12.0 in /typescript ([#574](https://github.com/sumup/sumup-ai/issues/574)) ([c09d900](https://github.com/sumup/sumup-ai/commit/c09d900cb41e0f84b4a92b312c101320fceb004a))
+- **deps-dev:** bump markdown-it from 14.3.0 to 14.3.3 in /typescript ([#594](https://github.com/sumup/sumup-ai/issues/594)) ([3141c23](https://github.com/sumup/sumup-ai/commit/3141c234dd69e59bbbea03a68d25969efd78de09))
+- **deps-dev:** update compatible TypeScript tooling ([#585](https://github.com/sumup/sumup-ai/issues/585)) ([a7cb094](https://github.com/sumup/sumup-ai/commit/a7cb0946c2bbc0006a3442525b8b9f54ea17221a))
+- **deps:** bump @modelcontextprotocol/client in /typescript ([#596](https://github.com/sumup/sumup-ai/issues/596)) ([18fccd9](https://github.com/sumup/sumup-ai/commit/18fccd98403a118d40e4c593aa1e82cb98b6bf0f))
+- **deps:** bump @modelcontextprotocol/sdk in /typescript ([#592](https://github.com/sumup/sumup-ai/issues/592)) ([c15ff1b](https://github.com/sumup/sumup-ai/commit/c15ff1bf88f9cbf2025c39f5ee870233f94fc873))
+- **deps:** bump body-parser from 2.2.2 to 2.4.0 in /typescript ([#598](https://github.com/sumup/sumup-ai/issues/598)) ([0654d59](https://github.com/sumup/sumup-ai/commit/0654d5991a06d3de17f266929c7c778f077d37df))
+- **deps:** bump proxy-addr from 2.0.7 to 2.0.8 in /typescript ([#589](https://github.com/sumup/sumup-ai/issues/589)) ([02510ab](https://github.com/sumup/sumup-ai/commit/02510abb7cf6fb41913438cddf72f1829f56b3e1))
+- **deps:** bump the ai-runtime group across 1 directory with 4 updates ([#581](https://github.com/sumup/sumup-ai/issues/581)) ([7bf2eba](https://github.com/sumup/sumup-ai/commit/7bf2eba4b66970c1f0fe93d05909bba275cd4990))
+- **deps:** bump the npm_and_yarn group across 2 directories with 3 updates ([#601](https://github.com/sumup/sumup-ai/issues/601)) ([48538d7](https://github.com/sumup/sumup-ai/commit/48538d72bfbe9525a0e4b5aaefd6a86c54d8a0ee))
+- **deps:** bump undici ([#579](https://github.com/sumup/sumup-ai/issues/579)) ([8795aab](https://github.com/sumup/sumup-ai/commit/8795aab69d9169e050a1d07d4fa348fcafd8393e))
+- **deps:** bump undici from 7.29.0 to 7.30.1 in /typescript ([#590](https://github.com/sumup/sumup-ai/issues/590)) ([59ff645](https://github.com/sumup/sumup-ai/commit/59ff645543e6eb8803e0bca2451f8b4ce6480fc8))
+- **deps:** bump zod from 4.6.5 to 4.6.7 in /typescript ([#600](https://github.com/sumup/sumup-ai/issues/600)) ([435c5a2](https://github.com/sumup/sumup-ai/commit/435c5a27fdb2406abc780575bb05ff79df090d16))
+
 ## [0.16.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.15.0...typescript-v0.16.0) (2026-09-24)
 
 ### Features
