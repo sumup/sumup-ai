@@ -45,21 +45,17 @@ jobs:
         run: npm publish --provenance --access public
 
       - name: Log in to GitHub Container Registry
-        if: steps.publish.outputs.published == 'true'
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
 
       - name: Extract short Git SHA
-        if: steps.publish.outputs.published == 'true'
-        run: echo "GIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: echo "GIT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
 
       - name: Build the Docker image
-        if: steps.publish.outputs.published == 'true'
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/mcp:latest \
                        -t ghcr.io/${{ github.repository_owner }}/mcp:${{ env.GIT_SHA }} .
 
       - name: Push the images
-        if: steps.publish.outputs.published == 'true'
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/mcp:latest
           docker push ghcr.io/${{ github.repository_owner }}/mcp:${{ env.GIT_SHA }}
