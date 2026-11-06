@@ -9,7 +9,7 @@ export const getReceipt: Tool<
 > = {
   name: "get_receipt",
   title: `Retrieve receipt details`,
-  description: `Retrieves receipt specific data for a transaction.`,
+  description: `Retrieves structured receipt data for a transaction belonging to the merchant specified by \`mid\`. The path accepts either the SumUp transaction ID or transaction code. Provide \`tx_event_id\` to include a specific transaction event, such as a refund, on the receipt.`,
   parameters: getReceiptParameters,
   result: getReceiptResult,
   callback: async (sumup: SumUp, { transactionId, ...args }) => {

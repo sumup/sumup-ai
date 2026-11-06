@@ -32,13 +32,17 @@ export const getTransactionV2_1Result = z
     transaction_code: z
       .string()
       .describe(
-        `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+        `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
       )
       .optional(),
-    amount: z.number().describe(`Total amount of the transaction.`).optional(),
+    amount: z
+      .number()
+      .describe(
+        `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+      )
+      .optional(),
     currency: z
       .enum([
-        "BGN",
         "BRL",
         "CHF",
         "CLP",
@@ -89,7 +93,9 @@ export const getTransactionV2_1Result = z
         "APM",
         "UNKNOWN",
       ])
-      .describe(`Payment type used for the transaction.`)
+      .describe(
+        `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+      )
       .optional(),
     installments_count: z
       .number()
@@ -105,12 +111,14 @@ export const getTransactionV2_1Result = z
     vat_amount: z
       .number()
       .describe(
-        `Amount of the applicable VAT (out of the total transaction amount).`,
+        `VAT included in the total transaction amount, in major units of the transaction's currency.`,
       )
       .optional(),
     tip_amount: z
       .number()
-      .describe(`Amount of the tip (out of the total transaction amount).`)
+      .describe(
+        `Tip included in the total transaction amount, in major units of the transaction's currency.`,
+      )
       .optional(),
     entry_mode: z
       .enum([
@@ -142,7 +150,9 @@ export const getTransactionV2_1Result = z
         "CONTACTLESS_MAGSTRIPE",
         "N/A",
       ])
-      .describe(`Entry mode of the payment details.`)
+      .describe(
+        `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+      )
       .optional(),
     auth_code: z
       .string()
@@ -192,7 +202,9 @@ export const getTransactionV2_1Result = z
       .optional(),
     fee_amount: z
       .number()
-      .describe(`Transaction SumUp total fee amount.`)
+      .describe(
+        `Total SumUp transaction fee in major units of the transaction's currency.`,
+      )
       .optional(),
     lat: z
       .number()
@@ -269,6 +281,7 @@ export const getTransactionV2_1Result = z
           .enum([
             "ALELO",
             "AMEX",
+            "BANCOMAT",
             "CONECS",
             "CUP",
             "DINERS",
@@ -283,6 +296,7 @@ export const getTransactionV2_1Result = z
             "MAESTRO",
             "MASTERCARD",
             "PLUXEE",
+            "SUMUP",
             "SWILE",
             "TICKET",
             "VISA",
@@ -294,6 +308,14 @@ export const getTransactionV2_1Result = z
           ])
           .describe(
             `Issuing card network of the payment card used for the transaction.`,
+          )
+          .optional(),
+        payment_account_reference: z
+          .string()
+          .describe(
+            `Payment Account Reference (PAR) defined by [EMVCo](https://www.emvco.com/emv-technologies/payment-tokenisation/). It links a card's primary account number (PAN) with its affiliated payment tokens, allowing transactions made with the physical card and tokenized versions of that card, such as digital wallets, to be correlated when PAR is available.
+
+This reference cannot be used to initiate a payment and is separate from the saved payment instrument \`token\` used to process checkouts. Returned only when available for the card; integrations must handle its absence.`,
           )
           .optional(),
       })
@@ -342,7 +364,9 @@ export const getTransactionV2_1Result = z
             price: z.number().describe(`Product price.`).optional(),
             vat_rate: z
               .number()
-              .describe(`VAT rate applied to the product price.`)
+              .describe(
+                `VAT rate as a decimal fraction, for example \`0.19\` for 19%.`,
+              )
               .optional(),
             single_vat_amount: z
               .number()
@@ -401,11 +425,20 @@ export const getTransactionV2_1Result = z
             id: z
               .number()
               .int()
-              .describe(`Unique identifier of the transaction event.`)
+              .describe(
+                `Numeric identifier of a transaction event. Use it as \`tx_event_id\` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.`,
+              )
               .optional(),
             event_type: z
               .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
-              .describe(`Type of the transaction event.`)
+              .describe(
+                `Financial event associated with a transaction.
+
+- \`PAYOUT\`: Funds from the transaction being prepared for or included in a merchant payout. Check the event status to determine whether they have been paid out.
+- \`REFUND\`: Money returned to the payer.
+- \`CHARGE_BACK\`: A reversal of the payment following a chargeback.
+- \`PAYOUT_DEDUCTION\`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.`,
+              )
               .optional(),
             status: z
               .enum([
@@ -431,7 +464,12 @@ Not every value is used for every event type.
 - \`FAILED\`: The event could not be completed. Typical examples are a payout that could not be executed or an event that was rejected during processing.`,
               )
               .optional(),
-            amount: z.number().describe(`Amount of the event.`).optional(),
+            amount: z
+              .number()
+              .describe(
+                `Amount of the event in major units of the associated transaction's currency.`,
+              )
+              .optional(),
             due_date: z
               .string()
               .describe(`Date when the transaction event is due to occur.`)
@@ -444,7 +482,7 @@ Not every value is used for every event type.
               .number()
               .int()
               .describe(
-                `Consecutive number of the installment that is paid. Applicable only payout events, i.e. \`event_type = PAYOUT\`.`,
+                `Consecutive number of the installment that is paid. Applicable only to payout events, i.e. \`event_type = PAYOUT\`.`,
               )
               .optional(),
             timestamp: z
@@ -522,7 +560,9 @@ Not every value is used for every event type.
             id: z
               .number()
               .int()
-              .describe(`Unique identifier of the transaction event.`)
+              .describe(
+                `Numeric identifier of a transaction event. Use it as \`tx_event_id\` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.`,
+              )
               .optional(),
             transaction_id: z
               .string()
@@ -530,7 +570,14 @@ Not every value is used for every event type.
               .optional(),
             type: z
               .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
-              .describe(`Type of the transaction event.`)
+              .describe(
+                `Financial event associated with a transaction.
+
+- \`PAYOUT\`: Funds from the transaction being prepared for or included in a merchant payout. Check the event status to determine whether they have been paid out.
+- \`REFUND\`: Money returned to the payer.
+- \`CHARGE_BACK\`: A reversal of the payment following a chargeback.
+- \`PAYOUT_DEDUCTION\`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.`,
+              )
               .optional(),
             status: z
               .enum([
@@ -647,26 +694,28 @@ export const listTransactionsV2_1Parameters = z.object({
     .enum(["ascending", "descending"])
     .optional()
     .describe(
-      `Specifies the order in which the returned results are displayed.`,
+      `Sort direction for the transaction history. Use \`ascending\` or \`descending\`; the default is \`ascending\`.`,
     ),
   limit: z
     .number()
     .int()
     .optional()
     .describe(
-      `Specifies the maximum number of results per page. Value must be a positive integer and if not specified, will return 10 results.`,
+      `Maximum number of transactions per page. Must be a positive integer. Defaults to \`10\` when omitted; a page can contain fewer results.`,
     ),
   users: z
     .array(z.string())
     .optional()
-    .describe(`Filters the returned results by user email.`),
+    .describe(
+      `Filters transactions by user email. For multiple values, repeat the query parameter, for example \`users[]=first@example.com&users[]=second@example.com\`.`,
+    ),
   statuses: z
     .array(
       z.enum(["SUCCESSFUL", "CANCELLED", "FAILED", "REFUNDED", "CHARGE_BACK"]),
     )
     .optional()
     .describe(
-      `Filters the returned results by the specified list of final statuses of the transactions.`,
+      `Filters transactions by the listed final statuses. For multiple values, repeat the query parameter, for example \`statuses[]=SUCCESSFUL&statuses[]=REFUNDED\`.`,
     ),
   payment_types: z
     .array(
@@ -684,7 +733,9 @@ export const listTransactionsV2_1Parameters = z.object({
           "APM",
           "UNKNOWN",
         ])
-        .describe(`Payment type used for the transaction.`),
+        .describe(
+          `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+        ),
     )
     .optional()
     .describe(
@@ -722,7 +773,9 @@ export const listTransactionsV2_1Parameters = z.object({
           "CONTACTLESS_MAGSTRIPE",
           "N/A",
         ])
-        .describe(`Entry mode of the payment details.`),
+        .describe(
+          `How the payment details were captured, for example \`CHIP\` or \`CONTACTLESS\` for card-present payments and \`CUSTOMER_ENTRY\` for card details entered by the payer. For wallet and alternative payment methods, this can identify the method, such as \`APPLE_PAY\` or \`BLIK\`.`,
+        ),
     )
     .optional()
     .describe(
@@ -750,7 +803,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .string()
     .optional()
     .describe(
-      `Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *smaller* than the specified value. This parameters supersedes the \`newest_time\` parameter (if both are provided in the request).`,
+      `Pagination reference that returns results before the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over \`newest_time\` when both are provided.`,
     ),
   oldest_time: z
     .string()
@@ -762,7 +815,7 @@ export const listTransactionsV2_1Parameters = z.object({
     .string()
     .optional()
     .describe(
-      `Filters the results by the reference ID of transaction events and returns only transactions with events whose IDs are *greater* than the specified value. This parameters supersedes the \`oldest_time\` parameter (if both are provided in the request).`,
+      `Pagination reference that returns results after the specified reference. Use the value from a returned pagination link rather than constructing it yourself. This parameter takes precedence over \`oldest_time\` when both are provided.`,
     ),
 });
 
@@ -779,16 +832,17 @@ export const listTransactionsV2_1Result = z
             transaction_code: z
               .string()
               .describe(
-                `Transaction code returned by the acquirer/processing entity after processing the transaction.`,
+                `SumUp transaction code, for example \`TEENSK4W2K\`. Use it to look up the transaction with the \`transaction_code\` query parameter. This is separate from the transaction's \`id\` and the card issuer's \`auth_code\`.`,
               )
               .optional(),
             amount: z
               .number()
-              .describe(`Total amount of the transaction.`)
+              .describe(
+                `Total amount of the transaction in major units of \`currency\`, for example \`10.1\` for EUR 10.10.`,
+              )
               .optional(),
             currency: z
               .enum([
-                "BGN",
                 "BRL",
                 "CHF",
                 "CLP",
@@ -845,7 +899,9 @@ export const listTransactionsV2_1Result = z
                 "APM",
                 "UNKNOWN",
               ])
-              .describe(`Payment type used for the transaction.`)
+              .describe(
+                `Payment category recorded on a transaction, for example \`POS\` for a point-of-sale card payment, \`ECOM\` for an online card payment, or \`RECURRING\` for a recurring card payment. These reporting values are separate from the lowercase \`payment_type\` values used to process checkouts.`,
+              )
               .optional(),
             installments_count: z
               .number()
@@ -906,6 +962,7 @@ export const listTransactionsV2_1Result = z
               .enum([
                 "ALELO",
                 "AMEX",
+                "BANCOMAT",
                 "CONECS",
                 "CUP",
                 "DINERS",
@@ -920,6 +977,7 @@ export const listTransactionsV2_1Result = z
                 "MAESTRO",
                 "MASTERCARD",
                 "PLUXEE",
+                "SUMUP",
                 "SWILE",
                 "TICKET",
                 "VISA",
@@ -943,7 +1001,9 @@ export const listTransactionsV2_1Result = z
               .optional(),
             refunded_amount: z
               .number()
-              .describe(`Total refunded amount.`)
+              .describe(
+                `Total amount refunded for this transaction, in major units of the transaction's currency.`,
+              )
               .optional(),
           })
           .describe(`Transaction entry returned in history listing responses.`),
@@ -954,8 +1014,16 @@ export const listTransactionsV2_1Result = z
       .array(
         z
           .object({
-            rel: z.string().describe(`Relation.`),
-            href: z.string().describe(`Location.`),
+            rel: z
+              .string()
+              .describe(
+                `Pagination relation indicating which page the link retrieves, for example \`next\`.`,
+              ),
+            href: z
+              .string()
+              .describe(
+                `Query string to use with the transaction history endpoint when requesting the linked page. Preserve the returned pagination references and query parameters.`,
+              ),
           })
           .describe(`Hypermedia link used for transaction history pagination.`),
       )
@@ -974,7 +1042,7 @@ export const refundTransactionParameters = z
     amount: z
       .number()
       .describe(
-        `Amount to be refunded. Eligible amount can't exceed the amount of the transaction and varies based on country and currency. If you do not specify a value, the system performs a full refund of the transaction.`,
+        `Amount to refund in major units of the transaction's currency, for example \`5\` for EUR 5.00. It must be greater than zero and cannot exceed the amount eligible for a refund. Eligibility depends on the transaction and country/currency rules. If omitted, the system requests a full refund.`,
       )
       .optional(),
   })
