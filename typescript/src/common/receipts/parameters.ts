@@ -176,7 +176,9 @@ export const getReceiptResult = z
                 id: z
                   .number()
                   .int()
-                  .describe(`Unique identifier of the transaction event.`)
+                  .describe(
+                    `Numeric identifier of a transaction event. Use it as \`tx_event_id\` when requesting receipt details for a specific event. This is separate from the transaction ID and the transaction history pagination references.`,
+                  )
                   .optional(),
                 transaction_id: z
                   .string()
@@ -184,7 +186,14 @@ export const getReceiptResult = z
                   .optional(),
                 type: z
                   .enum(["PAYOUT", "CHARGE_BACK", "REFUND", "PAYOUT_DEDUCTION"])
-                  .describe(`Type of the transaction event.`)
+                  .describe(
+                    `Financial event associated with a transaction.
+
+- \`PAYOUT\`: Funds from the transaction being prepared for or included in a merchant payout. Check the event status to determine whether they have been paid out.
+- \`REFUND\`: Money returned to the payer.
+- \`CHARGE_BACK\`: A reversal of the payment following a chargeback.
+- \`PAYOUT_DEDUCTION\`: An amount deducted from a merchant payout, for example to cover a refund or chargeback.`,
+                  )
                   .optional(),
                 status: z
                   .enum([
@@ -354,4 +363,6 @@ Not every value is used for every event type.
       .optional(),
   })
   .loose()
-  .describe(`Receipt details for a transaction.`);
+  .describe(
+    `Structured receipt details for a transaction. The transaction's \`amount\`, \`vat_amount\`, and \`tip_amount\`, as well as event amounts, are returned as decimal strings in major currency units, for example \`"10.10"\` for EUR 10.10.`,
+  );

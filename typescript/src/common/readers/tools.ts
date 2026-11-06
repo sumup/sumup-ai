@@ -16,12 +16,16 @@ import {
   getReaderCheckoutResult,
   getReaderParameters,
   getReaderResult,
+  getReaderSettingsParameters,
+  getReaderSettingsResult,
   getReaderStatusParameters,
   getReaderStatusResult,
   listReadersParameters,
   listReadersResult,
   updateReaderParameters,
   updateReaderResult,
+  updateReaderSettingsParameters,
+  updateReaderSettingsResult,
 } from "./parameters";
 
 export const createGoReaderCheckout: Tool<
@@ -88,7 +92,11 @@ There are some caveats when using this endpoint:
 * After the checkout is accepted, the system has 60 seconds to start the payment on the target device. During this time, any other checkout for the same device will be rejected.
 
 
-**Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.`,
+**Note**: If the target device is a Solo, it must be in version 3.3.24.3 or higher.
+
+
+Optionally include an \`affiliate\` object to attach integrator metadata to the payment.
+Provide both \`app_id\` and \`key\` when including this object.`,
   parameters: createReaderCheckoutParameters,
   result: createReaderCheckoutResult,
   callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
@@ -218,6 +226,35 @@ export const getReaderCheckout: Tool<
   },
 };
 
+export const getReaderSettings: Tool<
+  typeof getReaderSettingsParameters,
+  typeof getReaderSettingsResult
+> = {
+  name: "get_reader_settings",
+  title: `Get Reader Settings`,
+  description: `Returns the menu lock settings for a Solo reader.
+
+For an online reader, returns the current settings. For an offline reader,
+returns the last saved settings, which may differ from its current configuration.
+Returns \`404\` if the reader is offline and no saved settings are available.
+
+The response may include the menu lock PIN.`,
+  parameters: getReaderSettingsParameters,
+  result: getReaderSettingsResult,
+  callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
+    return await sumup.readers.getReaderSettings(merchantCode, readerId, args);
+  },
+  annotations: {
+    title: `Get Reader Settings`,
+    readOnly: true,
+    openWorld: false,
+    requiresApproval: false,
+    destructive: false,
+    idempotent: false,
+    oauthScopes: ["readers.read"],
+  },
+};
+
 export const getReaderStatus: Tool<
   typeof getReaderStatusParameters,
   typeof getReaderStatusResult
@@ -304,5 +341,40 @@ Providing \`metadata\` replaces the entire metadata object; include all entries 
     destructive: true,
     idempotent: false,
     oauthScopes: ["readers.write", "terminals.write"],
+  },
+};
+
+export const updateReaderSettings: Tool<
+  typeof updateReaderSettingsParameters,
+  typeof updateReaderSettingsResult
+> = {
+  name: "update_reader_settings",
+  title: `Update Reader Settings`,
+  description: `Updates the menu lock settings for a Solo reader. The reader must be online.
+A successful response confirms that the reader applied the update.
+
+Include at least one of \`menu_lock.enabled\` or \`menu_lock.passcode\`.
+Omitted settings keep their current values. The response contains only the
+settings included in the request.
+
+When enabling menu lock for a reader without a PIN, include a four-digit PIN
+in \`menu_lock.passcode\` in the same request.`,
+  parameters: updateReaderSettingsParameters,
+  result: updateReaderSettingsResult,
+  callback: async (sumup: SumUp, { merchantCode, readerId, ...args }) => {
+    return await sumup.readers.updateReaderSettings(
+      merchantCode,
+      readerId,
+      args,
+    );
+  },
+  annotations: {
+    title: `Update Reader Settings`,
+    readOnly: false,
+    openWorld: false,
+    requiresApproval: true,
+    destructive: true,
+    idempotent: false,
+    oauthScopes: ["readers.write"],
   },
 };

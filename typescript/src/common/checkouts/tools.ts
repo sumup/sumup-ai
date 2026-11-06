@@ -25,7 +25,7 @@ export const createCheckout: Tool<
 Set \`hosted_checkout.enabled\` to \`true\` to receive a [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) URL where the customer can complete the payment.
 Use \`redirect_url\` for redirect-based payment and 3DS flows. If \`return_url\` is provided, SumUp sends processing updates to that backend callback URL.
 
-Complete the payment through Hosted Checkout, the Payment Widget, or the process-checkout endpoint.`,
+Complete the payment through [Hosted Checkout](https://developer.sumup.com/online-payments/checkouts/hosted-checkout/) or the [Payment Widget](https://developer.sumup.com/online-payments/checkouts/card-widget).`,
   parameters: createCheckoutParameters,
   result: createCheckoutResult,
   callback: async (sumup: SumUp, args) => {
@@ -71,7 +71,7 @@ export const getCheckout: Tool<
 > = {
   name: "get_checkout",
   title: `Retrieve a checkout`,
-  description: `Retrieves an identified checkout resource. Use this request after processing a checkout to confirm its status and inform the end user respectively.`,
+  description: `Retrieves a checkout by its SumUp \`checkout_id\`. After processing a payment, returning from a redirect, or receiving a checkout notification, retrieve the checkout to confirm its current \`status\` before updating your order or displaying the payment outcome to the payer.`,
   parameters: getCheckoutParameters,
   result: getCheckoutResult,
   callback: async (sumup: SumUp, { checkoutId, ...args }) => {

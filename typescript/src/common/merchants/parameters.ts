@@ -43,12 +43,17 @@ export const getMerchantResult = z
           )
           .optional(),
         legal_type: z
-          .string()
-          .min(4)
-          .max(64)
-          .describe(
-            `The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
-`,
+          .intersection(
+            z
+              .record(z.string(), z.unknown())
+              .describe(`The category identifying the legal structure of the company or legal entity.
+`),
+            z
+              .string()
+              .min(4)
+              .max(64)
+              .describe(`The unique legal type reference as defined in the country SDK. We do not rely on IDs as used by other services. Consumers of this API are expected to use the country SDK to map to any other IDs, translation keys, or descriptions.
+`),
           )
           .optional(),
         address: z
@@ -67,13 +72,19 @@ export const getMerchantResult = z
 `,
               )
               .optional(),
-            country: z
-              .string()
-              .min(2)
-              .max(2)
-              .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+            country: z.intersection(
+              z
+                .record(z.string(), z.unknown())
+                .describe(`The ISO3166-1 Alpha-2 code of the address country.
+`),
+              z
+                .string()
+                .min(2)
+                .max(2)
+                .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
+            ),
             city: z
               .string()
               .max(60)
@@ -187,10 +198,6 @@ type to allow for support of future countries in client code.`),
               )
               .optional(),
           })
-          .describe(
-            `An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, \`city\` is \`post_town\`. In the United States, the top-level administrative unit used in addresses is \`state\`, whereas in Chile it's \`region\`.
-Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.`,
-          )
           .optional(),
         trading_address: z
           .object({
@@ -208,13 +215,19 @@ Whether an address is valid or not depends on whether the locally required field
 `,
               )
               .optional(),
-            country: z
-              .string()
-              .min(2)
-              .max(2)
-              .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+            country: z.intersection(
+              z
+                .record(z.string(), z.unknown())
+                .describe(`The ISO3166-1 Alpha-2 code of the address country.
+`),
+              z
+                .string()
+                .min(2)
+                .max(2)
+                .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
+            ),
             city: z
               .string()
               .max(60)
@@ -328,10 +341,6 @@ type to allow for support of future countries in client code.`),
               )
               .optional(),
           })
-          .describe(
-            `An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, \`city\` is \`post_town\`. In the United States, the top-level administrative unit used in addresses is \`state\`, whereas in Chile it's \`region\`.
-Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.`,
-          )
           .optional(),
         identifiers: z
           .array(
@@ -354,11 +363,16 @@ Whether an address is valid or not depends on whether the locally required field
           )
           .optional(),
         phone_number: z
-          .string()
-          .max(16)
-          .describe(
-            `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
-`,
+          .intersection(
+            z
+              .record(z.string(), z.unknown())
+              .describe(`The company's phone number (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+`),
+            z
+              .string()
+              .max(16)
+              .describe(`A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+`),
           )
           .optional(),
         website: z
@@ -446,13 +460,19 @@ The more recognisable your descriptor is, the less risk you have of receiving di
 `,
               )
               .optional(),
-            country: z
-              .string()
-              .min(2)
-              .max(2)
-              .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+            country: z.intersection(
+              z
+                .record(z.string(), z.unknown())
+                .describe(`The ISO3166-1 Alpha-2 code of the address country.
+`),
+              z
+                .string()
+                .min(2)
+                .max(2)
+                .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
+            ),
             city: z
               .string()
               .max(60)
@@ -760,21 +780,17 @@ export const getPersonResult = z
       .max(60)
       .describe(`The last name(s) of the individual.`)
       .optional(),
-    middle_name: z
-      .string()
-      .min(1)
-      .max(60)
-      .describe(
-        `Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
-`,
-      )
-      .optional(),
     phone_number: z
-      .string()
-      .max(16)
-      .describe(
-        `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
-`,
+      .intersection(
+        z
+          .record(z.string(), z.unknown())
+          .describe(`The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+`),
+        z
+          .string()
+          .max(16)
+          .describe(`A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+`),
       )
       .optional(),
     relationships: z
@@ -816,13 +832,19 @@ export const getPersonResult = z
 `,
           )
           .optional(),
-        country: z
-          .string()
-          .min(2)
-          .max(2)
-          .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+        country: z.intersection(
+          z
+            .record(z.string(), z.unknown())
+            .describe(`The ISO3166-1 Alpha-2 code of the address country.
+`),
+          z
+            .string()
+            .min(2)
+            .max(2)
+            .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
+        ),
         city: z
           .string()
           .max(60)
@@ -936,10 +958,6 @@ type to allow for support of future countries in client code.`),
           )
           .optional(),
       })
-      .describe(
-        `An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, \`city\` is \`post_town\`. In the United States, the top-level administrative unit used in addresses is \`state\`, whereas in Chile it's \`region\`.
-Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.`,
-      )
       .optional(),
     identifiers: z
       .array(
@@ -955,13 +973,18 @@ Whether an address is valid or not depends on whether the locally required field
       .describe(`A list of country-specific personal identifiers.`)
       .optional(),
     citizenship: z
-      .string()
-      .min(2)
-      .max(2)
-      .describe(
-        `An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+      .intersection(
+        z
+          .record(z.string(), z.unknown())
+          .describe(`The Alpha-2 ISO code of the country where the Person is a citizen.
+`),
+        z
+          .string()
+          .min(2)
+          .max(2)
+          .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
-type to allow for support of future countries in client code.`,
+type to allow for support of future countries in client code.`),
       )
       .optional(),
     nationality: z
@@ -1039,21 +1062,17 @@ export const listPersonsResult = z
           .max(60)
           .describe(`The last name(s) of the individual.`)
           .optional(),
-        middle_name: z
-          .string()
-          .min(1)
-          .max(60)
-          .describe(
-            `Middle name(s) of the End-User. Note that in some cultures, people can have multiple middle names; all can be present, with the names being separated by space characters. Also note that in some cultures, middle names are not used.
-`,
-          )
-          .optional(),
         phone_number: z
-          .string()
-          .max(16)
-          .describe(
-            `A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
-`,
+          .intersection(
+            z
+              .record(z.string(), z.unknown())
+              .describe(`The (mobile) phone number of the individual (used for verification) in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+`),
+            z
+              .string()
+              .max(16)
+              .describe(`A publicly available phone number in [E.164](https://en.wikipedia.org/wiki/E.164) format.
+`),
           )
           .optional(),
         relationships: z
@@ -1097,13 +1116,19 @@ export const listPersonsResult = z
 `,
               )
               .optional(),
-            country: z
-              .string()
-              .min(2)
-              .max(2)
-              .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+            country: z.intersection(
+              z
+                .record(z.string(), z.unknown())
+                .describe(`The ISO3166-1 Alpha-2 code of the address country.
+`),
+              z
+                .string()
+                .min(2)
+                .max(2)
+                .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
 type to allow for support of future countries in client code.`),
+            ),
             city: z
               .string()
               .max(60)
@@ -1217,10 +1242,6 @@ type to allow for support of future countries in client code.`),
               )
               .optional(),
           })
-          .describe(
-            `An address somewhere in the world. The address fields used depend on the country conventions. For example, in Great Britain, \`city\` is \`post_town\`. In the United States, the top-level administrative unit used in addresses is \`state\`, whereas in Chile it's \`region\`.
-Whether an address is valid or not depends on whether the locally required fields are present. Fields not supported in a country will be ignored.`,
-          )
           .optional(),
         identifiers: z
           .array(
@@ -1241,13 +1262,18 @@ Whether an address is valid or not depends on whether the locally required field
           .describe(`A list of country-specific personal identifiers.`)
           .optional(),
         citizenship: z
-          .string()
-          .min(2)
-          .max(2)
-          .describe(
-            `An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
+          .intersection(
+            z
+              .record(z.string(), z.unknown())
+              .describe(`The Alpha-2 ISO code of the country where the Person is a citizen.
+`),
+            z
+              .string()
+              .min(2)
+              .max(2)
+              .describe(`An [ISO3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)
 country code. This definition users \`oneOf\` with a two-character string
-type to allow for support of future countries in client code.`,
+type to allow for support of future countries in client code.`),
           )
           .optional(),
         nationality: z

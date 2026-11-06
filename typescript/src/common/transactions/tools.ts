@@ -43,7 +43,9 @@ export const listTransactionsV2_1: Tool<
 > = {
   name: "list_transactions_v2_1",
   title: `List transactions`,
-  description: `Lists detailed history of all transactions associated with the merchant profile.`,
+  description: `Lists transaction history for the merchant, with optional filters for payment type, status, and date range. The response contains the current page in \`items\` and pagination query strings in \`links\`.
+
+To request another page, use the query string from the relevant link's \`href\` with this history endpoint. Use \`changes_since\` when retrieving transactions modified since a previous synchronization, including transactions created earlier whose status has changed.`,
   parameters: listTransactionsV2_1Parameters,
   result: listTransactionsV2_1Result,
   callback: async (sumup: SumUp, { merchantCode, ...args }) => {
@@ -66,7 +68,9 @@ export const refundTransaction: Tool<
 > = {
   name: "refund_transaction",
   title: `Refund a transaction`,
-  description: `Refunds an identified transaction either in full or partially.`,
+  description: `Refunds a transaction identified by its SumUp transaction ID. Omit the request body to request a full refund, or provide \`amount\` for a partial refund in the transaction's currency.
+
+Retrieve the transaction afterwards to inspect its refunded amount and refund events. The transaction must be eligible for a refund; see the error responses for invalid amounts, permissions, and processing failures.`,
   parameters: refundTransactionParameters,
   result: refundTransactionResult,
   callback: async (sumup: SumUp, { merchantCode, transactionId, ...args }) => {
