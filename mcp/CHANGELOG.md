@@ -2,35 +2,34 @@
 
 ## [0.13.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.12.1...mcp-v0.13.0) (2026-11-06)
 
-
 ### Features
 
-* **docs:** update README.md ([3f834c5](https://github.com/sumup/sumup-ai/commit/3f834c5e96d28a580e480abf01471bbc49bf3cf4))
-* **mcp:** codex docs ([d5aa1a8](https://github.com/sumup/sumup-ai/commit/d5aa1a81c8d6f5801f913ccd37f3c3bf769ac2fb))
+- **docs:** update README.md ([3f834c5](https://github.com/sumup/sumup-ai/commit/3f834c5e96d28a580e480abf01471bbc49bf3cf4))
+- **mcp:** codex docs ([d5aa1a8](https://github.com/sumup/sumup-ai/commit/d5aa1a81c8d6f5801f913ccd37f3c3bf769ac2fb))
 
 
 ### Bug Fixes
 
-* pin patched node.js security releases ([#593](https://github.com/sumup/sumup-ai/issues/593)) ([e57ff3b](https://github.com/sumup/sumup-ai/commit/e57ff3b4fcfff33f89fe4e13a75bbc76f343a381))
+- pin patched node.js security releases ([#593](https://github.com/sumup/sumup-ai/issues/593)) ([e57ff3b](https://github.com/sumup/sumup-ai/commit/e57ff3b4fcfff33f89fe4e13a75bbc76f343a381))
 
 
 ### Chores
 
-* bump sumup-ts, update stuff ([#603](https://github.com/sumup/sumup-ai/issues/603)) ([89e3cf9](https://github.com/sumup/sumup-ai/commit/89e3cf9e0a4577f1b0d6222156390a1b58e90ffc))
+- bump sumup-ts, update stuff ([#603](https://github.com/sumup/sumup-ai/issues/603)) ([89e3cf9](https://github.com/sumup/sumup-ai/commit/89e3cf9e0a4577f1b0d6222156390a1b58e90ffc))
 
 
 ### Build System & Dependencies
 
-* **deps-dev:** bump @rslib/core ([#571](https://github.com/sumup/sumup-ai/issues/571)) ([a5b96b6](https://github.com/sumup/sumup-ai/commit/a5b96b6a42e65dfa4f5dc18aa2e2cd9b69254575))
-* **deps-dev:** bump the tooling group across 1 directory with 2 updates ([#568](https://github.com/sumup/sumup-ai/issues/568)) ([ed8a2f8](https://github.com/sumup/sumup-ai/commit/ed8a2f81dc33646cef749c6621acb184df6ef425))
-* **deps-dev:** bump the tooling group across 1 directory with 2 updates ([#602](https://github.com/sumup/sumup-ai/issues/602)) ([6af8d35](https://github.com/sumup/sumup-ai/commit/6af8d3549f2b1eb3d43b123024abd7b869bb7600))
-* **deps:** bump @modelcontextprotocol/sdk in /mcp ([#595](https://github.com/sumup/sumup-ai/issues/595)) ([260fcd6](https://github.com/sumup/sumup-ai/commit/260fcd6a6f5a755f9e12931f2092f47fc6710a51))
-* **deps:** bump body-parser from 2.2.2 to 2.4.0 in /mcp ([#597](https://github.com/sumup/sumup-ai/issues/597)) ([bd69011](https://github.com/sumup/sumup-ai/commit/bd6901127e1f49389f150f46f1f3d81675a1c6cc))
-* **deps:** bump node from `725aeba` to `0b36e8c` in /mcp ([#567](https://github.com/sumup/sumup-ai/issues/567)) ([26bbdca](https://github.com/sumup/sumup-ai/commit/26bbdcabe23febad96d19d7503035983797e0fae))
-* **deps:** bump proxy-addr from 2.0.7 to 2.0.8 in /mcp ([#586](https://github.com/sumup/sumup-ai/issues/586)) ([6c02cb9](https://github.com/sumup/sumup-ai/commit/6c02cb9c1f07e76b7110a19669a909eaf9b31e3a))
-* **deps:** bump the mcp-runtime group across 1 directory with 2 updates ([#580](https://github.com/sumup/sumup-ai/issues/580)) ([34511dd](https://github.com/sumup/sumup-ai/commit/34511dd2c7f863ee34f255666af0b98229bb5ac7))
-* **deps:** bump undici from 6.28.0 to 6.29.1 in /mcp ([#591](https://github.com/sumup/sumup-ai/issues/591)) ([ac34806](https://github.com/sumup/sumup-ai/commit/ac3480640d9f9e9f15c286cb5841427e75d492b8))
-* **deps:** bump zod from 4.4.3 to 4.6.7 in /mcp ([#599](https://github.com/sumup/sumup-ai/issues/599)) ([8d6c6f0](https://github.com/sumup/sumup-ai/commit/8d6c6f0baa96624a402c89c909299737dfc2fd3d))
+- **deps-dev:** bump @rslib/core ([#571](https://github.com/sumup/sumup-ai/issues/571)) ([a5b96b6](https://github.com/sumup/sumup-ai/commit/a5b96b6a42e65dfa4f5dc18aa2e2cd9b69254575))
+- **deps-dev:** bump the tooling group across 1 directory with 2 updates ([#568](https://github.com/sumup/sumup-ai/issues/568)) ([ed8a2f8](https://github.com/sumup/sumup-ai/commit/ed8a2f81dc33646cef749c6621acb184df6ef425))
+- **deps-dev:** bump the tooling group across 1 directory with 2 updates ([#602](https://github.com/sumup/sumup-ai/issues/602)) ([6af8d35](https://github.com/sumup/sumup-ai/commit/6af8d3549f2b1eb3d43b123024abd7b869bb7600))
+- **deps:** bump @modelcontextprotocol/sdk in /mcp ([#595](https://github.com/sumup/sumup-ai/issues/595)) ([260fcd6](https://github.com/sumup/sumup-ai/commit/260fcd6a6f5a755f9e12931f2092f47fc6710a51))
+- **deps:** bump body-parser from 2.2.2 to 2.4.0 in /mcp ([#597](https://github.com/sumup/sumup-ai/issues/597)) ([bd69011](https://github.com/sumup/sumup-ai/commit/bd6901127e1f49389f150f46f1f3d81675a1c6cc))
+- **deps:** bump node from `725aeba` to `0b36e8c` in /mcp ([#567](https://github.com/sumup/sumup-ai/issues/567)) ([26bbdca](https://github.com/sumup/sumup-ai/commit/26bbdcabe23febad96d19d7503035983797e0fae))
+- **deps:** bump proxy-addr from 2.0.7 to 2.0.8 in /mcp ([#586](https://github.com/sumup/sumup-ai/issues/586)) ([6c02cb9](https://github.com/sumup/sumup-ai/commit/6c02cb9c1f07e76b7110a19669a909eaf9b31e3a))
+- **deps:** bump the mcp-runtime group across 1 directory with 2 updates ([#580](https://github.com/sumup/sumup-ai/issues/580)) ([34511dd](https://github.com/sumup/sumup-ai/commit/34511dd2c7f863ee34f255666af0b98229bb5ac7))
+- **deps:** bump undici from 6.28.0 to 6.29.1 in /mcp ([#591](https://github.com/sumup/sumup-ai/issues/591)) ([ac34806](https://github.com/sumup/sumup-ai/commit/ac3480640d9f9e9f15c286cb5841427e75d492b8))
+- **deps:** bump zod from 4.4.3 to 4.6.7 in /mcp ([#599](https://github.com/sumup/sumup-ai/issues/599)) ([8d6c6f0](https://github.com/sumup/sumup-ai/commit/8d6c6f0baa96624a402c89c909299737dfc2fd3d))
 
 ## [0.12.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.12.0...mcp-v0.12.1) (2026-09-24)
 
