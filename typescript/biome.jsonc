@@ -33,6 +33,13 @@
   },
   "overrides": [
     {
+      // Release Please owns the changelog formatting.
+      "includes": ["CHANGELOG.md"],
+      "formatter": {
+        "enabled": false
+      }
+    },
+    {
       "includes": ["jsr.json"],
       "formatter": {
         "enabled": false

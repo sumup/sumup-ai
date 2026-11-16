@@ -14,6 +14,15 @@
       "preset": "recommended"
     }
   },
+  "overrides": [
+    {
+      // Release Please owns the changelog formatting.
+      "includes": ["CHANGELOG.md"],
+      "formatter": {
+        "enabled": false
+      }
+    }
+  ],
   "javascript": {
     "formatter": {
       "quoteProperties": "preserve",
