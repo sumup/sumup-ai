@@ -4,6 +4,13 @@
 
 - **typescript:** update to latest sumup sdk ([679347e](https://github.com/sumup/sumup-ai/commit/679347ef045ad24bcaac3f4966a5ce80301a3b82))
 
+## [0.17.1](https://github.com/sumup/sumup-ai/compare/typescript-v0.17.0...typescript-v0.17.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* CHANGELOG.md linting ([b534982](https://github.com/sumup/sumup-ai/commit/b534982530260e5d82d0d2900af074072e5909db))
+
 ## [0.17.0](https://github.com/sumup/sumup-ai/compare/typescript-v0.16.1...typescript-v0.17.0) (2026-11-06)
 
 

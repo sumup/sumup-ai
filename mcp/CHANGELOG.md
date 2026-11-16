@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.1](https://github.com/sumup/sumup-ai/compare/mcp-v0.14.0...mcp-v0.14.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* CHANGELOG.md linting ([b534982](https://github.com/sumup/sumup-ai/commit/b534982530260e5d82d0d2900af074072e5909db))
+
 ## [0.14.0](https://github.com/sumup/sumup-ai/compare/mcp-v0.13.0...mcp-v0.14.0) (2026-11-06)
 
 
